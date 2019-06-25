@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: http://192.168.128.132:1313/sitemap.xml
+Sitemap: https://kphn.github.io/sitemap.xml
