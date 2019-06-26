@@ -6,7 +6,7 @@
     <description>Recent content on 南阜</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 20 Jun 2019 21:38:52 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 26 Jun 2019 08:25:28 +0800</lastBuildDate>
     
         <atom:link href="https://kphn.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -20,6 +20,75 @@
       
         <description>&lt;p&gt;记录学习生活感悟的Blog，之前写的东西都比较零碎而且没有坚持下来。
 希望之后能认真的耕耘好着一亩三分地，认真记录好整理好自己的学习心得。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>设计模式</title>
+      <link>https://kphn.github.io/post/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Wed, 26 Jun 2019 08:25:28 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/post/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid>
+      
+        <description>
+
+&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
+
+&lt;p&gt;设计模式是前辈们对于代码开发经验的总结，是解决特定问题的一种固定套路。本质上还是对面向对象设计原则的实际运用，是对类的封装性、继承性和多态性，以及类的关联关系和组合关系的充分理解。设计模式最终要做到的就是&lt;strong&gt;将变化的部分和不变的部分隔离开来&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;设计模式有两个核心理念：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Program to an “interface”,not an &amp;ldquo;implementation&amp;rdquo;
+
+&lt;ol&gt;
+&lt;li&gt;使用者不需要知道数据类型，结构，算法的细节&lt;/li&gt;
+&lt;li&gt;使用者不需要知道实现细节，只需要知道提供的接口&lt;/li&gt;
+&lt;li&gt;利于抽象，封装，动态绑定，多态&lt;/li&gt;
+&lt;li&gt;符合面向对象的特质和理念&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;li&gt;&amp;ldquo;Favor &amp;lsquo;object composition&amp;rsquo; over &amp;lsquo;class inheritance&amp;rsquo;&amp;rdquo;
+
+&lt;ol&gt;
+&lt;li&gt;继承需要给子类暴漏一些父类的设计和实现细节&lt;/li&gt;
+&lt;li&gt;父类实现的改变会造成子类也需要改变&lt;/li&gt;
+&lt;li&gt;我们以为继承主要是为了代码重用，但实际上在子类中需要重新实现很多父类的方法&lt;/li&gt;
+&lt;li&gt;继承更多的应该是为了多态&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;tips&#34;&gt;TIPS&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;封装变化&lt;/li&gt;
+&lt;li&gt;多用组合，少用继承&lt;/li&gt;
+&lt;li&gt;针对接口编程，不针对实现编程&lt;/li&gt;
+&lt;li&gt;将系统中变化的部分抽离出来封装&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;导航&#34;&gt;导航&lt;/h2&gt;
+
+&lt;p&gt;接下来，我将具体的深入到每个设计模式当中去，去探究其使用场景&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;面向对象设计原则
+
+&lt;ol&gt;
+&lt;li&gt;[开放闭合原则]()&lt;/li&gt;
+&lt;li&gt;[里氏替换原则]()&lt;/li&gt;
+&lt;li&gt;[依赖倒置原则]()&lt;/li&gt;
+&lt;li&gt;[单一职责原则]()&lt;/li&gt;
+&lt;li&gt;[接口隔离原则]()&lt;/li&gt;
+&lt;li&gt;[迪米特法则]()&lt;/li&gt;
+&lt;li&gt;[合成复用原则]()&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;li&gt;设计模式详解
+
+&lt;ol&gt;
+&lt;li&gt;[观察者模式]()&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;/ol&gt;
 </description>
       
     </item>
