@@ -6,7 +6,7 @@
     <description>Recent content on 南阜</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 28 Jun 2019 08:41:18 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 30 Jun 2019 15:37:14 +0800</lastBuildDate>
     
         <atom:link href="https://kphn.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -20,6 +20,149 @@
       
         <description>&lt;p&gt;记录学习生活感悟的Blog，之前写的东西都比较零碎而且没有坚持下来。
 希望之后能认真的耕耘好着一亩三分地，认真记录好整理好自己的学习心得。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>部署ngrok</title>
+      <link>https://kphn.github.io/post/%E9%83%A8%E7%BD%B2ngrok/</link>
+      <pubDate>Sun, 30 Jun 2019 15:37:14 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/post/%E9%83%A8%E7%BD%B2ngrok/</guid>
+      
+        <description>
+
+&lt;h2 id=&#34;ngrok&#34;&gt;ngrok&lt;/h2&gt;
+
+&lt;p&gt;ngrok可以让本地的web服务或tcp服务和外部建立一个安全的通道，使得外网可以访问本地的计算机服务。不仅可以用来暴露内网的http给外网使用，还可以从外网来ssh到本机开发环境。ngrok可以通过官方的服务来连接，也可以自己来。下面介绍下私有的ngrok服务的搭建工作。&lt;/p&gt;
+
+&lt;h2 id=&#34;准备工作&#34;&gt;准备工作&lt;/h2&gt;
+
+&lt;p&gt;搭建ngrok服务需要一个&lt;strong&gt;外网服务器&lt;/strong&gt;以及一个已经解析到了该机器的&lt;strong&gt;域名&lt;/strong&gt;（假定为test.site）,国内可以在阿里云购买相关服务：&lt;a href=&#34;https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=mwdh54s4&#34;&gt;阿里云&lt;/a&gt;。注意：下文中用到的所有端口，如果启用了iptables规则，都需要放行，如果在阿里云中，需要设置&lt;strong&gt;安全组规则&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h3 id=&#34;依赖项&#34;&gt;依赖项&lt;/h3&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;ngrok使用go语言开发，所以首先要 安装go语言：&lt;a href=&#34;https://golang.org/doc/install&#34;&gt;https://golang.org/doc/install&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;
+
+&lt;p&gt;下载代码：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;git clone &lt;a href=&#34;https://github.com/inconshreveable/ngrok.git&#34;&gt;https://github.com/inconshreveable/ngrok.git&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;生成ssl证书：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;cd ngrok&lt;/p&gt;
+
+&lt;p&gt;NGROK_DOMAIN=&amp;ldquo;test.site&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;openssl genrsa -out base.key 2048&lt;/p&gt;
+
+&lt;p&gt;openssl req -new -x509 -nodes -key base.key -days 10000 -subj &amp;ldquo;/CN=$NGROK_DOMAIN&amp;rdquo; -out base.pem&lt;/p&gt;
+
+&lt;p&gt;openssl genrsa -out server.key 2048&lt;/p&gt;
+
+&lt;p&gt;openssl req -new -key server.key -subj &amp;ldquo;/CN=$NGROK_DOMAIN&amp;rdquo; -out server.csr&lt;/p&gt;
+
+&lt;p&gt;openssl x509 -req -in server.csr -CA base.pem -CAkey base.key -CAcreateserial -days 10000 -out server.crt&lt;/p&gt;
+
+&lt;p&gt;cp base.pem assets/client/tls/ngrokroot.crt&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;编译：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;sudo make release-server release-client&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;此时在bin目录下应该有ngrok和ngrokd两个可执行文件。&lt;/p&gt;
+
+&lt;p&gt;如果需要交叉编译：先设置好GOOS与GOARCH变量&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Linux 平台 32 位系统：GOOS=linux GOARCH=386&lt;/p&gt;
+
+&lt;p&gt;Linux 平台 64 位系统：GOOS=linux GOARCH=amd64&lt;/p&gt;
+
+&lt;p&gt;Windows 平台 32 位系统：GOOS=windows GOARCH=386&lt;/p&gt;
+
+&lt;p&gt;Windows 平台 64 位系统：GOOS=windows GOARCH=amd64&lt;/p&gt;
+
+&lt;p&gt;MAC 平台 32 位系统：GOOS=darwin GOARCH=386&lt;/p&gt;
+
+&lt;p&gt;MAC 平台 64 位系统：GOOS=darwin GOARCH=amd64&lt;/p&gt;
+
+&lt;p&gt;如需要编译window 64位版本：
+GOOS=windows GOARCH=amd64 make release-client&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;服务端启动：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;nohup ./bin/ngrokd -tlsKey=server.key -tlsCrt=server.crt -domain=&amp;ldquo;test.site&amp;rdquo; -httpAddr=&amp;rdquo;:8081&amp;rdquo; -httpsAddr=&amp;rdquo;:8082&amp;rdquo; &amp;amp;&lt;/p&gt;
+
+&lt;p&gt;示例中8081用来连接http请求，8082用来连接https请求&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;客户端启动：&lt;/p&gt;
+
+&lt;p&gt;将编译好的client版本下载到指定的机器上之后，配置启动文件：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;server_addr: test.site:4443			//4443为ngrok控制tunnel
+trust_host_root_certs: false		//如果不需要使用TLS，可以将此变量设置为你false
+tunnels:
+  client:
+    subdomain: pub
+    proto:
+      http: 8080
+  ssh:
+    remote_port: 2022
+    proto:
+      tcp: 22
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;./ngrok -log=stdout -config=ngrok.yml start ssh client&amp;amp;  启动客户端&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;此时，会把本机的8080端口的服务映射到服务端pub.test.site:8081端口，便可以用来访问客户端的8080端口的服务了。&lt;/p&gt;
+
+&lt;p&gt;tcp tunnel将22端口映射到服务端的2022端口，便可以ssh user@test.site -p2022 来访问客户端的ssh服务了。&lt;/p&gt;
+
+&lt;p&gt;开机启动ngrok client：&lt;/p&gt;
+
+&lt;p&gt;首先编写启动脚本 ngrok.sh：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;cd /path/to/ngrok-client
+./ngrok -log=stdout -config=ngrok.yml start ssh&amp;amp;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;再配置systemd ngrok service文件 /usr/lib/systemd/system/ngrok.service；&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[Unit]
+Description=ngrok service
+
+[Service]
+Type=forking
+ExecStart=/bin/bash /path/to/ngrok.sh
+
+[Install]
+WantedBy=multi-user.target
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后，&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;systemctl enable ngrok.service
+systemctl start ngrok.service
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;服务就可以开机启动了&lt;/p&gt;
 </description>
       
     </item>
