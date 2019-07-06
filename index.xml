@@ -6,7 +6,7 @@
     <description>Recent content on 有鸟止南方之阜</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 30 Jun 2019 15:37:14 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 05 Jul 2019 08:05:08 +0800</lastBuildDate>
     
         <atom:link href="https://kphn.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -20,6 +20,360 @@
       
         <description>&lt;p&gt;记录学习生活感悟的Blog，之前写的东西都比较零碎且没有全部记录在博客中。
 希望之后能认真的耕耘好着一亩三分地，认真记录好整理好自己的学习心得。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>分布式锁</title>
+      <link>https://kphn.github.io/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
+      <pubDate>Fri, 05 Jul 2019 08:05:08 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</guid>
+      
+        <description>
+
+&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+
+&lt;p&gt;在分布式环境下，需要控制多个节点对同一个资源的并发访问，此时本地的加锁已经不能满足需要。为了实现在分布式环境下的锁。&lt;/p&gt;
+
+&lt;h3 id=&#34;使用场景&#34;&gt;使用场景&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;效率:使用分布式锁可以避免不同节点重复相同的工作，这些工作会浪费资源。比如用户付了钱之后有可能不同节点会发出多封短信。&lt;/li&gt;
+&lt;li&gt;正确性:加分布式锁同样可以避免破坏正确性的发生，如果两个节点在同一条数据上面操作，比如多个节点机器对同一个订单操作不同的流程有可能会导致该笔订单最后状态出现错误，造成损失。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;特点&#34;&gt;特点&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;互斥性:和我们本地锁一样互斥性是最基本，但是分布式锁需要保证在不同节点的不同线程的互斥。&lt;/li&gt;
+&lt;li&gt;可重入性:同一个节点上的同一个线程如果获取了锁之后那么也可以再次获取这个锁。&lt;/li&gt;
+&lt;li&gt;锁超时:和本地锁一样支持锁超时，防止死锁。&lt;/li&gt;
+&lt;li&gt;高效，高可用:加锁和解锁需要高效，同时也需要保证高可用防止分布式锁失效，可以增加降级。&lt;/li&gt;
+&lt;li&gt;支持阻塞和非阻塞:和ReentrantLock一样支持lock和trylock以及tryLock(long timeOut)。&lt;/li&gt;
+&lt;li&gt;支持公平锁和非公平锁(可选):公平锁的意思是按照请求加锁的顺序获得锁，非公平锁就相反是无序的。这个一般来说实现的比较少。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;常见实现方式&#34;&gt;常见实现方式&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MySql&lt;/li&gt;
+&lt;li&gt;ZK/etcd&lt;/li&gt;
+&lt;li&gt;Redis&lt;/li&gt;
+&lt;li&gt;Chubby&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;mysql&#34;&gt;mysql&lt;/h2&gt;
+
+&lt;h3 id=&#34;事务&#34;&gt;事务&lt;/h3&gt;
+
+&lt;p&gt;利用mysql的事务可以实现分布式资源的互斥访问，一般可以建立一个锁表。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sql&#34;&gt;CREATE TABLE `lock_table` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `resourcce_name` varchar(128) DEFAULT &#39;&#39;&#39;&#39;&#39;&#39; COMMENT &#39;资源名称&#39;,
+  `node_info` varchar(128) DEFAULT NULL COMMENT &#39;机器信息&#39;,
+  `count` int(11) NOT NULL DEFAULT &#39;0&#39; COMMENT &#39;锁的次数，统计可重入锁&#39;,
+  `desc` varchar(128) DEFAULT NULL COMMENT &#39;额外的描述信息&#39;,
+  `utime` int(11) unsigned NOT NULL DEFAULT &#39;0&#39; COMMENT &#39;更新时间戳&#39;,
+  `ctime` int(11) unsigned NOT NULL DEFAULT &#39;0&#39; COMMENT &#39;创建时间戳&#39;,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_resource` (`resourcce_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Lock&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Transcation
+public void lock(resourceName){
+  if (select * from lock_table where resource_name = resourceName;有数据){
+    if(node_info == currentNode){
+      update lock_table set count=count+1 where resource_name = resourceName；
+      return true；
+    }else{
+      return false;
+    }
+  }else{
+    insert into lock_table;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;利用了sql的事务，获取锁时，先去查询锁是否存在，如果存在则比较node_info【ip+线程id】是否一致。如果一致就加可重入锁count的值，如果不一致那么就返回false。如果没有值，则可以创建这个锁。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;tryLock:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public boolean tryLock(){
+  return mysqlLock.lock();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;tryLock(timeout)&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public boolean tryLock(long timeout){
+  long endtime = timenow + timeout;
+  while(true){
+    if mysqlLock.lock(){
+      return true;
+    }
+    if(timenow &amp;gt; endtime){
+      return false;
+    }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;unlock()&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Transcation
+public boolean unlock(){
+  if(select * from lock_table 有数据){
+    if(currentNode == node_info){
+      if (count&amp;gt;1){
+        update count = count-1;
+      }else{
+        delete;
+      }
+    }else{
+      return false;
+    }
+  }else{
+    return false;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;锁超时&lt;/strong&gt;：如果持有锁的节点挂了，那么该锁就不会被释放，我们可以启动一个定时任务来认定节点挂了之后释放锁。&lt;/p&gt;
+
+&lt;h2 id=&#34;etcd&#34;&gt;etcd&lt;/h2&gt;
+
+&lt;h3 id=&#34;事务-1&#34;&gt;事务&lt;/h3&gt;
+
+&lt;p&gt;etcd3中可以序列化多个操作为一个条件性的迷你事务。每个事务包含一组条件守护的组合，当所有提交满足时一组操作被执行，并且任何条件不满足时另外一组操作被执行。事务可以保证分布式锁的安全。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;Txn().If(cond1, cond2, ...).Then(op1, op2, ...,).Else(op1’, op2’, …)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;etcd3中的事务有三个部分，条件块，&lt;code&gt;If(cond1,cond2,...)&lt;/code&gt; ,成功块 &lt;code&gt;Then(op1,op2,...)&lt;/code&gt;,失败块&lt;code&gt;Else(op1,op2,...)&lt;/code&gt; 条件块中的所有条件都满足的情况下就执行Then，否则就执行Else。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func doTxnXfer(etcd *v3.Client, from, to string, amount uint) (bool, error) {
+    getresp, err := etcd.Txn(ctx.TODO()).Then(OpGet(from), OpGet(to)).Commit()	//事务查出from和get
+    if err != nil {
+         return false, err
+    }
+    fromKV := getresp.Responses[0].GetRangeResponse().Kvs[0]
+    toKV := getresp.Responses[1].GetRangeResponse().Kvs[1]
+    fromV, toV := toUInt64(fromKV.Value), toUint64(toKV.Value)
+    if fromV &amp;lt; amount {
+        return false, fmt.Errorf(“insufficient value”)
+    }
+    txn := etcd.Txn(ctx.TODO()).If(
+        v3.Compare(v3.ModRevision(from), “=”, fromKV.ModRevision),
+        v3.Compare(v3.ModRevision(to), “=”, toKV.ModRevision))			//如果from 和 get还没被修改
+    txn = txn.Then(
+        OpPut(from, fromUint64(fromV - amount)),					//那么久同时更新这两个key
+        OpPut(to, fromUint64(toV + amount))
+    putresp, err := txn.Commit()												//提交事务
+    if err != nil {
+        return false, err
+    }
+    return putresp.Succeeded, nil
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://coreos.com/sites/default/files/inline-images/diagram3.png&#34; alt=&#34;diagram&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;而利用etcd的事务实现分布式锁的代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package concurrency
+
+import (
+	&amp;quot;context&amp;quot;
+	&amp;quot;fmt&amp;quot;
+	&amp;quot;sync&amp;quot;
+
+	v3 &amp;quot;go.etcd.io/etcd/clientv3&amp;quot;
+	pb &amp;quot;go.etcd.io/etcd/etcdserver/etcdserverpb&amp;quot;
+)
+
+// Mutex implements the sync Locker interface with etcd
+type Mutex struct {
+	s *Session
+
+	pfx   string
+	myKey string
+	myRev int64
+	hdr   *pb.ResponseHeader
+}
+
+func NewMutex(s *Session, pfx string) *Mutex {
+	return &amp;amp;Mutex{s, pfx + &amp;quot;/&amp;quot;, &amp;quot;&amp;quot;, -1, nil}
+}
+
+// Lock locks the mutex with a cancelable context. If the context is canceled
+// while trying to acquire the lock, the mutex tries to clean its stale lock entry.
+func (m *Mutex) Lock(ctx context.Context) error {
+	s := m.s
+	client := m.s.Client()
+
+	m.myKey = fmt.Sprintf(&amp;quot;%s%x&amp;quot;, m.pfx, s.Lease())
+	cmp := v3.Compare(v3.CreateRevision(m.myKey), &amp;quot;=&amp;quot;, 0)
+	// put self in lock waiters via myKey; oldest waiter holds lock
+	put := v3.OpPut(m.myKey, &amp;quot;&amp;quot;, v3.WithLease(s.Lease()))
+	// reuse key in case this session already holds the lock
+	get := v3.OpGet(m.myKey)
+	// fetch current holder to complete uncontended path with only one RPC
+	getOwner := v3.OpGet(m.pfx, v3.WithFirstCreate()...)
+	resp, err := client.Txn(ctx).If(cmp).Then(put, getOwner).Else(get, getOwner).Commit()
+  //类似于原子操作cas，compare and swap
+	if err != nil {
+		return err
+	}
+	m.myRev = resp.Header.Revision
+	if !resp.Succeeded {
+		m.myRev = resp.Responses[0].GetResponseRange().Kvs[0].CreateRevision
+	}
+	// if no key on prefix / the minimum rev is key, already hold the lock
+	ownerKey := resp.Responses[1].GetResponseRange().Kvs
+	if len(ownerKey) == 0 || ownerKey[0].CreateRevision == m.myRev {
+		m.hdr = resp.Header
+		return nil
+	}
+
+	// wait for deletion revisions prior to myKey
+	hdr, werr := waitDeletes(ctx, client, m.pfx, m.myRev-1)
+	// release lock key if wait failed
+	if werr != nil {
+		m.Unlock(client.Ctx())
+	} else {
+		m.hdr = hdr
+	}
+	return werr
+}
+
+func (m *Mutex) Unlock(ctx context.Context) error {
+	client := m.s.Client()
+	if _, err := client.Delete(ctx, m.myKey); err != nil {
+		return err
+	}
+	m.myKey = &amp;quot;\x00&amp;quot;
+	m.myRev = -1
+	return nil
+}
+
+func (m *Mutex) IsOwner() v3.Cmp {
+	return v3.Compare(v3.CreateRevision(m.myKey), &amp;quot;=&amp;quot;, m.myRev)
+}
+
+func (m *Mutex) Key() string { return m.myKey }
+
+// Header is the response header received from etcd on acquiring the lock.
+func (m *Mutex) Header() *pb.ResponseHeader { return m.hdr }
+
+type lockerMutex struct{ *Mutex }
+
+func (lm *lockerMutex) Lock() {
+	client := lm.s.Client()
+	if err := lm.Mutex.Lock(client.Ctx()); err != nil {
+		panic(err)
+	}
+}
+func (lm *lockerMutex) Unlock() {
+	client := lm.s.Client()
+	if err := lm.Mutex.Unlock(client.Ctx()); err != nil {
+		panic(err)
+	}
+}
+
+// NewLocker creates a sync.Locker backed by an etcd mutex.
+func NewLocker(s *Session, pfx string) sync.Locker {
+	return &amp;amp;lockerMutex{NewMutex(s, pfx)}
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;redis&#34;&gt;redis&lt;/h2&gt;
+
+&lt;h3 id=&#34;单节点redis锁&#34;&gt;单节点redis锁&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;SET resource_name my_random_value NX PX 30000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在上面的&lt;code&gt;SET&lt;/code&gt;命令中：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;my_random_value&lt;/code&gt;是由客户端生成的一个随机字符串，它要保证在足够长的一段时间内在所有客户端的所有获取锁的请求中都是唯一的。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;NX&lt;/code&gt;表示只有当&lt;code&gt;resource_name&lt;/code&gt;对应的key值不存在的时候才能&lt;code&gt;SET&lt;/code&gt;成功。这保证了只有第一个请求的客户端才能获得锁，而其它客户端在锁被释放之前都无法获得锁。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;PX 30000&lt;/code&gt;表示这个锁有一个30秒的自动过期时间。当然，这里30秒只是一个例子，客户端可以选择合适的过期时间。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;最后，当客户端完成了对共享资源的操作之后，执行下面的Redis Lua脚本来&lt;strong&gt;释放锁&lt;/strong&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;if redis.call(&amp;quot;get&amp;quot;,KEYS[1]) == ARGV[1] then
+    return redis.call(&amp;quot;del&amp;quot;,KEYS[1])
+else
+    return 0
+end复制代码
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这段Lua脚本在执行的时候要把前面的&lt;code&gt;my_random_value&lt;/code&gt;作为&lt;code&gt;ARGV[1]&lt;/code&gt;的值传进去，把&lt;code&gt;resource_name&lt;/code&gt;作为&lt;code&gt;KEYS[1]&lt;/code&gt;的值传进去.&lt;/p&gt;
+
+&lt;p&gt;有几个点要注意下：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;锁的过期时间，如果一个客户端获取到锁只有崩溃了，那么其他客户端再也不能获取到这个锁。所以要设置这个有效时间。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;设置一个随机字符串 my_random_value很有必要，这保证一个客户端释放的锁是自己持有的那个锁。假如获取锁时&lt;code&gt;SET&lt;/code&gt;的不是一个随机字符串，而是一个固定值，那么可能会发生下面的执行序列：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;客户端1获取锁成功。&lt;/li&gt;
+&lt;li&gt;客户端1在某个操作上阻塞了很长时间。&lt;/li&gt;
+&lt;li&gt;过期时间到了，锁自动释放了。&lt;/li&gt;
+&lt;li&gt;客户端2获取到了对应同一个资源的锁。&lt;/li&gt;
+&lt;li&gt;客户端1从阻塞中恢复过来，释放掉了客户端2持有的锁。&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;之后，客户端2在访问共享资源的时候，就没有锁为它提供保护了。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;释放锁的过程：释放锁的过程必须使用lua脚本或（multi）来实现。释放锁其实包含三步操作：&amp;rsquo;GET&amp;rsquo;、判断和&amp;rsquo;DEL&amp;rsquo;，用Lua脚本来实现能保证这三步的原子性。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;redlock&#34;&gt;redlock&lt;/h3&gt;
+
+&lt;p&gt;我们想象一个这样的场景当机器A申请到一把锁之后，如果Redis主宕机了，这个时候从机并没有同步到这一把锁，那么机器B再次申请的时候就会再次申请到这把锁，为了解决这个问题Redis作者提出了RedLock红锁的算法,在Redission中也对RedLock进行了实现。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;//三个redis的集群
+Rlock lock1 = redissonInstance1.getLock(&amp;quot;lock1&amp;quot;);
+Rlock lock2 = redissonInstance2.getLock(&amp;quot;lock2&amp;quot;);
+Rlock lock3 = redissonInstance3.getLock(&amp;quot;lock3&amp;quot;);
+
+RedissonRedLock lock = new REdissonRedLock(lock1,lock2,lock3);
+lock.lock();
+  ...
+lock.unlock();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过上面的代码，我们需要实现多个Redis集群，然后进行红锁的加锁，解锁。具体的步骤如下:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;首先生成多个Redis集群的Rlock，并将其构造成RedLock。&lt;/li&gt;
+&lt;li&gt;依次循环对三个集群进行加锁，加锁的过程和5.2里面一致。&lt;/li&gt;
+&lt;li&gt;如果循环加锁的过程中加锁失败，那么需要判断加锁失败的次数是否超出了最大值，这里的最大值是根据集群的个数，比如三个那么只允许失败一个，五个的话只允许失败两个，要保证多数成功。&lt;/li&gt;
+&lt;li&gt;加锁的过程中需要判断是否加锁超时，有可能我们设置加锁只能用3ms，第一个集群加锁已经消耗了3ms了。那么也算加锁失败。&lt;/li&gt;
+&lt;li&gt;3，4步里面加锁失败的话，那么就会进行解锁操作，解锁会对所有的集群在请求一次解锁。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;可以看见RedLock基本原理是利用多个Redis集群，用&lt;strong&gt;多数&lt;/strong&gt;的集群加锁成功，减少Redis某个集群出故障，造成分布式锁出现问题的概率。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;redis锁小结&lt;/strong&gt;：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;优点:对于Redis实现简单，性能对比ZK和Mysql较好。如果不需要特别复杂的要求，那么自己就可以利用setNx进行实现，如果自己需要复杂的需求的话那么可以利用或者借鉴Redission。对于一些要求比较严格的场景来说的话可以使用RedLock。&lt;/li&gt;
+&lt;li&gt;缺点:需要维护Redis集群，如果要实现RedLock那么需要维护更多的集群。&lt;/li&gt;
+&lt;/ul&gt;
 </description>
       
     </item>
