@@ -13,10 +13,10 @@
     
     <item>
       <title>迪米特法则</title>
-      <link>https://kphn.github.io/post/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/</link>
+      <link>https://kphn.github.io/post/2019/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/</link>
       <pubDate>Fri, 28 Jun 2019 08:27:57 +0800</pubDate>
       
-      <guid>https://kphn.github.io/post/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/</guid>
+      <guid>https://kphn.github.io/post/2019/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/</guid>
       <description>定义 迪米特法则（Law of Demeter）：又称最少知识原则（Least Knowledge Principle，LKP），只与你的直接朋友交谈，不跟“陌生人”说</description>
     </item>
     

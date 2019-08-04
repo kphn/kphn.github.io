@@ -6,7 +6,7 @@
     <description>Recent content on 有鸟止南方之阜</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 05 Jul 2019 08:05:08 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 03 Aug 2019 15:51:09 +0800</lastBuildDate>
     
         <atom:link href="https://kphn.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -25,11 +25,97 @@
     </item>
     
     <item>
+      <title>网络编程</title>
+      <link>https://kphn.github.io/post/2019/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</link>
+      <pubDate>Sat, 03 Aug 2019 15:51:09 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/post/2019/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</guid>
+      
+        <description>
+
+&lt;h2 id=&#34;客户端-服务器编程模型&#34;&gt;客户端-服务器编程模型&lt;/h2&gt;
+
+&lt;p&gt;每个网络应用都是基于&lt;code&gt;客户端-服务器模型&lt;/code&gt;的。基于这个模型，一个应用是由一个服务器进程和一个或多个客户端进程组成。服务器管理者某种资源，并利用这种资源为其他客户端提供服务。
+常见的类型有：&lt;strong&gt;web服务器&lt;/strong&gt;，&lt;strong&gt;FTP服务器&lt;/strong&gt;，&lt;strong&gt;电子邮件服务器&lt;/strong&gt;等。&lt;/p&gt;
+
+&lt;h2 id=&#34;套接字编程&#34;&gt;套接字编程&lt;/h2&gt;
+
+&lt;p&gt;套接字接口流程图&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://kphn.github.io/image/套接字接口.svg&#34; alt=&#34;socket&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;套接字函数&#34;&gt;套接字函数&lt;/h3&gt;
+
+&lt;p&gt;​   &lt;code&gt;int socket(int domain,int type,int protocol)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;如果想要使套接字成为连接的一个端点，使用 &lt;code&gt;clinetfd = Socket(AF_INET,SOCK_STREAM,0)&lt;/code&gt;,AF_INET代表正在使用32位IP地址，而SOCK_STREAM表示这个套接字是连接的一个端点。socket返回的clientfd描述符仅是部分打开的，还不能用于读写。&lt;/p&gt;
+
+&lt;h3 id=&#34;connect函数&#34;&gt;connect函数&lt;/h3&gt;
+
+&lt;p&gt;客户端通过调用connect函数来建立和服务器的连接。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;int connect(int clientfd,const struct sockaddr *addr,socklen_t addr)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;connect函数试图与套接字地址为addr的服务器建立一个因特网连接，其中addrlen是sizeof（sockaddr_in）。connect函数会阻塞，一直到连接成功建立或者发生错误。如果成功，clientfd描述符现在就可以准备好读写了。&lt;/p&gt;
+
+&lt;h3 id=&#34;bind函数&#34;&gt;bind函数&lt;/h3&gt;
+
+&lt;p&gt;服务器用bind、listen和accept等套接字来和客户端建立连接。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;int bind(int sockfd,const struct sockaddr *addr,socklen_t addrlen&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;bind函数告诉内核将addr中的服务器套接字地址和套接字描述符sockfd联系起来。&lt;/p&gt;
+
+&lt;h3 id=&#34;listen函数&#34;&gt;listen函数&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;int listen(int socktd,int backlog)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;listen函数将sockfd从一个主动套接字转化为一个监听套接字(listening socket),该套接字可以接受来自客户端的连接请求。backlog参数暗示了内核在开始拒绝连接请求之前，队列中要排队的未完成的连接请求的数量。&lt;/p&gt;
+
+&lt;h3 id=&#34;accept函数&#34;&gt;accept函数&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;int accept(int listenfd,struct sockaddr *addr,int *addrlen)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;accept函数等待来自客户端的请求连接到达侦听描述符listenfd，然后在addr中填写客户端的套接字地址，并返回一个*已连接描述符*，这个描述符可被用来利用Unix I/O函数与客户端通信。&lt;/p&gt;
+
+&lt;p&gt;监听描述符vs已连接描述符：监听描述符是作为客户端连接请求中的一个端点。它通常被创建一次，并存在于服务器的整个生命周期。已连接描述符是客户端和服务器之间已经建立起来的一个端点。服务器每次接受连接请求时都会创建一次，它只存在服务器为一个客户端服务的过程中。
+&lt;img src=&#34;https://kphn.github.io/image/connfd.png&#34; alt=&#34;socket&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;套接字接口区分监听描述符和已连接描述符的一个重要的原因就是：使用连接描述符可以建立并发服务器，它能够同时处理许多客户端连接。例如：每次一个连接请求到达监听描述符时，可以派生出一个新的进程，它通过已连接描述符和客户端通信。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;//简单的单连接无并发的程序
+void echo(int connfd);
+int main(int argc,char **argv)
+{
+  int listenfd,connfd;
+  socklen_t clientfd;
+  struct sockaddr_storage clientaddr;
+  char client_hostname[MAXLINE],client_port[MAXLINE];
+  
+  if (argc!=2){
+    exit(0);
+  }
+  
+  listenfd = Open_listenfd(argv[1]);
+  while(1){
+    clientlen = sizeof(struct sockaddr_storage);
+    connfd = Accept(listenfd,(SA *)&amp;amp;clientaddr, &amp;amp;clientlen);
+    echo(connfd);
+    Close(connfd);
+  }
+  exit(0);
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>分布式锁</title>
-      <link>https://kphn.github.io/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
+      <link>https://kphn.github.io/post/2019/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
       <pubDate>Fri, 05 Jul 2019 08:05:08 +0800</pubDate>
       
-      <guid>https://kphn.github.io/post/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</guid>
+      <guid>https://kphn.github.io/post/2019/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</guid>
       
         <description>
 
@@ -380,10 +466,10 @@ lock.unlock();
     
     <item>
       <title>部署ngrok</title>
-      <link>https://kphn.github.io/post/%E9%83%A8%E7%BD%B2ngrok/</link>
+      <link>https://kphn.github.io/post/2019/%E9%83%A8%E7%BD%B2ngrok/</link>
       <pubDate>Sun, 30 Jun 2019 15:37:14 +0800</pubDate>
       
-      <guid>https://kphn.github.io/post/%E9%83%A8%E7%BD%B2ngrok/</guid>
+      <guid>https://kphn.github.io/post/2019/%E9%83%A8%E7%BD%B2ngrok/</guid>
       
         <description>
 
@@ -523,10 +609,10 @@ systemctl start ngrok.service
     
     <item>
       <title>合成复用原则</title>
-      <link>https://kphn.github.io/post/%E5%90%88%E6%88%90%E5%A4%8D%E7%94%A8%E5%8E%9F%E5%88%99/</link>
+      <link>https://kphn.github.io/post/2019/%E5%90%88%E6%88%90%E5%A4%8D%E7%94%A8%E5%8E%9F%E5%88%99/</link>
       <pubDate>Fri, 28 Jun 2019 08:41:18 +0800</pubDate>
       
-      <guid>https://kphn.github.io/post/%E5%90%88%E6%88%90%E5%A4%8D%E7%94%A8%E5%8E%9F%E5%88%99/</guid>
+      <guid>https://kphn.github.io/post/2019/%E5%90%88%E6%88%90%E5%A4%8D%E7%94%A8%E5%8E%9F%E5%88%99/</guid>
       
         <description>
 
@@ -565,10 +651,10 @@ systemctl start ngrok.service
     
     <item>
       <title>迪米特法则</title>
-      <link>https://kphn.github.io/post/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/</link>
+      <link>https://kphn.github.io/post/2019/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/</link>
       <pubDate>Fri, 28 Jun 2019 08:27:57 +0800</pubDate>
       
-      <guid>https://kphn.github.io/post/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/</guid>
+      <guid>https://kphn.github.io/post/2019/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/</guid>
       
         <description>
 
@@ -612,10 +698,10 @@ systemctl start ngrok.service
     
     <item>
       <title>接口隔离原则</title>
-      <link>https://kphn.github.io/post/%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99/</link>
+      <link>https://kphn.github.io/post/2019/%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99/</link>
       <pubDate>Fri, 28 Jun 2019 08:16:33 +0800</pubDate>
       
-      <guid>https://kphn.github.io/post/%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99/</guid>
+      <guid>https://kphn.github.io/post/2019/%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99/</guid>
       
         <description>
 
@@ -658,10 +744,10 @@ systemctl start ngrok.service
     
     <item>
       <title>单一职责原则</title>
-      <link>https://kphn.github.io/post/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/</link>
+      <link>https://kphn.github.io/post/2019/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/</link>
       <pubDate>Fri, 28 Jun 2019 08:05:42 +0800</pubDate>
       
-      <guid>https://kphn.github.io/post/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/</guid>
+      <guid>https://kphn.github.io/post/2019/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/</guid>
       
         <description>
 
@@ -696,10 +782,10 @@ systemctl start ngrok.service
     
     <item>
       <title>依赖倒置原则</title>
-      <link>https://kphn.github.io/post/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99/</link>
+      <link>https://kphn.github.io/post/2019/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99/</link>
       <pubDate>Thu, 27 Jun 2019 08:42:55 +0800</pubDate>
       
-      <guid>https://kphn.github.io/post/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99/</guid>
+      <guid>https://kphn.github.io/post/2019/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99/</guid>
       
         <description>
 
@@ -784,10 +870,10 @@ public void shopping(Shop shop)
     
     <item>
       <title>开放闭合原则</title>
-      <link>https://kphn.github.io/post/open-close/</link>
+      <link>https://kphn.github.io/post/2019/open-close/</link>
       <pubDate>Wed, 26 Jun 2019 23:17:56 +0800</pubDate>
       
-      <guid>https://kphn.github.io/post/open-close/</guid>
+      <guid>https://kphn.github.io/post/2019/open-close/</guid>
       
         <description>
 
@@ -817,10 +903,10 @@ public void shopping(Shop shop)
     
     <item>
       <title>设计模式</title>
-      <link>https://kphn.github.io/post/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+      <link>https://kphn.github.io/post/2019/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Wed, 26 Jun 2019 08:25:28 +0800</pubDate>
       
-      <guid>https://kphn.github.io/post/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>https://kphn.github.io/post/2019/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid>
       
         <description>
 

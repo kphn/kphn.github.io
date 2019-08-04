@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>IO on 有鸟止南方之阜</title>
+    <link>https://kphn.github.io/tags/io/</link>
+    <description>Recent content in IO on 有鸟止南方之阜</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 03 Aug 2019 15:51:09 +0800</lastBuildDate>
+    
+	<atom:link href="https://kphn.github.io/tags/io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>网络编程</title>
+      <link>https://kphn.github.io/post/2019/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</link>
+      <pubDate>Sat, 03 Aug 2019 15:51:09 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/post/2019/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</guid>
+      <description>客户端-服务器编程模型 每个网络应用都是基于客户端-服务器模型的。基于这个模型，一个应用是由一个服务器进程和一个或多个客户端进程组成。服务器管</description>
+    </item>
+    
+  </channel>
+</rss>
