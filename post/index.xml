@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 有鸟止南方之阜</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 03 Aug 2019 15:51:09 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 12 Aug 2019 20:07:58 +0800</lastBuildDate>
     
 	<atom:link href="https://kphn.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Go临时对象池pool原理解析</title>
+      <link>https://kphn.github.io/post/2019/go%E4%B8%B4%E6%97%B6%E5%AF%B9%E8%B1%A1%E6%B1%A0pool%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Mon, 12 Aug 2019 20:07:58 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/post/2019/go%E4%B8%B4%E6%97%B6%E5%AF%B9%E8%B1%A1%E6%B1%A0pool%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/</guid>
+      <description>临时对象池是啥 查看sync.Pool中的注释来了解pool的基本用法。主要有以下几点： pool是一个可以存储和取出临时对象的临时对象池。 池中</description>
+    </item>
     
     <item>
       <title>网络编程</title>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>单一职责原则 - 有鸟止南方之阜</title>
+  <title>Go临时对象池pool原理解析 - 有鸟止南方之阜</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -23,7 +23,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="kunpeng" />
-  <meta name="description" content="定义 单一职责原则（Single Responsibility Principle，SRP）又称单一功能原则：规定一个类应该且仅有一个引起它变化的原因，否则类应该被拆分。 该" />
+  <meta name="description" content="临时对象池是啥 查看sync.Pool中的注释来了解pool的基本用法。主要有以下几点： pool是一个可以存储和取出临时对象的临时对象池。 池中" />
 
   <meta name="keywords" content="Hugo, theme, jane" />
 
@@ -35,7 +35,7 @@
 <meta name="generator" content="Hugo 0.56.0-DEV" />
 
 
-<link rel="canonical" href="https://kphn.github.io/post/2019/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/" />
+<link rel="canonical" href="https://kphn.github.io/post/2019/go%E4%B8%B4%E6%97%B6%E5%AF%B9%E8%B1%A1%E6%B1%A0pool%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/" />
 
 
 
@@ -57,27 +57,27 @@
 
 
 
-<meta property="og:title" content="单一职责原则" />
-<meta property="og:description" content="定义 单一职责原则（Single Responsibility Principle，SRP）又称单一功能原则：规定一个类应该且仅有一个引起它变化的原因，否则类应该被拆分。 该" />
+<meta property="og:title" content="Go临时对象池pool原理解析" />
+<meta property="og:description" content="临时对象池是啥 查看sync.Pool中的注释来了解pool的基本用法。主要有以下几点： pool是一个可以存储和取出临时对象的临时对象池。 池中" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://kphn.github.io/post/2019/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/" />
-<meta property="article:published_time" content="2019-06-28T08:05:42+08:00" />
-<meta property="article:modified_time" content="2019-06-28T08:05:42+08:00" />
+<meta property="og:url" content="https://kphn.github.io/post/2019/go%E4%B8%B4%E6%97%B6%E5%AF%B9%E8%B1%A1%E6%B1%A0pool%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/" />
+<meta property="article:published_time" content="2019-08-12T20:07:58+08:00" />
+<meta property="article:modified_time" content="2019-08-12T20:07:58+08:00" />
 
-<meta itemprop="name" content="单一职责原则">
-<meta itemprop="description" content="定义 单一职责原则（Single Responsibility Principle，SRP）又称单一功能原则：规定一个类应该且仅有一个引起它变化的原因，否则类应该被拆分。 该">
-
-
-<meta itemprop="datePublished" content="2019-06-28T08:05:42&#43;08:00" />
-<meta itemprop="dateModified" content="2019-06-28T08:05:42&#43;08:00" />
-<meta itemprop="wordCount" content="408">
+<meta itemprop="name" content="Go临时对象池pool原理解析">
+<meta itemprop="description" content="临时对象池是啥 查看sync.Pool中的注释来了解pool的基本用法。主要有以下几点： pool是一个可以存储和取出临时对象的临时对象池。 池中">
 
 
+<meta itemprop="datePublished" content="2019-08-12T20:07:58&#43;08:00" />
+<meta itemprop="dateModified" content="2019-08-12T20:07:58&#43;08:00" />
+<meta itemprop="wordCount" content="1874">
 
-<meta itemprop="keywords" content="设计模式,单一职责原则,LSP," />
+
+
+<meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="单一职责原则"/>
-<meta name="twitter:description" content="定义 单一职责原则（Single Responsibility Principle，SRP）又称单一功能原则：规定一个类应该且仅有一个引起它变化的原因，否则类应该被拆分。 该"/>
+<meta name="twitter:title" content="Go临时对象池pool原理解析"/>
+<meta name="twitter:description" content="临时对象池是啥 查看sync.Pool中的注释来了解pool的基本用法。主要有以下几点： pool是一个可以存储和取出临时对象的临时对象池。 池中"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -289,17 +289,13 @@
           <article class="post bg-white">
     
     <header class="post-header">
-      <h1 class="post-title">单一职责原则</h1>
+      <h1 class="post-title">Go临时对象池pool原理解析</h1>
       
       <div class="post-meta">
-        <time datetime="2019-06-28" class="post-time">
-          2019-06-28
+        <time datetime="2019-08-12" class="post-time">
+          2019-08-12
         </time>
-        <div class="post-category">
-            <a href="https://kphn.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"> 设计模式 </a>
-            <a href="https://kphn.github.io/categories/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/"> 设计原则 </a>
-            
-          </div>
+        
         
 
         
@@ -319,9 +315,13 @@
 <ul>
 <li>
 <ul>
-<li><a href="#定义">定义</a></li>
-<li><a href="#优点">优点</a></li>
-<li><a href="#实现方法">实现方法</a></li>
+<li><a href="#临时对象池是啥">临时对象池是啥</a></li>
+<li><a href="#使用的基本原理">使用的基本原理</a>
+<ul>
+<li><a href="#get">Get</a></li>
+</ul></li>
+<li><a href="#使用示例">使用示例</a></li>
+<li><a href="#源码解析">源码解析</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -332,31 +332,250 @@
     <div class="post-content">
       
 
-<h2 id="定义">定义</h2>
+<h2 id="临时对象池是啥">临时对象池是啥</h2>
 
-<p>单一职责原则（Single Responsibility Principle，SRP）又称单一功能原则：规定一个类应该且仅有一个引起它变化的原因，否则类应该被拆分。</p>
-
-<p>该原则提出对象不应该承担太多职责，如果一个对象承担了太多的职责，至少存在以下两个缺点：</p>
+<p>查看<code>sync.Pool</code>中的注释来了解<code>pool</code>的基本用法。主要有以下几点：</p>
 
 <ol>
-<li>一个职责的变化可能会削弱或者抑制这个类实现其他职责的能力；</li>
-<li>当客户端需要该对象的某一个职责时，不得不将其他不需要的职责全部包含进来，从而造成冗余代码或代码的浪费。</li>
+<li>pool是一个可以存储和取出临时对象的<strong><em>临时对象</em></strong>池。</li>
+<li>池中的对象会在没有通知的情况下自动删除，如果一个对象池持有某个对象的唯一引用，那么该对象很有可能被回收。</li>
+<li>pool是多goroutine并发安全的。</li>
+<li>pool的目的是缓存已经分配但之后才回用到的对象，来减轻GC的压力。使用pool可以高效的构建线程安全的<code>free list</code>,但是其并不适用于所有场景的<code>free list</code>。</li>
+<li>一个适当的适用场景是：管理一个包内的多个独立运行的线程之间静默共享一组临时元素。pool提供了在多个client之间共享临时元素的机制。</li>
+<li>在fmt包中有一个适用Pool的例子，其维持了一个动态大小的临时输出buffer。</li>
+<li>Pool不适合存储在短生命周期的对象，这种场景下的缓存效果不大。</li>
+<li>一旦一个pool使用之后，便不能再被复制。</li>
 </ol>
 
-<h2 id="优点">优点</h2>
+<p><code>pool</code>的结构体定义如下：</p>
 
-<p>单一职责原则的核心就是<strong>控制类的粒度大小</strong>、将对象<strong>解耦、提高其内聚性</strong>。如果遵循单一职责原则将有以下优点。</p>
+<pre><code class="language-go">type Pool struct {
+	noCopy noCopy
 
-<ul>
-<li>降低类的复杂度。一个类只负责一项职责。</li>
-<li>提高类的可读性。</li>
-<li>提高系统的可维护性。</li>
-<li>变更引起的风险降低。当修改一个功能时，可以显著降低对其他功能的影响。</li>
-</ul>
+	local     unsafe.Pointer // local fixed-size per-P pool, actual type is [P]poolLocal
+	localSize uintptr        // size of the local array
 
-<h2 id="实现方法">实现方法</h2>
+	// New optionally specifies a function to generate
+	// a value when Get would otherwise return nil.
+	// It may not be changed concurrently with calls to Get.
+	New func() interface{}
+}
+</code></pre>
 
-<p>单一职责原则是最简单但又比较难运用的原则，需要设计人员发现类的不同职责并将其分离，再封装到不同的类或者模块中。而发现类的多重职责需要设计人员具有较强的分析设计能力和相关重构经验。</p>
+<p>使用pool对象的时候，需要传入New方法，来创建自己需要的对象（Get方法拿不到对象的时候，会调用New方法）。</p>
+
+<p>Pool 中有两个定义的公共方法，分别是 Put - 向池中添加元素；Get - 从池中获取元素，如果没有，则调用 New 生成元素，如果 New 未设置，则返回 nil。</p>
+
+<h2 id="使用的基本原理">使用的基本原理</h2>
+
+<h3 id="get">Get</h3>
+
+<p>Pool会为每个P维护一个本地池，P的本地池分为私有对象private 和 共享池 shared。私有对象的元数据只能本地P使用，共享池中的shared中的元素可能会被其他P*偷走*。</p>
+
+<pre><code class="language-go">// Local per-P Pool appendix.
+type poolLocalInternal struct {
+  //P私有元素,获取private不需要加锁
+	private interface{}   // Can be used only by the respective P.
+  //各个P共享元素池，获取shared需要加锁
+	shared  []interface{} // Can be used by any P.
+	Mutex                 // Protects shared.
+}
+</code></pre>
+
+<p>Get会优先查找本地private，再查找本地shared，最后再去其他P的shared去查找。如果都查不到则会调用New函数来获取新元素。</p>
+
+<pre><code class="language-go">
+
+func (p *Pool) Get() interface{} {
+	if race.Enabled {
+		race.Disable()
+	}
+	l := p.pin()
+  //先取private
+	x := l.private
+	l.private = nil
+	runtime_procUnpin()
+	if x == nil {
+		l.Lock()
+		last := len(l.shared) - 1
+		if last &gt;= 0 {
+      //加锁取shared
+			x = l.shared[last]
+			l.shared = l.shared[:last]
+		}
+		l.Unlock()
+		if x == nil {
+      //去取其他P的对象池数据
+			x = p.getSlow()
+		}
+	}
+	if race.Enabled {
+		race.Enable()
+		if x != nil {
+			race.Acquire(poolRaceAddr(x))
+		}
+	}
+  //都不存在则创建新对象，此时pool持有的对象未必为空，其他p可能是有私有数据的
+	if x == nil &amp;&amp; p.New != nil {
+		x = p.New()
+	}
+	return x
+}
+</code></pre>
+
+<p>getSlow，会从其他的P中的shared获取可用元素：</p>
+
+<pre><code class="language-go">func (p *Pool) getSlow() (x interface{}) {
+	// See the comment in pin regarding ordering of the loads.
+	size := atomic.LoadUintptr(&amp;p.localSize) // load-acquire
+	local := p.local                         // load-consume
+	// Try to steal one element from other procs.
+	pid := runtime_procPin()
+	runtime_procUnpin()
+	for i := 0; i &lt; int(size); i++ {
+		l := indexLocal(local, (pid+i+1)%int(size))
+    //对应的pool需要加上锁
+		l.Lock()
+		last := len(l.shared) - 1
+		if last &gt;= 0 {
+			x = l.shared[last]
+			l.shared = l.shared[:last]
+			l.Unlock()
+			break
+		}
+		l.Unlock()
+	}
+	return x
+}
+</code></pre>
+
+<p>Put：</p>
+
+<p>Put优先把数据放到private对象中，如果private对象不为空，则放入shared池中。但是在放入池中时，会有1/4的几率把池数据丢掉。</p>
+
+<pre><code class="language-go">// Put adds x to the pool.
+func (p *Pool) Put(x interface{}) {
+	if x == nil {
+		return
+	}
+	if race.Enabled {
+    //随机丢掉数据
+		if fastrand()%4 == 0 {
+			// Randomly drop x on floor.
+			return
+		}
+		race.ReleaseMerge(poolRaceAddr(x))
+		race.Disable()
+	}
+	l := p.pin()
+  //优先放入private对象中
+	if l.private == nil {
+		l.private = x
+		x = nil
+	}
+	runtime_procUnpin()
+	if x != nil {
+		l.Lock()
+    //其次放入shared池中
+		l.shared = append(l.shared, x)
+		l.Unlock()
+	}
+	if race.Enabled {
+		race.Enable()
+	}
+}
+</code></pre>
+
+<p>poolCleanup：</p>
+
+<p>在STW阶段，垃圾回收时，poolCleanup就会被调用。如果此时pool.shared被一个goroutine占用，那么整个Pool都会被保留下来，下次清理时内存占用差不多会翻一倍。</p>
+
+<pre><code class="language-go">func poolCleanup() {
+	// This function is called with the world stopped, at the beginning of a garbage collection.
+	// It must not allocate and probably should not call any runtime functions.
+	// Defensively zero out everything, 2 reasons:
+	// 1. To prevent false retention of whole Pools.
+	// 2. If GC happens while a goroutine works with l.shared in Put/Get,
+	//    it will retain whole Pool. So next cycle memory consumption would be doubled.
+	for i, p := range allPools {
+		allPools[i] = nil
+		for i := 0; i &lt; int(p.localSize); i++ {
+			l := indexLocal(p.local, i)
+			l.private = nil
+			for j := range l.shared {
+				l.shared[j] = nil
+			}
+			l.shared = nil
+		}
+		p.local = nil
+		p.localSize = 0
+	}
+	allPools = []*Pool{}
+}
+</code></pre>
+
+<h2 id="使用示例">使用示例</h2>
+
+<p>fmt中的printer pool</p>
+
+<p>printer与其的临时对象池,newPrinter从对象池中获取printer，free将对象放入对象池中，这样就避免了每次都重新生成打印对象，节省了对象生成时间。</p>
+
+<pre><code class="language-go">// pp is used to store a printer's state and is reused with sync.Pool to avoid allocations.
+type pp struct {
+	buf buffer
+
+	// arg holds the current item, as an interface{}.
+	arg interface{}
+
+	// value is used instead of arg for reflect values.
+	value reflect.Value
+
+	// fmt is used to format basic items such as integers or strings.
+	fmt fmt
+
+	// reordered records whether the format string used argument reordering.
+	reordered bool
+	// goodArgNum records whether the most recent reordering directive was valid.
+	goodArgNum bool
+	// panicking is set by catchPanic to avoid infinite panic, recover, panic, ... recursion.
+	panicking bool
+	// erroring is set when printing an error string to guard against calling handleMethods.
+	erroring bool
+}
+
+var ppFree = sync.Pool{
+	New: func() interface{} { return new(pp) },
+}
+
+// newPrinter allocates a new pp struct or grabs a cached one.
+func newPrinter() *pp {
+	p := ppFree.Get().(*pp)
+	p.panicking = false
+	p.erroring = false
+	p.fmt.init(&amp;p.buf)
+	return p
+}
+
+// free saves used pp structs in ppFree; avoids an allocation per invocation.
+func (p *pp) free() {
+	// Proper usage of a sync.Pool requires each entry to have approximately
+	// the same memory cost. To obtain this property when the stored type
+	// contains a variably-sized buffer, we add a hard limit on the maximum buffer
+	// to place back in the pool.
+	//
+	// See https://golang.org/issue/23199
+	if cap(p.buf) &gt; 64&lt;&lt;10 {
+		return
+	}
+
+	p.buf = p.buf[:0]
+	p.arg = nil
+	p.value = reflect.Value{}
+	ppFree.Put(p)
+}
+</code></pre>
+
+<h2 id="源码解析">源码解析</h2>
 
     </div>
 
@@ -369,7 +588,7 @@
   </p>
   <p class="copyright-item">
     <span class="item-title">LastMod</span>
-    <span class="item-content">2019-06-28</span>
+    <span class="item-content">2019-08-12</span>
   </p>
   
   <p class="copyright-item">
@@ -383,32 +602,14 @@
     
 
     <footer class="post-footer">
-      <div class="post-tags">
-          <a href="https://kphn.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
-          <a href="https://kphn.github.io/tags/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99/">单一职责原则</a>
-          <a href="https://kphn.github.io/tags/lsp/">LSP</a>
-          
-        </div>
+      
 
       
       <nav class="post-nav">
         
-          <a class="prev" href="/post/2019/%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99/">
-            
-            <i class="iconfont">
-              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
-  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="18" height="18">
-  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
-</svg>
-
-            </i>
-            <span class="prev-text nav-default">接口隔离原则</span>
-            <span class="prev-text nav-mobile">Prev</span>
-          </a>
         
-          <a class="next" href="/post/2019/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99/">
-            <span class="next-text nav-default">依赖倒置原则</span>
+          <a class="next" href="/post/2019/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
+            <span class="next-text nav-default">网络编程</span>
             <span class="prev-text nav-mobile">Next</span>
             
             <i class="iconfont">
@@ -446,7 +647,7 @@
   <div id="disqus_thread"></div>
   <script type="text/javascript">
     var disqus_config = function () {
-      this.page.url = "https://kphn.github.io/post/2019/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3/";
+      this.page.url = "https://kphn.github.io/post/2019/go%E4%B8%B4%E6%97%B6%E5%AF%B9%E8%B1%A1%E6%B1%A0pool%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/";
     };
     function load_disqus() {
       
