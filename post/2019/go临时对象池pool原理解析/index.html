@@ -70,7 +70,7 @@
 
 <meta itemprop="datePublished" content="2019-08-12T20:07:58&#43;08:00" />
 <meta itemprop="dateModified" content="2019-08-12T20:07:58&#43;08:00" />
-<meta itemprop="wordCount" content="1874">
+<meta itemprop="wordCount" content="1854">
 
 
 
@@ -319,6 +319,9 @@
 <li><a href="#使用的基本原理">使用的基本原理</a>
 <ul>
 <li><a href="#get">Get</a></li>
+<li><a href="#getslow">getSlow</a></li>
+<li><a href="#put">Put</a></li>
+<li><a href="#poolcleanup">poolCleanup</a></li>
 </ul></li>
 <li><a href="#使用示例">使用示例</a></li>
 <li><a href="#源码解析">源码解析</a></li>
@@ -423,7 +426,9 @@ func (p *Pool) Get() interface{} {
 }
 </code></pre>
 
-<p>getSlow，会从其他的P中的shared获取可用元素：</p>
+<h3 id="getslow">getSlow</h3>
+
+<p>getSlow 会从其他的P中的shared获取可用元素：</p>
 
 <pre><code class="language-go">func (p *Pool) getSlow() (x interface{}) {
 	// See the comment in pin regarding ordering of the loads.
@@ -449,7 +454,7 @@ func (p *Pool) Get() interface{} {
 }
 </code></pre>
 
-<p>Put：</p>
+<h3 id="put">Put</h3>
 
 <p>Put优先把数据放到private对象中，如果private对象不为空，则放入shared池中。但是在放入池中时，会有1/4的几率把池数据丢掉。</p>
 
@@ -486,7 +491,7 @@ func (p *Pool) Put(x interface{}) {
 }
 </code></pre>
 
-<p>poolCleanup：</p>
+<h3 id="poolcleanup">poolCleanup</h3>
 
 <p>在STW阶段，垃圾回收时，poolCleanup就会被调用。如果此时pool.shared被一个goroutine占用，那么整个Pool都会被保留下来，下次清理时内存占用差不多会翻一倍。</p>
 

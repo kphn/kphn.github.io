@@ -124,7 +124,9 @@ func (p *Pool) Get() interface{} {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;getSlow，会从其他的P中的shared获取可用元素：&lt;/p&gt;
+&lt;h3 id=&#34;getslow&#34;&gt;getSlow&lt;/h3&gt;
+
+&lt;p&gt;getSlow 会从其他的P中的shared获取可用元素：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func (p *Pool) getSlow() (x interface{}) {
 	// See the comment in pin regarding ordering of the loads.
@@ -150,7 +152,7 @@ func (p *Pool) Get() interface{} {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Put：&lt;/p&gt;
+&lt;h3 id=&#34;put&#34;&gt;Put&lt;/h3&gt;
 
 &lt;p&gt;Put优先把数据放到private对象中，如果private对象不为空，则放入shared池中。但是在放入池中时，会有1/4的几率把池数据丢掉。&lt;/p&gt;
 
@@ -187,7 +189,7 @@ func (p *Pool) Put(x interface{}) {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;poolCleanup：&lt;/p&gt;
+&lt;h3 id=&#34;poolcleanup&#34;&gt;poolCleanup&lt;/h3&gt;
 
 &lt;p&gt;在STW阶段，垃圾回收时，poolCleanup就会被调用。如果此时pool.shared被一个goroutine占用，那么整个Pool都会被保留下来，下次清理时内存占用差不多会翻一倍。&lt;/p&gt;
 
