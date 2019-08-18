@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Go Interface 原理解析 - 有鸟止南方之阜</title>
+  
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="author" content="kunpeng" />
+  <meta name="description" content="概述 在Go中的，interface是一个非常重要的概念，一般情况下会有两种用法，一种类似于Java语言的接口的概念，作为Go语言中的一组方法" />
+
+  <meta name="keywords" content="Hugo, theme, jane" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://kphn.github.io/post/2019/go-interface-%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/" />
+
+
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/sass/jane.min.ec807d8b802a40889537c26e014f733206312ea440d42e1f0dabed80918de1ac.css" integrity="sha256-7IB9i4AqQIiVN8JuAU9zMgYxLqRA1C4fDavtgJGN4aw=" media="screen" crossorigin="anonymous">
+
+
+
+
+
+<meta property="og:title" content="Go Interface 原理解析" />
+<meta property="og:description" content="概述 在Go中的，interface是一个非常重要的概念，一般情况下会有两种用法，一种类似于Java语言的接口的概念，作为Go语言中的一组方法" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kphn.github.io/post/2019/go-interface-%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/" />
+<meta property="article:published_time" content="2019-08-13T21:46:30+08:00" />
+<meta property="article:modified_time" content="2019-08-13T21:46:30+08:00" />
+
+<meta itemprop="name" content="Go Interface 原理解析">
+<meta itemprop="description" content="概述 在Go中的，interface是一个非常重要的概念，一般情况下会有两种用法，一种类似于Java语言的接口的概念，作为Go语言中的一组方法">
+
+
+<meta itemprop="datePublished" content="2019-08-13T21:46:30&#43;08:00" />
+<meta itemprop="dateModified" content="2019-08-13T21:46:30&#43;08:00" />
+<meta itemprop="wordCount" content="3530">
+
+
+
+<meta itemprop="keywords" content="go,interface," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go Interface 原理解析"/>
+<meta name="twitter:description" content="概述 在Go中的，interface是一个非常重要的概念，一般情况下会有两种用法，一种类似于Java语言的接口的概念，作为Go语言中的一组方法"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">有鸟止南方之阜</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://kphn.github.io/">首页</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://kphn.github.io/post/">博客</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://kphn.github.io/tags/">标签</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://kphn.github.io/categories/">分类</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://kphn.github.io/about/">关于</a>
+          
+        
+      </li>
+    
+  </ul>
+</nav>
+
+
+  
+    
+
+
+
+
+
+
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css" />
+  <link rel="stylesheet" href="/lib/photoswipe/default-skin/default-skin.min.css" />
+
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+  
+
+  
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">
+    
+      有鸟止南方之阜
+    
+  </a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://kphn.github.io/">首页</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://kphn.github.io/post/">博客</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://kphn.github.io/tags/">标签</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://kphn.github.io/categories/">分类</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://kphn.github.io/about/">关于</a>
+          
+
+        
+
+      </li>
+    
+    
+  </ul>
+</nav>
+
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go Interface 原理解析</h1>
+      
+      <div class="post-meta">
+        <time datetime="2019-08-13" class="post-time">
+          2019-08-13
+        </time>
+        <div class="post-category">
+            <a href="https://kphn.github.io/categories/go/"> go </a>
+            <a href="https://kphn.github.io/categories/interface/"> interface </a>
+            <a href="https://kphn.github.io/categories/develop/"> develop </a>
+            
+          </div>
+        
+
+        
+        
+
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Table of Contents</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#概述">概述</a>
+<ul>
+<li><a href="#方法">方法</a></li>
+<li><a href="#类型">类型</a></li>
+<li><a href="#指针与接口">指针与接口</a></li>
+<li><a href="#nil-non-nil">nil &amp;&amp; non-nil</a></li>
+<li><a href="#类型断言">类型断言</a></li>
+</ul></li>
+<li><a href="#why-interface">why interface</a>
+<ul>
+<li><a href="#泛型">泛型</a></li>
+<li><a href="#隐藏具体实现">隐藏具体实现</a></li>
+<li><a href="#providing-interception-points">providing interception points</a></li>
+<li><a href="#非侵入式">非侵入式</a></li>
+</ul></li>
+<li><a href="#内部实现原理">内部实现原理</a>
+<ul>
+<li><a href="#eface">eface</a></li>
+<li><a href="#iface">iface</a></li>
+<li><a href="#itab">itab</a></li>
+</ul></li>
+<li><a href="#reference">Reference</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h2 id="概述">概述</h2>
+
+<p>在Go中的，interface是一个非常重要的概念，一般情况下会有两种用法，一种<strong><em>类似</em></strong>于Java语言的接口的概念，作为Go语言中的一组方法的定义；一种<strong><em>类似</em></strong>于c 中的<code>void *</code>的概念，是Go中的抽象类型。</p>
+
+<h3 id="方法">方法</h3>
+
+<p>比如经常使用的Context类型，只定义了其方法的集合，具体的类型可以有不同的实现方式，传输过程中可以不传递其实现类型，而是直接传递context即可。这样就隐藏了其具体实现。</p>
+
+<pre><code class="language-go">type Context interface {
+	Deadline() (deadline time.Time, ok bool)
+	Done() &lt;-chan struct{}
+	Err() error
+	Value(key interface{}) interface{}
+}
+</code></pre>
+
+<p>不同于其他语言的接口，go语言接口的实现是 <strong><em>隐式的</em></strong> 。我们不需要像Java那样显式的<code>implement interface</code>。在golang中 我们只需要给类型定义好接口中的几个方法，那么该类型就自动实现了该接口。</p>
+
+<p>Go语言会在编译器对代码进行类型检查，如下面代码所示，共触发了三次类型检查:</p>
+
+<ol>
+<li>将 <code>*RPCError</code> 类型的变量赋值给 <code>error</code> 类型的变量 <code>rpcErr</code>；</li>
+<li>将 <code>*RPCError</code> 类型的变量 <code>rpcErr</code> 传递给签名中参数类型为 <code>error</code> 的 <code>AsErr</code> 函数；</li>
+
+<li><p>将 <code>*RPCError</code> 类型的变量从函数签名的返回值类型为 <code>error</code> 的 <code>NewRPCError</code> 函数中返回；</p>
+
+<pre><code class="language-go">func main() {
+var rpcErr error = NewRPCError(400, &quot;unknown err&quot;) // typecheck1
+err := AsErr(rpcErr) // typecheck2
+println(err) 
+}
+
+func NewRPCError(code int64, msg string) error {
+return &amp;RPCError{ // typecheck3
+    Code:    code,
+    Message: msg,
+}
+}
+
+func AsErr(err error) error {
+return err
+}
+</code></pre></li>
+</ol>
+
+<p>从编译器类型检查的过程来看，编译器仅在需要时才会对类型进行检查，类型实现接口时也只需要隐式的实现所有接口中的方法即可。</p>
+
+<h3 id="类型">类型</h3>
+
+<p>不带有任何方法的<code>interface{}</code>类型，使用起来像c中的空指针。不过不同的地方是，<code>interface{}</code>类型不代表任意类型，<code>interface{}</code>类型的变量在运行期间的类型只是<code>interface{}</code>。</p>
+
+<pre><code class="language-go">func Print(v interface{}){
+  println(v)
+}
+
+Print(Struct{a int}{a:1})
+</code></pre>
+
+<p>上述Print函数并不能接收任意类型的阐述，只是在调用Print函数时，将参数转换成了<code>interface{}</code>类型。</p>
+
+<p>如果需要将<code>interface{}</code>类型重新转化为其实际类型，需要进行类型断言。</p>
+
+<p>在Go语言中的源码中，将接口实现表示成了 <code>iface</code>结构体，将 不包含任何方法的抽象类型表示为<code>eface</code>结构体。虽然两种类型都使用了<code>interface</code>进行声明，但是后者由于在Go语言中非常常见，所以在实现时也将它实现成了一种特殊的类型。</p>
+
+<h3 id="指针与接口">指针与接口</h3>
+
+<p>Go语言是一个有指针类型的语言，接口在定义一组方法时，并没有对实现的接收者做限制，所以可以在一个类型上看到两种不同的实现方式。</p>
+
+<pre><code class="language-go">//方式1
+type Plane interface{
+  Fly()
+}
+
+type Helicopter struct{}
+
+func (h *Helicopter)Fly{
+  fmt.Println(&quot;helicopter flying&quot;)
+}
+
+//方式2
+type Plane interface{
+  Fly()
+}
+
+type Helicopter struct{}
+
+func (h Helicopter)Fly{
+  fmt.Println(&quot;helicopter flying&quot;)
+}
+</code></pre>
+
+<p>理论上，调用者和接收者各有两种类型，一共四种组合。而实际上，方法集规范只包括三种方式，如下表：</p>
+
+<table>
+<thead>
+<tr>
+<th>Values</th>
+<th>Methods Receivers</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>T</td>
+<td>(t T)</td>
+</tr>
+
+<tr>
+<td>*T</td>
+<td>(t T) and (t *T)</td>
+</tr>
+</tbody>
+</table>
+
+<p>有一种情况会编译不通过。就是方法接收者是指针类型，而实际调用者是结构体。</p>
+
+<p>因为在实际调用者是结构体时，并不是总能获取到结构体的指针的。而反过来，指针总是能获取到其指向的实际结构体，那么指针自然能调用接收器为结构体的方法了。</p>
+
+<blockquote>
+<p>因为不能总是获取到一个值的地址，所以指针结构体的方法不能由结构体来调用。</p>
+</blockquote>
+
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+type myStruct int
+
+func main() {
+	fmt.Printf(&quot;%p\n&quot;, &amp;myStruct(1))        //can't take the address of myStruct(1)
+}
+</code></pre>
+
+<h3 id="nil-non-nil">nil &amp;&amp; non-nil</h3>
+
+<p>我们可以再通过一个例子理解<strong>『Go 语言的接口类型不是任意类型』</strong>这一句话，下面的代码在 <code>main</code>函数中初始化了一个 <code>*TestStruct</code> 结构体指针，由于指针的零值是 <code>nil</code>，所以变量 <code>s</code> 在初始化之后也是 <code>nil</code>：</p>
+
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+type TestStruct struct{}
+
+func NilOrNot(v interface{}) {
+	if v == nil {
+		println(&quot;nil&quot;)
+	} else {
+		println(&quot;non-nil&quot;)
+	}
+}
+
+func main() {
+	var s *TestStruct
+	if s == nil {
+		fmt.Println(&quot;nil&quot;)
+	} else {
+		fmt.Println(&quot;non nil&quot;)
+	}
+	NilOrNot(s)
+}
+
+
+$ go run main.go
+nil
+non-nil
+</code></pre>
+
+<p>但是当我们将 <code>s</code> 变量传入 <code>NilOrNot</code> 时，该方法却打印出了 <code>non-nil</code> 字符串，这主要是因为调用 <code>NilOrNot</code> 函数时其实<strong>会发生隐式的类型转换</strong>，变量 <code>nil</code> 会被转换成 <code>interface{}</code> 类型，<code>interface{}</code> 类型是一个结构体，它除了包含 <code>nil</code> 变量之外还包含变量的类型信息，也就是 <code>TestStruct</code>，所以在这里会打印出 <code>nil</code> <code>non-nil</code>，在转换为接口之前，变量s确实为nil，但是转化为<code>interface</code>之后就不再是nil了。</p>
+
+<h3 id="类型断言">类型断言</h3>
+
+<p>类型断言可以看成一系列类型转换，对每一个swtich case而言，试图转换value的类型。</p>
+
+<pre><code class="language-go">type Stringer interface {
+    String() string
+}
+
+var value interface{} // Value provided by caller.
+switch str := value.(type) {
+case string:
+    return str
+case Stringer:
+    return str.String()
+}
+</code></pre>
+
+<p>使用类型转换，等价于如上流程的代码如下：</p>
+
+<pre><code class="language-go">if str, ok := value.(string); ok {
+    return str
+} else if str, ok := value.(Stringer); ok {
+    return str.String()
+}
+</code></pre>
+
+<p>进行类型转换时，<code>str,ok := value.(string)</code>这种方式，可以通过ok来判断value是否转换成功，如果转换不成功，那么str也会变成转换之后类型的<code>零值</code>。当然，也有一种写法 <code>str := value.(string)</code>这种方式直接进行类型转换，而一旦转换不成功，那么代码就会直接panic。</p>
+
+<h2 id="why-interface">why interface</h2>
+
+<h3 id="泛型">泛型</h3>
+
+<p>使用 <code>interfae</code>可以实现范型编程，比如我们现在要写一个泛型算法，形参定义采用 interface 就可以了，以标准库的 sort 为例。</p>
+
+<pre><code class="language-go">type Interface interface {
+    Len() int
+    Less(i, j int) bool
+    Swap(i, j int)
+}
+
+func Sort(data Interface) {
+    n := data.Len()
+    maxDepth := 0
+    for i := n; i &gt; 0; i &gt;&gt;= 1 {
+        maxDepth++
+    }
+    maxDepth *= 2
+    quickSort(data, 0, n, maxDepth)
+}
+</code></pre>
+
+<p>Sort 函数的形参是一个 interface，包含了三个方法：<code>Len()</code>，<code>Less(i,j int)</code>，<code>Swap(i, j int)</code>。使用的时候不管数组的元素类型是什么类型（int, float, string…），只要我们实现了这三个方法就可以使用 Sort 函数，这样就实现了“泛型编程”。有一点比较麻烦的是，我们需要将数组自定义一下。</p>
+
+<h3 id="隐藏具体实现">隐藏具体实现</h3>
+
+<p>隐藏具体实现，这个很好理解。比如我设计一个函数给你返回一个 <code>interface</code>，那么你只能通过 <code>interface</code> 里面的方法来做一些操作，但是内部的具体实现是完全不知道的。如 下图演示的<code>context</code> 接口：尽管内部实现上下面三个函数返回的具体 struct （都实现了 Context interface）不同，但是对于使用者来说是完全无感知的。</p>
+
+<pre><code class="language-go">func WithCancel(parent Context) (ctx Context, cancel CancelFunc)    //返回 cancelCtx
+func WithDeadline(parent Context, deadline time.Time) (Context, CancelFunc) //返回 timerCtx
+func WithValue(parent Context, key, val interface{}) Context    //返回 valueCtx
+</code></pre>
+
+<h3 id="providing-interception-points">providing interception points</h3>
+
+<p>这里应该是 wrapper 或者装饰器，文章末尾视频中Francesc给出了一个例子如下：</p>
+
+<pre><code class="language-go">type header struct {
+    rt  http.RoundTripper
+    v   map[string]string
+}
+
+func (h header) RoundTrip(r *http.Request) *http.Response {
+    for k, v := range h.v {
+        r.Header.Set(k,v)
+    }
+    return h.rt.RoundTrip(r)
+}
+</code></pre>
+
+<p>通过 interface，我们可以通过类似这种方式实现 dynamic dispatch。</p>
+
+<p>另外golang中一个重要的原则就是,返回具体的类型，而接收参数的时候接收 接口类型，这样可以提升程序的健壮性，而且可以使得方法很容易进行测试：</p>
+
+<blockquote>
+<p>Return <strong>concrete types</strong>, receive <strong>interfaces</strong> as parameter. — Robustness Principle applied to Go</p>
+</blockquote>
+
+<h3 id="非侵入式">非侵入式</h3>
+
+<p>上面提过，golang的接口是隐式的实现的，在编译期一个结构体作为一个接口传递，会检测该结构体是否实现了接口的所有方法。一个结构体可以实现多个接口，只要其实现了这几个接口的方法。假设接口的方法个数为m，结构体实现的方法的个数为n，检查结构体是否实现接口的时间复杂度为 O( m*n )。在将方法进行排序之后，时间复杂度可以将为O( m + n )。</p>
+
+<p>同时不同于Java中实现一个接口需要显示的implement 一个接口，golang中可以减少对包的依赖。但是这样也会带来一个新的问题：</p>
+
+<ol>
+<li>性能下降，使用 <code>interface</code>作为函数参数，runtime的时候会动态的确定行为。而使用struct作为参数的话，编译期间就可以确定了。</li>
+<li>不知道 struct 实现了哪些interface。</li>
+</ol>
+
+<p>tip：使用规范：可以实现多个接口，编译时检测vs运行时检测</p>
+
+<p>如果没有额外的导出函数，实现接口的方法可以用接口来传递（方便替换，open - close原则）</p>
+
+<p>返回具体值，接收方接收interface，但是如果不想让接收方看到具体细节，也可以直接返回interface。</p>
+
+<h2 id="内部实现原理">内部实现原理</h2>
+
+<p>上面提到： Go 语言中其实有两种略微不同的接口，其中一种是带有一组方法的接口，另一种是不带有任何方法的 <code>interface{}</code> 类型。这两种不同的接口，在go语言的源代码中也有着不同的定义：第一种接口表示为 <code>iface</code>， 而第二种表示成 <code>eface</code>结构体。</p>
+
+<h3 id="eface">eface</h3>
+
+<pre><code class="language-go">type eface struct { // 16 bytes
+    _type *_type
+    data  unsafe.Pointer
+}
+</code></pre>
+
+<p>由于<code>interface{}</code>类型不包含任何方法，所以其结构也相对简单，只包含指向底层数据和类型的两个指针，从这里的结构可以推断出，任意的类型都可以转换成<code>interface{}</code>类型。</p>
+
+<h3 id="iface">iface</h3>
+
+<pre><code class="language-go">type iface struct { // 16 bytes
+    tab  *itab
+    data unsafe.Pointer
+}
+
+type itab struct { // 32 bytes
+    inter *interfacetype
+    _type *_type
+    hash  uint32 // copy of _type.hash. Used for type switches.
+    _     [4]byte
+    fun   [1]uintptr // variable sized. fun[0]==0 means _type does not implement inter.
+}
+</code></pre>
+
+<p>用于表示接口的 <code>interface</code>类型的底层数据结构就是 <code>iface</code> 了。在这个结构体中也有指向原始数据的指针 <code>data</code>,但是这个结构体中更为重要的其实是 <code>itab</code>类型的<code>tab</code>字段。</p>
+
+<h3 id="itab">itab</h3>
+
+<p>在itab结构中，也包含了 eface 中包含的 _type 结构体，每个 _type 结构体中都包含了类型的大小，对齐以及hash等信息。</p>
+
+<p><code>hash</code> 字段其实是对 <code>_type.hash</code> 的拷贝，它会在从 <code>interface</code> 到具体类型的切换时用于<strong>快速判断目标类型和接口中类型是否一致</strong>；最后的 <code>fun</code> 数组其实是一个动态大小的数组，如果如果当前数组中内容为空就表示 <code>_type</code> 没有实现 <code>inter</code> 接口，虽然这是一个大小固定的数组，但是在使用时会直接通过指针获取其中的数据并不会检查数组的边界，所以该数组中保存的元素数量是不确定的。<code>用户缓存是否实现某个接口</code></p>
+
+<p>itable在头部存储了一些类型相关元数据，之后是一个函数指针的列表。注意itable不是和不动态类型对应的，而是和*interface类型*相对应，只有interface中的方法会存入itable中。</p>
+
+<h2 id="reference">Reference</h2>
+
+<ol>
+<li><a href="https://research.swtch.com/interfaces">Go Data Structures: Interfaces</a></li>
+<li><a href="https://draveness.me/golang/basic/golang-interface.html">go 接口</a></li>
+</ol>
+
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="//www.youtube.com/embed/F4wUrj6pmSI" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">kunpeng</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2019-08-13</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://kphn.github.io/tags/go/">go</a>
+          <a href="https://kphn.github.io/tags/interface/">interface</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+        
+          <a class="next" href="/post/2019/go%E4%B8%B4%E6%97%B6%E5%AF%B9%E8%B1%A1%E6%B1%A0pool%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/">
+            <span class="next-text nav-default">Go临时对象池pool原理解析</span>
+            <span class="prev-text nav-mobile">Next</span>
+            
+            <i class="iconfont">
+              <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M332.091514 74.487481l-75.369571 89.491197c-10.963703 12.998035-10.285251 32.864502 1.499144 44.378743l286.278095 300.375162L266.565125 819.058374c-11.338233 12.190647-11.035334 32.285311 0.638543 44.850487l80.46666 86.564541c11.680017 12.583596 30.356378 12.893658 41.662889 0.716314l377.434212-421.426145c11.332093-12.183484 11.041474-32.266891-0.657986-44.844348l-80.46666-86.564541c-1.772366-1.910513-3.706415-3.533476-5.750981-4.877077L373.270379 71.774697C361.493148 60.273758 343.054193 61.470003 332.091514 74.487481z"></path>
+</svg>
+
+            </i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  <div class="disqus-comment">
+  <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
+    显示评论
+  </div>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    var disqus_config = function () {
+      this.page.url = "https://kphn.github.io/post/2019/go-interface-%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/";
+    };
+    function load_disqus() {
+      
+      
+      if (window.location.hostname === '192.168.128.132') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'kunpeng';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+
+      $('#load_disqus').remove();
+    };
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+  
+  </div>
+
+    
+
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="icon-links">
+  
+  
+    <a href="mailto:kunpengdai@foxmail.com" rel="me noopener" class="iconfont"
+      title="email" >
+      <svg class="icon" viewBox="0 0 1451 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+    </a>
+  
+    <a href="https://www.linkedin.com/in/%E5%9D%A4%E9%B9%8F-%E4%BB%A3-01aa0a151" rel="me noopener" class="iconfont"
+      title="linkedin"  target="_blank"
+      >
+      <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="33" height="33">
+  <path d="M872.405333 872.618667h-151.637333v-237.610667c0-56.661333-1.152-129.578667-79.018667-129.578667-79.061333 0-91.136 61.653333-91.136 125.397334v241.792H398.976V384h145.664v66.602667h1.962667c20.352-38.4 69.845333-78.933333 143.786666-78.933334 153.642667 0 182.058667 101.12 182.058667 232.746667v268.202667zM227.712 317.141333a87.978667 87.978667 0 0 1-88.021333-88.106666 88.064 88.064 0 1 1 88.021333 88.106666z m76.032 555.477334H151.68V384h152.064v488.618667zM948.266667 0H75.562667C33.792 0 0 33.024 0 73.770667v876.458666C0 991.018667 33.792 1024 75.562667 1024h872.576C989.866667 1024 1024 991.018667 1024 950.229333V73.770667C1024 33.024 989.866667 0 948.138667 0h0.128z"></path>
+</svg>
+
+    </a>
+  
+    <a href="https://github.com/kphn" rel="me noopener" class="iconfont"
+      title="github"  target="_blank"
+      >
+      <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M512 12.672c-282.88 0-512 229.248-512 512 0 226.261333 146.688 418.133333 350.08 485.76 25.6 4.821333 34.986667-11.008 34.986667-24.618667 0-12.16-0.426667-44.373333-0.64-87.04-142.421333 30.890667-172.458667-68.693333-172.458667-68.693333C188.672 770.986667 155.008 755.2 155.008 755.2c-46.378667-31.744 3.584-31.104 3.584-31.104 51.413333 3.584 78.421333 52.736 78.421333 52.736 45.653333 78.293333 119.850667 55.68 149.12 42.581333 4.608-33.109333 17.792-55.68 32.426667-68.48-113.706667-12.8-233.216-56.832-233.216-253.013333 0-55.893333 19.84-101.546667 52.693333-137.386667-5.76-12.928-23.04-64.981333 4.48-135.509333 0 0 42.88-13.738667 140.8 52.48 40.96-11.392 84.48-17.024 128-17.28 43.52 0.256 87.04 5.888 128 17.28 97.28-66.218667 140.16-52.48 140.16-52.48 27.52 70.528 10.24 122.581333 5.12 135.509333 32.64 35.84 52.48 81.493333 52.48 137.386667 0 196.693333-119.68 240-233.6 252.586667 17.92 15.36 34.56 46.762667 34.56 94.72 0 68.522667-0.64 123.562667-0.64 140.202666 0 13.44 8.96 29.44 35.2 24.32C877.44 942.592 1024 750.592 1024 524.672c0-282.752-229.248-512-512-512"></path>
+</svg>
+
+    </a>
+
+
+<a href="https://kphn.github.io/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+    class="iconfont" title="rss" target="_blank">
+    <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="30" height="30">
+  <path d="M819.157333 1024C819.157333 574.592 449.408 204.8 0 204.8V0c561.706667 0 1024 462.293333 1024 1024h-204.842667zM140.416 743.04a140.8 140.8 0 0 1 140.501333 140.586667A140.928 140.928 0 0 1 140.074667 1024C62.72 1024 0 961.109333 0 883.626667s62.933333-140.544 140.416-140.586667zM678.784 1024h-199.04c0-263.210667-216.533333-479.786667-479.744-479.786667V345.173333c372.352 0 678.784 306.517333 678.784 678.826667z"></path>
+</svg>
+
+  </a>
+   
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+      2017 -
+    2019
+    <span class="heart">
+      
+      <i class="iconfont">
+        <svg class="icon" viewBox="0 0 1025 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="14" height="14">
+  <path d="M1000.1 247.9c-15.5-37.3-37.6-70.6-65.7-98.9-54.4-54.8-125.8-85-201-85-85.7 0-166 39-221.4 107.4C456.6 103 376.3 64 290.6 64c-75.1 0-146.5 30.4-201.1 85.6-28.2 28.5-50.4 61.9-65.8 99.3-16 38.8-24 79.9-23.6 122.2 0.7 91.7 40.1 177.2 108.1 234.8 3.1 2.6 6 5.1 8.9 7.8 14.9 13.4 58 52.8 112.6 102.7 93.5 85.5 209.9 191.9 257.5 234.2 7 6.1 15.8 9.5 24.9 9.5 9.2 0 18.1-3.4 24.9-9.5 34.5-30.7 105.8-95.9 181.4-165 74.2-67.8 150.9-138 195.8-178.2 69.5-57.9 109.6-144.4 109.9-237.3 0.1-42.5-8-83.6-24-122.2z"
+   fill="#8a8a8a"></path>
+</svg>
+
+      </i>
+    </span><span class="author">
+        kunpeng
+        
+      </span></span>
+
+  
+  
+
+  
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont">
+        
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="35" height="35">
+  <path d="M510.866688 227.694839 95.449397 629.218702l235.761562 0-2.057869 328.796468 362.40389 0L691.55698 628.188232l241.942331-3.089361L510.866688 227.694839zM63.840492 63.962777l894.052392 0 0 131.813095L63.840492 195.775872 63.840492 63.962777 63.840492 63.962777zM63.840492 63.962777"></path>
+</svg>
+
+      </i>
+    </div>
+  </div>
+  
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+
+
+
+
+<script type="text/javascript" src="/js/main.638251f4230630f0335d8c6748e53a96f94b72670920b60c09a56fdc8bece214.js" integrity="sha256-Y4JR9CMGMPAzXYxnSOU6lvlLcmcJILYMCaVv3Ivs4hQ=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

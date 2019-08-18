@@ -6,10 +6,28 @@
     <description>Recent content in Tags on 有鸟止南方之阜</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 03 Aug 2019 15:51:09 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 13 Aug 2019 21:46:30 +0800</lastBuildDate>
     
 	<atom:link href="https://kphn.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>go</title>
+      <link>https://kphn.github.io/tags/go/</link>
+      <pubDate>Tue, 13 Aug 2019 21:46:30 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/tags/go/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>interface</title>
+      <link>https://kphn.github.io/tags/interface/</link>
+      <pubDate>Tue, 13 Aug 2019 21:46:30 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/tags/interface/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>IO</title>
@@ -170,15 +188,6 @@
       <pubDate>Wed, 26 Jun 2019 23:17:56 +0800</pubDate>
       
       <guid>https://kphn.github.io/tags/%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>index</title>
-      <link>https://kphn.github.io/tags/index/</link>
-      <pubDate>Wed, 26 Jun 2019 08:25:28 +0800</pubDate>
-      
-      <guid>https://kphn.github.io/tags/index/</guid>
       <description></description>
     </item>
     

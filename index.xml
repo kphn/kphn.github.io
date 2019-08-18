@@ -6,7 +6,7 @@
     <description>Recent content on 有鸟止南方之阜</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 12 Aug 2019 20:07:58 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 13 Aug 2019 21:46:30 +0800</lastBuildDate>
     
         <atom:link href="https://kphn.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -20,6 +20,344 @@
       
         <description>&lt;p&gt;记录学习生活感悟的Blog，之前写的东西都比较零碎且没有全部记录在博客中。
 希望之后能认真的耕耘好着一亩三分地，认真记录好整理好自己的学习心得。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Go Interface 原理解析</title>
+      <link>https://kphn.github.io/post/2019/go-interface-%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Tue, 13 Aug 2019 21:46:30 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/post/2019/go-interface-%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/</guid>
+      
+        <description>
+
+&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
+
+&lt;p&gt;在Go中的，interface是一个非常重要的概念，一般情况下会有两种用法，一种&lt;strong&gt;&lt;em&gt;类似&lt;/em&gt;&lt;/strong&gt;于Java语言的接口的概念，作为Go语言中的一组方法的定义；一种&lt;strong&gt;&lt;em&gt;类似&lt;/em&gt;&lt;/strong&gt;于c 中的&lt;code&gt;void *&lt;/code&gt;的概念，是Go中的抽象类型。&lt;/p&gt;
+
+&lt;h3 id=&#34;方法&#34;&gt;方法&lt;/h3&gt;
+
+&lt;p&gt;比如经常使用的Context类型，只定义了其方法的集合，具体的类型可以有不同的实现方式，传输过程中可以不传递其实现类型，而是直接传递context即可。这样就隐藏了其具体实现。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;type Context interface {
+	Deadline() (deadline time.Time, ok bool)
+	Done() &amp;lt;-chan struct{}
+	Err() error
+	Value(key interface{}) interface{}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;不同于其他语言的接口，go语言接口的实现是 &lt;strong&gt;&lt;em&gt;隐式的&lt;/em&gt;&lt;/strong&gt; 。我们不需要像Java那样显式的&lt;code&gt;implement interface&lt;/code&gt;。在golang中 我们只需要给类型定义好接口中的几个方法，那么该类型就自动实现了该接口。&lt;/p&gt;
+
+&lt;p&gt;Go语言会在编译器对代码进行类型检查，如下面代码所示，共触发了三次类型检查:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;将 &lt;code&gt;*RPCError&lt;/code&gt; 类型的变量赋值给 &lt;code&gt;error&lt;/code&gt; 类型的变量 &lt;code&gt;rpcErr&lt;/code&gt;；&lt;/li&gt;
+&lt;li&gt;将 &lt;code&gt;*RPCError&lt;/code&gt; 类型的变量 &lt;code&gt;rpcErr&lt;/code&gt; 传递给签名中参数类型为 &lt;code&gt;error&lt;/code&gt; 的 &lt;code&gt;AsErr&lt;/code&gt; 函数；&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;将 &lt;code&gt;*RPCError&lt;/code&gt; 类型的变量从函数签名的返回值类型为 &lt;code&gt;error&lt;/code&gt; 的 &lt;code&gt;NewRPCError&lt;/code&gt; 函数中返回；&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func main() {
+var rpcErr error = NewRPCError(400, &amp;quot;unknown err&amp;quot;) // typecheck1
+err := AsErr(rpcErr) // typecheck2
+println(err) 
+}
+
+func NewRPCError(code int64, msg string) error {
+return &amp;amp;RPCError{ // typecheck3
+    Code:    code,
+    Message: msg,
+}
+}
+
+func AsErr(err error) error {
+return err
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;从编译器类型检查的过程来看，编译器仅在需要时才会对类型进行检查，类型实现接口时也只需要隐式的实现所有接口中的方法即可。&lt;/p&gt;
+
+&lt;h3 id=&#34;类型&#34;&gt;类型&lt;/h3&gt;
+
+&lt;p&gt;不带有任何方法的&lt;code&gt;interface{}&lt;/code&gt;类型，使用起来像c中的空指针。不过不同的地方是，&lt;code&gt;interface{}&lt;/code&gt;类型不代表任意类型，&lt;code&gt;interface{}&lt;/code&gt;类型的变量在运行期间的类型只是&lt;code&gt;interface{}&lt;/code&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func Print(v interface{}){
+  println(v)
+}
+
+Print(Struct{a int}{a:1})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上述Print函数并不能接收任意类型的阐述，只是在调用Print函数时，将参数转换成了&lt;code&gt;interface{}&lt;/code&gt;类型。&lt;/p&gt;
+
+&lt;p&gt;如果需要将&lt;code&gt;interface{}&lt;/code&gt;类型重新转化为其实际类型，需要进行类型断言。&lt;/p&gt;
+
+&lt;p&gt;在Go语言中的源码中，将接口实现表示成了 &lt;code&gt;iface&lt;/code&gt;结构体，将 不包含任何方法的抽象类型表示为&lt;code&gt;eface&lt;/code&gt;结构体。虽然两种类型都使用了&lt;code&gt;interface&lt;/code&gt;进行声明，但是后者由于在Go语言中非常常见，所以在实现时也将它实现成了一种特殊的类型。&lt;/p&gt;
+
+&lt;h3 id=&#34;指针与接口&#34;&gt;指针与接口&lt;/h3&gt;
+
+&lt;p&gt;Go语言是一个有指针类型的语言，接口在定义一组方法时，并没有对实现的接收者做限制，所以可以在一个类型上看到两种不同的实现方式。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;//方式1
+type Plane interface{
+  Fly()
+}
+
+type Helicopter struct{}
+
+func (h *Helicopter)Fly{
+  fmt.Println(&amp;quot;helicopter flying&amp;quot;)
+}
+
+//方式2
+type Plane interface{
+  Fly()
+}
+
+type Helicopter struct{}
+
+func (h Helicopter)Fly{
+  fmt.Println(&amp;quot;helicopter flying&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;理论上，调用者和接收者各有两种类型，一共四种组合。而实际上，方法集规范只包括三种方式，如下表：&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Values&lt;/th&gt;
+&lt;th&gt;Methods Receivers&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;T&lt;/td&gt;
+&lt;td&gt;(t T)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;*T&lt;/td&gt;
+&lt;td&gt;(t T) and (t *T)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;有一种情况会编译不通过。就是方法接收者是指针类型，而实际调用者是结构体。&lt;/p&gt;
+
+&lt;p&gt;因为在实际调用者是结构体时，并不是总能获取到结构体的指针的。而反过来，指针总是能获取到其指向的实际结构体，那么指针自然能调用接收器为结构体的方法了。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;因为不能总是获取到一个值的地址，所以指针结构体的方法不能由结构体来调用。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+
+type myStruct int
+
+func main() {
+	fmt.Printf(&amp;quot;%p\n&amp;quot;, &amp;amp;myStruct(1))        //can&#39;t take the address of myStruct(1)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;nil-non-nil&#34;&gt;nil &amp;amp;&amp;amp; non-nil&lt;/h3&gt;
+
+&lt;p&gt;我们可以再通过一个例子理解&lt;strong&gt;『Go 语言的接口类型不是任意类型』&lt;/strong&gt;这一句话，下面的代码在 &lt;code&gt;main&lt;/code&gt;函数中初始化了一个 &lt;code&gt;*TestStruct&lt;/code&gt; 结构体指针，由于指针的零值是 &lt;code&gt;nil&lt;/code&gt;，所以变量 &lt;code&gt;s&lt;/code&gt; 在初始化之后也是 &lt;code&gt;nil&lt;/code&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
+import &amp;quot;fmt&amp;quot;
+
+type TestStruct struct{}
+
+func NilOrNot(v interface{}) {
+	if v == nil {
+		println(&amp;quot;nil&amp;quot;)
+	} else {
+		println(&amp;quot;non-nil&amp;quot;)
+	}
+}
+
+func main() {
+	var s *TestStruct
+	if s == nil {
+		fmt.Println(&amp;quot;nil&amp;quot;)
+	} else {
+		fmt.Println(&amp;quot;non nil&amp;quot;)
+	}
+	NilOrNot(s)
+}
+
+
+$ go run main.go
+nil
+non-nil
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是当我们将 &lt;code&gt;s&lt;/code&gt; 变量传入 &lt;code&gt;NilOrNot&lt;/code&gt; 时，该方法却打印出了 &lt;code&gt;non-nil&lt;/code&gt; 字符串，这主要是因为调用 &lt;code&gt;NilOrNot&lt;/code&gt; 函数时其实&lt;strong&gt;会发生隐式的类型转换&lt;/strong&gt;，变量 &lt;code&gt;nil&lt;/code&gt; 会被转换成 &lt;code&gt;interface{}&lt;/code&gt; 类型，&lt;code&gt;interface{}&lt;/code&gt; 类型是一个结构体，它除了包含 &lt;code&gt;nil&lt;/code&gt; 变量之外还包含变量的类型信息，也就是 &lt;code&gt;TestStruct&lt;/code&gt;，所以在这里会打印出 &lt;code&gt;nil&lt;/code&gt; &lt;code&gt;non-nil&lt;/code&gt;，在转换为接口之前，变量s确实为nil，但是转化为&lt;code&gt;interface&lt;/code&gt;之后就不再是nil了。&lt;/p&gt;
+
+&lt;h3 id=&#34;类型断言&#34;&gt;类型断言&lt;/h3&gt;
+
+&lt;p&gt;类型断言可以看成一系列类型转换，对每一个swtich case而言，试图转换value的类型。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;type Stringer interface {
+    String() string
+}
+
+var value interface{} // Value provided by caller.
+switch str := value.(type) {
+case string:
+    return str
+case Stringer:
+    return str.String()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用类型转换，等价于如上流程的代码如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;if str, ok := value.(string); ok {
+    return str
+} else if str, ok := value.(Stringer); ok {
+    return str.String()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;进行类型转换时，&lt;code&gt;str,ok := value.(string)&lt;/code&gt;这种方式，可以通过ok来判断value是否转换成功，如果转换不成功，那么str也会变成转换之后类型的&lt;code&gt;零值&lt;/code&gt;。当然，也有一种写法 &lt;code&gt;str := value.(string)&lt;/code&gt;这种方式直接进行类型转换，而一旦转换不成功，那么代码就会直接panic。&lt;/p&gt;
+
+&lt;h2 id=&#34;why-interface&#34;&gt;why interface&lt;/h2&gt;
+
+&lt;h3 id=&#34;泛型&#34;&gt;泛型&lt;/h3&gt;
+
+&lt;p&gt;使用 &lt;code&gt;interfae&lt;/code&gt;可以实现范型编程，比如我们现在要写一个泛型算法，形参定义采用 interface 就可以了，以标准库的 sort 为例。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;type Interface interface {
+    Len() int
+    Less(i, j int) bool
+    Swap(i, j int)
+}
+
+func Sort(data Interface) {
+    n := data.Len()
+    maxDepth := 0
+    for i := n; i &amp;gt; 0; i &amp;gt;&amp;gt;= 1 {
+        maxDepth++
+    }
+    maxDepth *= 2
+    quickSort(data, 0, n, maxDepth)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Sort 函数的形参是一个 interface，包含了三个方法：&lt;code&gt;Len()&lt;/code&gt;，&lt;code&gt;Less(i,j int)&lt;/code&gt;，&lt;code&gt;Swap(i, j int)&lt;/code&gt;。使用的时候不管数组的元素类型是什么类型（int, float, string…），只要我们实现了这三个方法就可以使用 Sort 函数，这样就实现了“泛型编程”。有一点比较麻烦的是，我们需要将数组自定义一下。&lt;/p&gt;
+
+&lt;h3 id=&#34;隐藏具体实现&#34;&gt;隐藏具体实现&lt;/h3&gt;
+
+&lt;p&gt;隐藏具体实现，这个很好理解。比如我设计一个函数给你返回一个 &lt;code&gt;interface&lt;/code&gt;，那么你只能通过 &lt;code&gt;interface&lt;/code&gt; 里面的方法来做一些操作，但是内部的具体实现是完全不知道的。如 下图演示的&lt;code&gt;context&lt;/code&gt; 接口：尽管内部实现上下面三个函数返回的具体 struct （都实现了 Context interface）不同，但是对于使用者来说是完全无感知的。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func WithCancel(parent Context) (ctx Context, cancel CancelFunc)    //返回 cancelCtx
+func WithDeadline(parent Context, deadline time.Time) (Context, CancelFunc) //返回 timerCtx
+func WithValue(parent Context, key, val interface{}) Context    //返回 valueCtx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;providing-interception-points&#34;&gt;providing interception points&lt;/h3&gt;
+
+&lt;p&gt;这里应该是 wrapper 或者装饰器，文章末尾视频中Francesc给出了一个例子如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;type header struct {
+    rt  http.RoundTripper
+    v   map[string]string
+}
+
+func (h header) RoundTrip(r *http.Request) *http.Response {
+    for k, v := range h.v {
+        r.Header.Set(k,v)
+    }
+    return h.rt.RoundTrip(r)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通过 interface，我们可以通过类似这种方式实现 dynamic dispatch。&lt;/p&gt;
+
+&lt;p&gt;另外golang中一个重要的原则就是,返回具体的类型，而接收参数的时候接收 接口类型，这样可以提升程序的健壮性，而且可以使得方法很容易进行测试：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Return &lt;strong&gt;concrete types&lt;/strong&gt;, receive &lt;strong&gt;interfaces&lt;/strong&gt; as parameter. — Robustness Principle applied to Go&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;非侵入式&#34;&gt;非侵入式&lt;/h3&gt;
+
+&lt;p&gt;上面提过，golang的接口是隐式的实现的，在编译期一个结构体作为一个接口传递，会检测该结构体是否实现了接口的所有方法。一个结构体可以实现多个接口，只要其实现了这几个接口的方法。假设接口的方法个数为m，结构体实现的方法的个数为n，检查结构体是否实现接口的时间复杂度为 O( m*n )。在将方法进行排序之后，时间复杂度可以将为O( m + n )。&lt;/p&gt;
+
+&lt;p&gt;同时不同于Java中实现一个接口需要显示的implement 一个接口，golang中可以减少对包的依赖。但是这样也会带来一个新的问题：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;性能下降，使用 &lt;code&gt;interface&lt;/code&gt;作为函数参数，runtime的时候会动态的确定行为。而使用struct作为参数的话，编译期间就可以确定了。&lt;/li&gt;
+&lt;li&gt;不知道 struct 实现了哪些interface。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;tip：使用规范：可以实现多个接口，编译时检测vs运行时检测&lt;/p&gt;
+
+&lt;p&gt;如果没有额外的导出函数，实现接口的方法可以用接口来传递（方便替换，open - close原则）&lt;/p&gt;
+
+&lt;p&gt;返回具体值，接收方接收interface，但是如果不想让接收方看到具体细节，也可以直接返回interface。&lt;/p&gt;
+
+&lt;h2 id=&#34;内部实现原理&#34;&gt;内部实现原理&lt;/h2&gt;
+
+&lt;p&gt;上面提到： Go 语言中其实有两种略微不同的接口，其中一种是带有一组方法的接口，另一种是不带有任何方法的 &lt;code&gt;interface{}&lt;/code&gt; 类型。这两种不同的接口，在go语言的源代码中也有着不同的定义：第一种接口表示为 &lt;code&gt;iface&lt;/code&gt;， 而第二种表示成 &lt;code&gt;eface&lt;/code&gt;结构体。&lt;/p&gt;
+
+&lt;h3 id=&#34;eface&#34;&gt;eface&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;type eface struct { // 16 bytes
+    _type *_type
+    data  unsafe.Pointer
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;由于&lt;code&gt;interface{}&lt;/code&gt;类型不包含任何方法，所以其结构也相对简单，只包含指向底层数据和类型的两个指针，从这里的结构可以推断出，任意的类型都可以转换成&lt;code&gt;interface{}&lt;/code&gt;类型。&lt;/p&gt;
+
+&lt;h3 id=&#34;iface&#34;&gt;iface&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;type iface struct { // 16 bytes
+    tab  *itab
+    data unsafe.Pointer
+}
+
+type itab struct { // 32 bytes
+    inter *interfacetype
+    _type *_type
+    hash  uint32 // copy of _type.hash. Used for type switches.
+    _     [4]byte
+    fun   [1]uintptr // variable sized. fun[0]==0 means _type does not implement inter.
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;用于表示接口的 &lt;code&gt;interface&lt;/code&gt;类型的底层数据结构就是 &lt;code&gt;iface&lt;/code&gt; 了。在这个结构体中也有指向原始数据的指针 &lt;code&gt;data&lt;/code&gt;,但是这个结构体中更为重要的其实是 &lt;code&gt;itab&lt;/code&gt;类型的&lt;code&gt;tab&lt;/code&gt;字段。&lt;/p&gt;
+
+&lt;h3 id=&#34;itab&#34;&gt;itab&lt;/h3&gt;
+
+&lt;p&gt;在itab结构中，也包含了 eface 中包含的 _type 结构体，每个 _type 结构体中都包含了类型的大小，对齐以及hash等信息。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;hash&lt;/code&gt; 字段其实是对 &lt;code&gt;_type.hash&lt;/code&gt; 的拷贝，它会在从 &lt;code&gt;interface&lt;/code&gt; 到具体类型的切换时用于&lt;strong&gt;快速判断目标类型和接口中类型是否一致&lt;/strong&gt;；最后的 &lt;code&gt;fun&lt;/code&gt; 数组其实是一个动态大小的数组，如果如果当前数组中内容为空就表示 &lt;code&gt;_type&lt;/code&gt; 没有实现 &lt;code&gt;inter&lt;/code&gt; 接口，虽然这是一个大小固定的数组，但是在使用时会直接通过指针获取其中的数据并不会检查数组的边界，所以该数组中保存的元素数量是不确定的。&lt;code&gt;用户缓存是否实现某个接口&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;itable在头部存储了一些类型相关元数据，之后是一个函数指针的列表。注意itable不是和不动态类型对应的，而是和*interface类型*相对应，只有interface中的方法会存入itable中。&lt;/p&gt;
+
+&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://research.swtch.com/interfaces&#34;&gt;Go Data Structures: Interfaces&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://draveness.me/golang/basic/golang-interface.html&#34;&gt;go 接口&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
+  &lt;iframe src=&#34;//www.youtube.com/embed/F4wUrj6pmSI&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
 </description>
       
     </item>
