@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Archive - 有鸟止南方之阜</title>
+  <title>Redis Bitmap - 有鸟止南方之阜</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -23,7 +23,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="kunpeng" />
-  <meta name="description" content="Hugo theme jane example site." />
+  <meta name="description" content="redis bitmap简介 redis中的bitmap是一串连续的2进制数字，每一位所在的位置为偏移，在bitmap上可以执行AND，OR，XOR，N" />
+
   <meta name="keywords" content="Hugo, theme, jane" />
 
 
@@ -34,8 +35,7 @@
 <meta name="generator" content="Hugo 0.56.0-DEV" />
 
 
-<link rel="canonical" href="https://kphn.github.io/post/" />
-<link href="%7balternate%20%7bRSS%20application/rss&#43;xml%20%20index%20alternate%20%20false%20false%20true%20false%20false%200%7d%20/post/index.xml%20https://kphn.github.io/post/index.xml%7d" rel="alternate" type="application/rss+xml" title="有鸟止南方之阜" />
+<link rel="canonical" href="https://kphn.github.io/post/2019/redis-bitmap/" />
 
 
 
@@ -57,19 +57,27 @@
 
 
 
-<meta property="og:title" content="Posts" />
-<meta property="og:description" content="Hugo theme jane example site." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://kphn.github.io/post/" />
+<meta property="og:title" content="Redis Bitmap" />
+<meta property="og:description" content="redis bitmap简介 redis中的bitmap是一串连续的2进制数字，每一位所在的位置为偏移，在bitmap上可以执行AND，OR，XOR，N" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kphn.github.io/post/2019/redis-bitmap/" />
+<meta property="article:published_time" content="2019-08-24T22:12:12+08:00" />
+<meta property="article:modified_time" content="2019-08-24T22:12:12+08:00" />
 
-<meta property="og:updated_time" content="2019-08-24T22:12:12+08:00" />
+<meta itemprop="name" content="Redis Bitmap">
+<meta itemprop="description" content="redis bitmap简介 redis中的bitmap是一串连续的2进制数字，每一位所在的位置为偏移，在bitmap上可以执行AND，OR，XOR，N">
 
-<meta itemprop="name" content="Posts">
-<meta itemprop="description" content="Hugo theme jane example site.">
 
+<meta itemprop="datePublished" content="2019-08-24T22:12:12&#43;08:00" />
+<meta itemprop="dateModified" content="2019-08-24T22:12:12&#43;08:00" />
+<meta itemprop="wordCount" content="1057">
+
+
+
+<meta itemprop="keywords" content="redis,go,bitmap," />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Posts"/>
-<meta name="twitter:description" content="Hugo theme jane example site."/>
+<meta name="twitter:title" content="Redis Bitmap"/>
+<meta name="twitter:description" content="redis bitmap简介 redis中的bitmap是一串连续的2进制数字，每一位所在的位置为偏移，在bitmap上可以执行AND，OR，XOR，N"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -224,7 +232,7 @@
 
       </li>
     
-        <li class="menu-item active">
+        <li class="menu-item">
         
           
           
@@ -278,177 +286,259 @@
     <main id="main" class="main bg-llight">
       <div class="content-wrapper">
         <div id="content" class="content container">
-          
-<section id="archive" class="archive">
-    <div class="archive-title">
-      <span class="archive-post-counter">
-          14 posts In Total
-      </span>
-    </div>
+          <article class="post bg-white">
     
-      <div class="collection-title">
-        <h2 class="archive-year">2019</h2>
+    <header class="post-header">
+      <h1 class="post-title">Redis Bitmap</h1>
+      
+      <div class="post-meta">
+        <time datetime="2019-08-24" class="post-time">
+          2019-08-24
+        </time>
+        <div class="post-category">
+            <a href="https://kphn.github.io/categories/go/"> go </a>
+            <a href="https://kphn.github.io/categories/redis/"> redis </a>
+            <a href="https://kphn.github.io/categories/gonum/"> gonum </a>
+            
+          </div>
+        
+
+        
+        
+
+        
+        
       </div>
+    </header>
 
-    <div class="archive-post">
-      <time datetime="2019-08-24" class="archive-post-time">
-        2019-08-24
-      </time>
-      <span class="archive-post-title">
-        <a href="/post/2019/redis-bitmap/" class="archive-post-link">
-          Redis Bitmap
-        </a>
-      </span>
-    </div>
     
-
-    <div class="archive-post">
-      <time datetime="2019-08-13" class="archive-post-time">
-        2019-08-13
-      </time>
-      <span class="archive-post-title">
-        <a href="/post/2019/go-interface-%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/" class="archive-post-link">
-          Go Interface 原理解析
-        </a>
-      </span>
-    </div>
     
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Table of Contents</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#redis-bitmap简介">redis bitmap简介</a></li>
+<li><a href="#bitmap-vs-hash">bitmap vs hash</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
 
-    <div class="archive-post">
-      <time datetime="2019-08-12" class="archive-post-time">
-        2019-08-12
-      </time>
-      <span class="archive-post-title">
-        <a href="/post/2019/go%E4%B8%B4%E6%97%B6%E5%AF%B9%E8%B1%A1%E6%B1%A0pool%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/" class="archive-post-link">
-          Go临时对象池pool原理解析
-        </a>
-      </span>
-    </div>
     
-
-    <div class="archive-post">
-      <time datetime="2019-08-03" class="archive-post-time">
-        2019-08-03
-      </time>
-      <span class="archive-post-title">
-        <a href="/post/2019/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="archive-post-link">
-          网络编程
-        </a>
-      </span>
-    </div>
-    
-
-    <div class="archive-post">
-      <time datetime="2019-07-23" class="archive-post-time">
-        2019-07-23
-      </time>
-      <span class="archive-post-title">
-        <a href="/post/2019/redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="archive-post-link">
-          Redis 数据结构
-        </a>
-      </span>
-    </div>
-    
-
-    <div class="archive-post">
-      <time datetime="2019-07-05" class="archive-post-time">
-        2019-07-05
-      </time>
-      <span class="archive-post-title">
-        <a href="/post/2019/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" class="archive-post-link">
-          分布式锁
-        </a>
-      </span>
-    </div>
-    
-
-    <div class="archive-post">
-      <time datetime="2019-06-30" class="archive-post-time">
-        2019-06-30
-      </time>
-      <span class="archive-post-title">
-        <a href="/post/2019/%E9%83%A8%E7%BD%B2ngrok/" class="archive-post-link">
-          部署ngrok
-        </a>
-      </span>
-    </div>
-    
-
-    <div class="archive-post">
-      <time datetime="2019-06-28" class="archive-post-time">
-        2019-06-28
-      </time>
-      <span class="archive-post-title">
-        <a href="/post/2019/%E5%90%88%E6%88%90%E5%A4%8D%E7%94%A8%E5%8E%9F%E5%88%99/" class="archive-post-link">
-          合成复用原则
-        </a>
-      </span>
-    </div>
-    
-
-    <div class="archive-post">
-      <time datetime="2019-06-28" class="archive-post-time">
-        2019-06-28
-      </time>
-      <span class="archive-post-title">
-        <a href="/post/2019/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/" class="archive-post-link">
-          迪米特法则
-        </a>
-      </span>
-    </div>
-    
-
-    <div class="archive-post">
-      <time datetime="2019-06-28" class="archive-post-time">
-        2019-06-28
-      </time>
-      <span class="archive-post-title">
-        <a href="/post/2019/%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99/" class="archive-post-link">
-          接口隔离原则
-        </a>
-      </span>
-    </div></section>
-
-
-
-
-
-
-  
-  
-  
-
-  
-  
-
-  
-  
-
-  
-  
-
-  
-  
-  <nav class="pagination">
-    <ul>
+    <div class="post-content">
       
-      <li  class="active" >
-        <a href="/post/">1</a>
-      </li>
+
+<h2 id="redis-bitmap简介">redis bitmap简介</h2>
+
+<p>redis中的bitmap是一串连续的2进制数字，每一位所在的位置为偏移，在bitmap上可以执行AND，OR，XOR，NOT等位操作。</p>
+
+<p>bitmap中保存每个位置的数据仅使用了一个bit，而对应的数据的存储根据大小在bitmap中相对应offset。</p>
+
+<p>一个简单的例子：日活跃用户</p>
+
+<p>​    为了统计今日登录的用户数，我们建立了一个bitmap,每一位标识一个用户ID。当某个用户访问我们的网页或执行了某个操作，就在bitmap中把标识此用户的位置为1。在Redis中获取此bitmap的key值是通过用户执行操作的类型和时间戳获得的。之后可以通过各天的bitmap进行位操作来统计相应的数据。</p>
+
+<p>在这里，bitmap在大数据量的情况下，占用大小较为稳定，增长不会随着存储数据量线性增长。也不会只存储一个 2^32-1数字就占满 512G（存在着内存压缩）。</p>
+
+<h2 id="bitmap-vs-hash">bitmap vs hash</h2>
+
+<p>在数据量没有那么大的情况下，使用bitmap可能比使用hashmap还要占用空间。因此，做了如下的实验来验证各个数据存储量的情况下，bitmap与hash占用的空间大小。</p>
+
+<pre><code class="language-go">func testBit(c redis.Conn, times int) int {	//times为测试存储量
+	for i := 0; i &lt; times; i = i + 1000 {
+		for j := 0; j &lt; 1000; j++ {		//redis pipeline
+			c.Send(&quot;setbit&quot;, &quot;bitset&quot;, rand.Intn(maxUsers), 1)	//使数据尽量分散，减小压缩带来的占用降低
+		}
+		c.Flush()
+	}
+
+	res, _ := redis.String(c.Do(&quot;debug&quot;, &quot;object&quot;, &quot;bitset&quot;))
+	return getLength(res)
+}
+
+func testHash(c redis.Conn, times int) int {
+	for i := 0; i &lt; times; i += 1000 {
+		args := make([]interface{}, 0)
+		args = append(args, &quot;hash&quot;)
+		for j := 0; j &lt; 1000; j++ {	//redis mset
+			args = append(args, i+j+times)
+			args = append(args, 1)
+		}
+		c.Do(&quot;HSET&quot;, args...)
+	}
+	res, _ := redis.String(c.Do(&quot;debug&quot;, &quot;object&quot;, &quot;hash&quot;))
+	return getLength(res)
+}
+
+func getLength(s string) int {			//获取debug命令中占用空间量
+	strs := strings.Fields(s)
+	length := strings.Split(strs[4], &quot;:&quot;)[1]
+	l, _ := strconv.Atoi(length)
+	return l
+}
+
+</code></pre>
+
+<p>实际测试代码，测试少量数据情况下【100~100000】及大量数据情况下的【100000，10000000】情况下的实际空间大小，并使用gonum/plot绘制出效果图：</p>
+
+<pre><code class="language-go">const maxUsers = 200000000		//假设公司有两亿用户
+
+func main() {
+	c, err := redis.Dial(&quot;tcp&quot;, &quot;:6379&quot;)
+	if err != nil {
+		fmt.Println(&quot;err:&quot;, err)
+		return
+	}
+	defer c.Close()
+	p, _ := plot.New()
+	p.Title.Text = &quot;bitmap vs hash&quot;
+	p.X.Label.Text = &quot;key nums&quot;
+	p.Y.Label.Text = &quot;memory used&quot;
+
+	points := plotter.XYs{}
+	points1 := plotter.XYs{}
+
+	timess := []int{100, 1000, 2000, 5000, 10000, 30000, 45000, 60000, 100000}
+	afterTest(c)
+	for _, times := range timess {
+		points = append(points, plotter.XY{float64(times), float64(testBit(c, times))})
+		points1 = append(points1, plotter.XY{float64(times), float64(testHash(c, times))})
+		afterTest(c)
+	}
+	plotutil.AddLinePoints(p, []interface{}{points, points1}...)
+	p.Save(4*vg.Inch, 4*vg.Inch, &quot;small.png&quot;)
+
+	points3 := plotter.XYs{}
+	points4 := plotter.XYs{}
+
+	timess = []int{100000, 300000, 1000000, 2000000, 3000000, 10000000}
+	afterTest(c)
+	for _, times := range timess {
+		points3 = append(points3, plotter.XY{float64(times), float64(testBit(c, times))})
+		points4 = append(points4, plotter.XY{float64(times), float64(testHash(c, times))})
+		afterTest(c)
+	}
+	plotutil.AddLinePoints(p, []interface{}{points3, points4}...)
+	p.Save(4*vg.Inch, 4*vg.Inch, &quot;large.png&quot;)
+}
+
+func afterTest(c redis.Conn) {
+	c.Do(&quot;del&quot;, &quot;bitset&quot;)
+	c.Do(&quot;del&quot;, &quot;hash&quot;)
+}
+</code></pre>
+
+<p>实验结果如下：</p>
+
+<p><img src="/image/small.png" alt="小规模数据" /></p>
+
+<p>在假定两亿用户的情况下，小规模数据测试情况下，可以发现6W左右数据存储的情况下，hash 和 bitmap使用的空间都为400~500KB，而用户小于6W的情况下使用hash稍有优势。而数据规模更大的时候，bitmap的存储优势就发挥了出来。</p>
+
+<p><img src="/image/large.png" alt="大规模数据" /></p>
+
+<p>大规模场景下可以看出hash的空间占用为线性增长，而bitmap在大规模数据存储的情况下空间占用量的增长则稳定的多。</p>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">kunpeng</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">2019-08-24</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://kphn.github.io/tags/redis/">redis</a>
+          <a href="https://kphn.github.io/tags/go/">go</a>
+          <a href="https://kphn.github.io/tags/bitmap/">bitmap</a>
+          
+        </div>
+
       
-      <li >
-        <a href="/post/page/2/">2</a>
-      </li>
-      
-    </ul>
-  </nav>
+      <nav class="post-nav">
+        
+        
+          <a class="next" href="/post/2019/go-interface-%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/">
+            <span class="next-text nav-default">Go Interface 原理解析</span>
+            <span class="prev-text nav-mobile">Next</span>
+            
+            <i class="iconfont">
+              <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M332.091514 74.487481l-75.369571 89.491197c-10.963703 12.998035-10.285251 32.864502 1.499144 44.378743l286.278095 300.375162L266.565125 819.058374c-11.338233 12.190647-11.035334 32.285311 0.638543 44.850487l80.46666 86.564541c11.680017 12.583596 30.356378 12.893658 41.662889 0.716314l377.434212-421.426145c11.332093-12.183484 11.041474-32.266891-0.657986-44.844348l-80.46666-86.564541c-1.772366-1.910513-3.706415-3.533476-5.750981-4.877077L373.270379 71.774697C361.493148 60.273758 343.054193 61.470003 332.091514 74.487481z"></path>
+</svg>
+
+            </i>
+          </a>
+      </nav>
+    </footer>
+  </article>
 
   
   
 
+  
+  
 
+  
 
+  
+  
 
+  
+
+  
+
+  <div class="disqus-comment">
+  <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
+    显示评论
+  </div>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    var disqus_config = function () {
+      this.page.url = "https://kphn.github.io/post/2019/redis-bitmap/";
+    };
+    function load_disqus() {
+      
+      
+      if (window.location.hostname === '192.168.128.132') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'kunpeng';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+
+      $('#load_disqus').remove();
+    };
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+  
+  </div>
+
+    
 
         </div>
       </div>

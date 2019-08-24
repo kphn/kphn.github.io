@@ -6,10 +6,19 @@
     <description>Recent content in go on 有鸟止南方之阜</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 13 Aug 2019 21:46:30 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 24 Aug 2019 22:12:12 +0800</lastBuildDate>
     
 	<atom:link href="https://kphn.github.io/categories/go/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Redis Bitmap</title>
+      <link>https://kphn.github.io/post/2019/redis-bitmap/</link>
+      <pubDate>Sat, 24 Aug 2019 22:12:12 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/post/2019/redis-bitmap/</guid>
+      <description>redis bitmap简介 redis中的bitmap是一串连续的2进制数字，每一位所在的位置为偏移，在bitmap上可以执行AND，OR，XOR，N</description>
+    </item>
     
     <item>
       <title>Go Interface 原理解析</title>

@@ -6,7 +6,7 @@
     <description>Recent content on 有鸟止南方之阜</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 13 Aug 2019 21:46:30 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 24 Aug 2019 22:12:12 +0800</lastBuildDate>
     
         <atom:link href="https://kphn.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -20,6 +20,128 @@
       
         <description>&lt;p&gt;记录学习生活感悟的Blog，之前写的东西都比较零碎且没有全部记录在博客中。
 希望之后能认真的耕耘好着一亩三分地，认真记录好整理好自己的学习心得。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Redis Bitmap</title>
+      <link>https://kphn.github.io/post/2019/redis-bitmap/</link>
+      <pubDate>Sat, 24 Aug 2019 22:12:12 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/post/2019/redis-bitmap/</guid>
+      
+        <description>
+
+&lt;h2 id=&#34;redis-bitmap简介&#34;&gt;redis bitmap简介&lt;/h2&gt;
+
+&lt;p&gt;redis中的bitmap是一串连续的2进制数字，每一位所在的位置为偏移，在bitmap上可以执行AND，OR，XOR，NOT等位操作。&lt;/p&gt;
+
+&lt;p&gt;bitmap中保存每个位置的数据仅使用了一个bit，而对应的数据的存储根据大小在bitmap中相对应offset。&lt;/p&gt;
+
+&lt;p&gt;一个简单的例子：日活跃用户&lt;/p&gt;
+
+&lt;p&gt;​    为了统计今日登录的用户数，我们建立了一个bitmap,每一位标识一个用户ID。当某个用户访问我们的网页或执行了某个操作，就在bitmap中把标识此用户的位置为1。在Redis中获取此bitmap的key值是通过用户执行操作的类型和时间戳获得的。之后可以通过各天的bitmap进行位操作来统计相应的数据。&lt;/p&gt;
+
+&lt;p&gt;在这里，bitmap在大数据量的情况下，占用大小较为稳定，增长不会随着存储数据量线性增长。也不会只存储一个 2^32-1数字就占满 512G（存在着内存压缩）。&lt;/p&gt;
+
+&lt;h2 id=&#34;bitmap-vs-hash&#34;&gt;bitmap vs hash&lt;/h2&gt;
+
+&lt;p&gt;在数据量没有那么大的情况下，使用bitmap可能比使用hashmap还要占用空间。因此，做了如下的实验来验证各个数据存储量的情况下，bitmap与hash占用的空间大小。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func testBit(c redis.Conn, times int) int {	//times为测试存储量
+	for i := 0; i &amp;lt; times; i = i + 1000 {
+		for j := 0; j &amp;lt; 1000; j++ {		//redis pipeline
+			c.Send(&amp;quot;setbit&amp;quot;, &amp;quot;bitset&amp;quot;, rand.Intn(maxUsers), 1)	//使数据尽量分散，减小压缩带来的占用降低
+		}
+		c.Flush()
+	}
+
+	res, _ := redis.String(c.Do(&amp;quot;debug&amp;quot;, &amp;quot;object&amp;quot;, &amp;quot;bitset&amp;quot;))
+	return getLength(res)
+}
+
+func testHash(c redis.Conn, times int) int {
+	for i := 0; i &amp;lt; times; i += 1000 {
+		args := make([]interface{}, 0)
+		args = append(args, &amp;quot;hash&amp;quot;)
+		for j := 0; j &amp;lt; 1000; j++ {	//redis mset
+			args = append(args, i+j+times)
+			args = append(args, 1)
+		}
+		c.Do(&amp;quot;HSET&amp;quot;, args...)
+	}
+	res, _ := redis.String(c.Do(&amp;quot;debug&amp;quot;, &amp;quot;object&amp;quot;, &amp;quot;hash&amp;quot;))
+	return getLength(res)
+}
+
+func getLength(s string) int {			//获取debug命令中占用空间量
+	strs := strings.Fields(s)
+	length := strings.Split(strs[4], &amp;quot;:&amp;quot;)[1]
+	l, _ := strconv.Atoi(length)
+	return l
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;实际测试代码，测试少量数据情况下【100~100000】及大量数据情况下的【100000，10000000】情况下的实际空间大小，并使用gonum/plot绘制出效果图：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;const maxUsers = 200000000		//假设公司有两亿用户
+
+func main() {
+	c, err := redis.Dial(&amp;quot;tcp&amp;quot;, &amp;quot;:6379&amp;quot;)
+	if err != nil {
+		fmt.Println(&amp;quot;err:&amp;quot;, err)
+		return
+	}
+	defer c.Close()
+	p, _ := plot.New()
+	p.Title.Text = &amp;quot;bitmap vs hash&amp;quot;
+	p.X.Label.Text = &amp;quot;key nums&amp;quot;
+	p.Y.Label.Text = &amp;quot;memory used&amp;quot;
+
+	points := plotter.XYs{}
+	points1 := plotter.XYs{}
+
+	timess := []int{100, 1000, 2000, 5000, 10000, 30000, 45000, 60000, 100000}
+	afterTest(c)
+	for _, times := range timess {
+		points = append(points, plotter.XY{float64(times), float64(testBit(c, times))})
+		points1 = append(points1, plotter.XY{float64(times), float64(testHash(c, times))})
+		afterTest(c)
+	}
+	plotutil.AddLinePoints(p, []interface{}{points, points1}...)
+	p.Save(4*vg.Inch, 4*vg.Inch, &amp;quot;small.png&amp;quot;)
+
+	points3 := plotter.XYs{}
+	points4 := plotter.XYs{}
+
+	timess = []int{100000, 300000, 1000000, 2000000, 3000000, 10000000}
+	afterTest(c)
+	for _, times := range timess {
+		points3 = append(points3, plotter.XY{float64(times), float64(testBit(c, times))})
+		points4 = append(points4, plotter.XY{float64(times), float64(testHash(c, times))})
+		afterTest(c)
+	}
+	plotutil.AddLinePoints(p, []interface{}{points3, points4}...)
+	p.Save(4*vg.Inch, 4*vg.Inch, &amp;quot;large.png&amp;quot;)
+}
+
+func afterTest(c redis.Conn) {
+	c.Do(&amp;quot;del&amp;quot;, &amp;quot;bitset&amp;quot;)
+	c.Do(&amp;quot;del&amp;quot;, &amp;quot;hash&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;实验结果如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://kphn.github.io/image/small.png&#34; alt=&#34;小规模数据&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;在假定两亿用户的情况下，小规模数据测试情况下，可以发现6W左右数据存储的情况下，hash 和 bitmap使用的空间都为400~500KB，而用户小于6W的情况下使用hash稍有优势。而数据规模更大的时候，bitmap的存储优势就发挥了出来。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://kphn.github.io/image/large.png&#34; alt=&#34;大规模数据&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;大规模场景下可以看出hash的空间占用为线性增长，而bitmap在大规模数据存储的情况下空间占用量的增长则稳定的多。&lt;/p&gt;
 </description>
       
     </item>
@@ -703,6 +825,264 @@ int main(int argc,char **argv)
   exit(0);
 }
 &lt;/code&gt;&lt;/pre&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>Redis 数据结构</title>
+      <link>https://kphn.github.io/post/2019/redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link>
+      <pubDate>Tue, 23 Jul 2019 14:24:45 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/post/2019/redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</guid>
+      
+        <description>
+
+&lt;h2 id=&#34;数据结构&#34;&gt;数据结构&lt;/h2&gt;
+
+&lt;h3 id=&#34;sds-simple-dynamic-strings&#34;&gt;SDS/simple dynamic strings&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;struct sdshdr {
+
+    // 记录 buf 数组中已使用字节的数量
+    // 等于 SDS 所保存字符串的长度
+    int len;
+
+    // 记录 buf 数组中未使用字节的数量
+    int free;
+
+    // 字节数组，用于保存字符串
+    char buf[];
+
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://redisbook.com/_images/graphviz-72760f6945c3742eca0df91a91cc379168eda82d.png&#34; alt=&#34;SDS实例&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;SDS遵循C语言的规则，在字符串末尾添加了&amp;rsquo;\0&amp;rsquo;,这样就可以直接使用C字符串函数库中的函数。&lt;/p&gt;
+
+&lt;p&gt;SDS保存了字符串的长度，这样可以在常数时间内获取字符串的长度。&lt;/p&gt;
+
+&lt;p&gt;SDS在字符串扩展时可以自动扩展申请的字符串长度，这样可以避免发生缓冲区溢出的可能性。&lt;/p&gt;
+
+&lt;p&gt;SDS中存在着free空间【空间预分配和惰性删除】，可以尽量减少内存的重分配。&lt;/p&gt;
+
+&lt;p&gt;SDS也是二进制安全的，因此也可以用来保存二进制数据。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;C字符串&lt;/th&gt;
+&lt;th&gt;SDS&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;获取字符串长度的复杂度为O(N)&lt;/td&gt;
+&lt;td&gt;获取字符串长度的复杂度为O(1)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;API是不安全的，可能会造成缓冲区溢出&lt;/td&gt;
+&lt;td&gt;API是安全的，不会造成缓冲区溢出&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;修改字符串长度N次必然需要执行N此内存分配&lt;/td&gt;
+&lt;td&gt;修改字符串长度N次至多执行N次内存分配&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;只能保存文本数据&lt;/td&gt;
+&lt;td&gt;可以保存文本或者二进制数据&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;可以使用所有&lt;string.h&gt;库中的函数&lt;/td&gt;
+&lt;td&gt;可以使用一部分&lt;string.h&gt;库中的函数&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&#34;链表&#34;&gt;链表&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;typedef struct listNode {
+
+    // 前置节点
+    struct listNode *prev;
+
+    // 后置节点
+    struct listNode *next;
+
+    // 节点的值
+    void *value;
+
+} listNode;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://redisbook.com/_images/graphviz-167adfc2e52e078d4c0e3c8a9eddec54551602fb.png&#34; alt=&#34;list&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;虽然使用多个listNode结构就可以组成链表，但是使用adlist.h/list 来持有链表的话，操作起来会更加方便。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;typedef struct list {
+
+    // 表头节点
+    listNode *head;
+
+    // 表尾节点
+    listNode *tail;
+
+    // 链表所包含的节点数量
+    unsigned long len;
+
+    // 节点值复制函数
+    void *(*dup)(void *ptr);
+
+    // 节点值释放函数
+    void (*free)(void *ptr);
+
+    // 节点值对比函数
+    int (*match)(void *ptr, void *key);
+
+} list;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://redisbook.com/_images/graphviz-5f4d8b6177061ac52d0ae05ef357fceb52e9cb90.png&#34; alt=&#34;list&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;redis链表实现了如下的特性:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;双端：链表节点带有prev和next指针，获取某个节点的前置节点和后置节点的复杂度都是O(1)&lt;/li&gt;
+&lt;li&gt;无环：表头节点的prev指针和表尾节点的next指针都指向NIULL，对链表的访问以NULL为终点&lt;/li&gt;
+&lt;li&gt;带表头指针和表尾指针：通过list结果的head和tail指针，程序获取链表头结点和尾节点的复杂度为O(1)&lt;/li&gt;
+&lt;li&gt;带链表长度计数器：程序使用list结构的len属性来对list持有的链表节点进行计数，程序获取链表中节点数量的复杂度为O(1)&lt;/li&gt;
+&lt;li&gt;多态：链表节点使用void*指针来保存节点值，并且可以通过list结构的dup、free、match三个属性为节点值设置类型特定函数，所以链表可以保存各种不同类型的值。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;redis队列主要可以用来做消息队列，发布订阅pub/sub，列表键，慢查询，监视器等。做消息队列的话，由于没有实现ack机制，且在宕机时可能会有部分数据没有持久化，对数据可靠性要求较高的场景不适合使用redis list来做消息队列。&lt;/p&gt;
+
+&lt;h3 id=&#34;字典&#34;&gt;字典&lt;/h3&gt;
+
+&lt;p&gt;redis字典使用的哈希表由 dictht结构定义：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;typedef struct dictht {
+
+    // 哈希表数组
+    dictEntry **table;
+
+    // 哈希表大小
+    unsigned long size;
+
+    // 哈希表大小掩码，用于计算索引值
+    // 总是等于 size - 1
+  	// size 总是为2的整数倍
+    unsigned long sizemask;
+
+    // 该哈希表已有节点的数量
+    unsigned long used;
+
+} dictht;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;table&lt;/code&gt; 属性是一个数组， 数组中的每个元素都是一个指向 &lt;code&gt;dict.h/dictEntry&lt;/code&gt; 结构的指针， 每个 &lt;code&gt;dictEntry&lt;/code&gt; 结构保存着一个键值对。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;size&lt;/code&gt; 属性记录了哈希表的大小， 也即是 &lt;code&gt;table&lt;/code&gt; 数组的大小， 而 &lt;code&gt;used&lt;/code&gt; 属性则记录了哈希表目前已有节点（键值对）的数量。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sizemask&lt;/code&gt; 属性的值总是等于 &lt;code&gt;size - 1&lt;/code&gt; ， 这个属性和哈希值一起决定一个键应该被放到 &lt;code&gt;table&lt;/code&gt; 数组的哪个索引上面。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://redisbook.com/_images/graphviz-bd3eecd927a4d8fc33b4a1c7f5957c52d67c5021.png&#34; alt=&#34;table&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;哈希表节点使用 &lt;code&gt;dictEntry&lt;/code&gt; 结构表示， 每个 &lt;code&gt;dictEntry&lt;/code&gt; 结构都保存着一个键值对：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;typedef struct dictEntry {
+
+    // 键
+    void *key;
+
+    // 值
+    union {
+        void *val;
+        uint64_t u64;
+        int64_t s64;
+    } v;
+
+    // 指向下个哈希表节点，形成链表
+    struct dictEntry *next;
+
+} dictEntry;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;key&lt;/code&gt; 属性保存着键值对中的键， 而 &lt;code&gt;v&lt;/code&gt; 属性则保存着键值对中的值， 其中键值对的值可以是一个指针， 或者是一个 &lt;code&gt;uint64_t&lt;/code&gt; 整数， 又或者是一个 &lt;code&gt;int64_t&lt;/code&gt; 整数。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;next&lt;/code&gt; 属性是指向另一个哈希表节点的指针， 这个指针可以将多个哈希值相同的键值对连接在一次， 以此来解决键冲突（collision）的问题。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://redisbook.com/_images/graphviz-d2641d962325fd58bf15d9fffb4208f70251a999.png&#34; alt=&#34;dictEntry&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;而字典的结构如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;typedef struct dict {
+
+    // 类型特定函数
+    dictType *type;
+
+    // 私有数据
+    void *privdata;
+
+    // 哈希表
+    dictht ht[2];	//ht[0]表示哈希表，ht[1]只有在哈希表进行rehash时使用。
+
+    // rehash 索引
+    // 当 rehash 不在进行时，值为 -1
+    int rehashidx; /* rehashing not in progress if rehashidx == -1 */
+
+} dict;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;rehash&#34;&gt;rehash&lt;/h3&gt;
+
+&lt;p&gt;随着操作的不断执行， 哈希表保存的键值对会逐渐地增多或者减少， 为了让哈希表的负载因子（load factor）维持在一个合理的范围之内， 当哈希表保存的键值对数量太多或者太少时， 程序需要对哈希表的大小进行相应的扩展或者收缩。&lt;/p&gt;
+
+&lt;p&gt;扩展和收缩哈希表的工作可以通过执行 rehash 【渐进式】（重新散列）操作来完成， Redis 对字典的哈希表执行 rehash 的步骤如下：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;为 &lt;code&gt;ht[1]&lt;/code&gt; 分配空间， 让字典同时持有 &lt;code&gt;ht[0]&lt;/code&gt; 和 &lt;code&gt;ht[1]&lt;/code&gt; 两个哈希表。&lt;/li&gt;
+&lt;li&gt;在字典中维持一个索引计数器变量 &lt;code&gt;rehashidx&lt;/code&gt; ， 并将它的值设置为 &lt;code&gt;0&lt;/code&gt; ， 表示 rehash 工作正式开始。&lt;/li&gt;
+&lt;li&gt;在 rehash 进行期间， 每次对字典执行添加、删除、查找或者更新操作时， 程序除了执行指定的操作以外， 还会顺带将 &lt;code&gt;ht[0]&lt;/code&gt; 哈希表在 &lt;code&gt;rehashidx&lt;/code&gt; 索引上的所有键值对 rehash 到 &lt;code&gt;ht[1]&lt;/code&gt; ， 当 rehash 工作完成之后， 程序将 &lt;code&gt;rehashidx&lt;/code&gt; 属性的值增一。&lt;/li&gt;
+&lt;li&gt;随着字典操作的不断执行， 最终在某个时间点上， &lt;code&gt;ht[0]&lt;/code&gt; 的所有键值对都会被 rehash 至 &lt;code&gt;ht[1]&lt;/code&gt; ， 这时程序将 &lt;code&gt;rehashidx&lt;/code&gt; 属性的值设为 &lt;code&gt;-1&lt;/code&gt; ， 表示 rehash 操作已完成。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;跳跃表&#34;&gt;跳跃表&lt;/h3&gt;
+
+&lt;p&gt;跳跃表用来实现 zset，跳跃表【zskiplist】主要有以下几个属性：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;header&lt;/code&gt; ：指向跳跃表的表头节点。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;tail&lt;/code&gt; ：指向跳跃表的表尾节点。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;level&lt;/code&gt; ：记录目前跳跃表内，层数最大的那个节点的层数（表头节点的层数不计算在内）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;length&lt;/code&gt; ：记录跳跃表的长度，也即是，跳跃表目前包含节点的数量（表头节点不计算在内）。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://redisbook.com/_images/graphviz-8fc5de396a5b52c3d0b1991a1e09558ad055dd86.png&#34; alt=&#34;skip list&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;zskiplist结构hea的和tail指向的是 zskiplistNode结构，该结构包含以下属性：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;层（level）：节点中用 &lt;code&gt;L1&lt;/code&gt; 、 &lt;code&gt;L2&lt;/code&gt; 、 &lt;code&gt;L3&lt;/code&gt; 等字样标记节点的各个层， &lt;code&gt;L1&lt;/code&gt; 代表第一层， &lt;code&gt;L2&lt;/code&gt; 代表第二层，以此类推。每个层都带有两个属性：前进指针和跨度。前进指针用于访问位于表尾方向的其他节点，而跨度则记录了前进指针所指向节点和当前节点的距离。在上面的图片中，连线上带有数字的箭头就代表前进指针，而那个数字就是跨度。当程序从表头向表尾进行遍历时，访问会沿着层的前进指针进行。&lt;/li&gt;
+&lt;li&gt;后退（backward）指针：节点中用 &lt;code&gt;BW&lt;/code&gt; 字样标记节点的后退指针，它指向位于当前节点的前一个节点。后退指针在程序从表尾向表头遍历时使用。&lt;/li&gt;
+&lt;li&gt;分值（score）：各个节点中的 &lt;code&gt;1.0&lt;/code&gt; 、 &lt;code&gt;2.0&lt;/code&gt; 和 &lt;code&gt;3.0&lt;/code&gt; 是节点所保存的分值。在跳跃表中，节点按各自所保存的分值从小到大排列。&lt;/li&gt;
+&lt;li&gt;成员对象（obj）：各个节点中的 &lt;code&gt;o1&lt;/code&gt; 、 &lt;code&gt;o2&lt;/code&gt; 和 &lt;code&gt;o3&lt;/code&gt; 是节点所保存的成员对象。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;总结：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;跳跃表是有序集合的底层实现之一， 除此之外它在 Redis 中没有其他应用。&lt;/li&gt;
+&lt;li&gt;Redis 的跳跃表实现由 &lt;code&gt;zskiplist&lt;/code&gt; 和 &lt;code&gt;zskiplistNode&lt;/code&gt; 两个结构组成， 其中 &lt;code&gt;zskiplist&lt;/code&gt; 用于保存跳跃表信息（比如表头节点、表尾节点、长度）， 而 &lt;code&gt;zskiplistNode&lt;/code&gt; 则用于表示跳跃表节点。&lt;/li&gt;
+&lt;li&gt;每个跳跃表节点的层高都是 &lt;code&gt;1&lt;/code&gt; 至 &lt;code&gt;32&lt;/code&gt; 之间的随机数。&lt;/li&gt;
+&lt;li&gt;在同一个跳跃表中， 多个节点可以包含相同的分值， 但每个节点的成员对象必须是唯一的。&lt;/li&gt;
+&lt;li&gt;跳跃表中的节点按照分值大小进行排序， 当分值相同时， 节点按照成员对象的大小进行排序。&lt;/li&gt;
+&lt;/ul&gt;
 </description>
       
     </item>

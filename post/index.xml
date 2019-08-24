@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 有鸟止南方之阜</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 13 Aug 2019 21:46:30 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 24 Aug 2019 22:12:12 +0800</lastBuildDate>
     
 	<atom:link href="https://kphn.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Redis Bitmap</title>
+      <link>https://kphn.github.io/post/2019/redis-bitmap/</link>
+      <pubDate>Sat, 24 Aug 2019 22:12:12 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/post/2019/redis-bitmap/</guid>
+      <description>redis bitmap简介 redis中的bitmap是一串连续的2进制数字，每一位所在的位置为偏移，在bitmap上可以执行AND，OR，XOR，N</description>
+    </item>
     
     <item>
       <title>Go Interface 原理解析</title>
@@ -36,6 +45,15 @@
       
       <guid>https://kphn.github.io/post/2019/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</guid>
       <description>客户端-服务器编程模型 每个网络应用都是基于客户端-服务器模型的。基于这个模型，一个应用是由一个服务器进程和一个或多个客户端进程组成。服务器管</description>
+    </item>
+    
+    <item>
+      <title>Redis 数据结构</title>
+      <link>https://kphn.github.io/post/2019/redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link>
+      <pubDate>Tue, 23 Jul 2019 14:24:45 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/post/2019/redis%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</guid>
+      <description>数据结构 SDS/simple dynamic strings struct sdshdr { // 记录 buf 数组中已使用字节的数量 // 等于 SDS 所保存字符串的长度 int len; // 记录 buf 数组中未使用字节的数量 int free; // 字节数组，用于保存字符串</description>
     </item>
     
     <item>

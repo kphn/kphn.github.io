@@ -6,10 +6,37 @@
     <description>Recent content in Categories on 有鸟止南方之阜</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 13 Aug 2019 21:46:30 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 24 Aug 2019 22:12:12 +0800</lastBuildDate>
     
 	<atom:link href="https://kphn.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>go</title>
+      <link>https://kphn.github.io/categories/go/</link>
+      <pubDate>Sat, 24 Aug 2019 22:12:12 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/categories/go/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gonum</title>
+      <link>https://kphn.github.io/categories/gonum/</link>
+      <pubDate>Sat, 24 Aug 2019 22:12:12 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/categories/gonum/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>redis</title>
+      <link>https://kphn.github.io/categories/redis/</link>
+      <pubDate>Sat, 24 Aug 2019 22:12:12 +0800</pubDate>
+      
+      <guid>https://kphn.github.io/categories/redis/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>develop</title>
@@ -17,15 +44,6 @@
       <pubDate>Tue, 13 Aug 2019 21:46:30 +0800</pubDate>
       
       <guid>https://kphn.github.io/categories/develop/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>go</title>
-      <link>https://kphn.github.io/categories/go/</link>
-      <pubDate>Tue, 13 Aug 2019 21:46:30 +0800</pubDate>
-      
-      <guid>https://kphn.github.io/categories/go/</guid>
       <description></description>
     </item>
     
