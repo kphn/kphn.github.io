@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>迪米特法则 - 有鸟止南方之阜</title>
+  <title>Redis持久化与同步 - 有鸟止南方之阜</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -23,7 +23,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="kunpeng" />
-  <meta name="description" content="定义 迪米特法则（Law of Demeter）：又称最少知识原则（Least Knowledge Principle，LKP），只与你的直接朋友交谈，不跟“陌生人”说" />
+  <meta name="description" content="持久化 redis 持久化有两种方式，RDB与AOF。 RDB 优点: 利于备份 适用于故障恢复 比AOF重启更快 缺点: 备份会造成更大的数据损失 需要使用fork子进程" />
 
   <meta name="keywords" content="Hugo, theme, jane" />
 
@@ -35,7 +35,7 @@
 <meta name="generator" content="Hugo 0.56.0-DEV" />
 
 
-<link rel="canonical" href="https://kphn.github.io/post/2019/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/" />
+<link rel="canonical" href="https://kphn.github.io/post/2019/redis%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%8E%E5%90%8C%E6%AD%A5/" />
 
 
 
@@ -57,27 +57,27 @@
 
 
 
-<meta property="og:title" content="迪米特法则" />
-<meta property="og:description" content="定义 迪米特法则（Law of Demeter）：又称最少知识原则（Least Knowledge Principle，LKP），只与你的直接朋友交谈，不跟“陌生人”说" />
+<meta property="og:title" content="Redis持久化与同步" />
+<meta property="og:description" content="持久化 redis 持久化有两种方式，RDB与AOF。 RDB 优点: 利于备份 适用于故障恢复 比AOF重启更快 缺点: 备份会造成更大的数据损失 需要使用fork子进程" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://kphn.github.io/post/2019/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/" />
-<meta property="article:published_time" content="2018-06-28T08:27:57+08:00" />
-<meta property="article:modified_time" content="2018-06-28T08:27:57+08:00" />
+<meta property="og:url" content="https://kphn.github.io/post/2019/redis%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%8E%E5%90%8C%E6%AD%A5/" />
+<meta property="article:published_time" content="2019-05-28T15:34:09+08:00" />
+<meta property="article:modified_time" content="2019-05-28T15:34:09+08:00" />
 
-<meta itemprop="name" content="迪米特法则">
-<meta itemprop="description" content="定义 迪米特法则（Law of Demeter）：又称最少知识原则（Least Knowledge Principle，LKP），只与你的直接朋友交谈，不跟“陌生人”说">
-
-
-<meta itemprop="datePublished" content="2018-06-28T08:27:57&#43;08:00" />
-<meta itemprop="dateModified" content="2018-06-28T08:27:57&#43;08:00" />
-<meta itemprop="wordCount" content="663">
+<meta itemprop="name" content="Redis持久化与同步">
+<meta itemprop="description" content="持久化 redis 持久化有两种方式，RDB与AOF。 RDB 优点: 利于备份 适用于故障恢复 比AOF重启更快 缺点: 备份会造成更大的数据损失 需要使用fork子进程">
 
 
+<meta itemprop="datePublished" content="2019-05-28T15:34:09&#43;08:00" />
+<meta itemprop="dateModified" content="2019-05-28T15:34:09&#43;08:00" />
+<meta itemprop="wordCount" content="690">
 
-<meta itemprop="keywords" content="设计模式,迪米特法则,LSP," />
+
+
+<meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="迪米特法则"/>
-<meta name="twitter:description" content="定义 迪米特法则（Law of Demeter）：又称最少知识原则（Least Knowledge Principle，LKP），只与你的直接朋友交谈，不跟“陌生人”说"/>
+<meta name="twitter:title" content="Redis持久化与同步"/>
+<meta name="twitter:description" content="持久化 redis 持久化有两种方式，RDB与AOF。 RDB 优点: 利于备份 适用于故障恢复 比AOF重启更快 缺点: 备份会造成更大的数据损失 需要使用fork子进程"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -289,17 +289,13 @@
           <article class="post bg-white">
     
     <header class="post-header">
-      <h1 class="post-title">迪米特法则</h1>
+      <h1 class="post-title">Redis持久化与同步</h1>
       
       <div class="post-meta">
-        <time datetime="2018-06-28" class="post-time">
-          2018-06-28
+        <time datetime="2019-05-28" class="post-time">
+          2019-05-28
         </time>
-        <div class="post-category">
-            <a href="https://kphn.github.io/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"> 设计模式 </a>
-            <a href="https://kphn.github.io/categories/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/"> 设计原则 </a>
-            
-          </div>
+        
         
 
         
@@ -319,9 +315,17 @@
 <ul>
 <li>
 <ul>
-<li><a href="#定义">定义</a></li>
-<li><a href="#优点">优点</a></li>
-<li><a href="#实现方法">实现方法</a></li>
+<li><a href="#持久化">持久化</a>
+<ul>
+<li><a href="#rdb">RDB</a></li>
+<li><a href="#aof">AOF</a></li>
+</ul></li>
+<li><a href="#同步">同步</a>
+<ul>
+<li><a href="#旧版复制">旧版复制</a></li>
+<li><a href="#新版复制">新版复制</a></li>
+</ul></li>
+<li><a href="#cluster">cluster</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -332,40 +336,70 @@
     <div class="post-content">
       
 
-<h2 id="定义">定义</h2>
+<h2 id="持久化">持久化</h2>
 
-<p>迪米特法则（Law of Demeter）：又称最少知识原则（Least Knowledge Principle，LKP），只与你的直接朋友交谈，不跟“陌生人”说话（Talk only to your immediate friends and not to strangers）。其含义是：如果两个软件实体无须直接通信，那么就不应当发生直接的相互调用，可以通过第三方转发该调用。其目的是降低类之间的耦合度，提高模块的相对独立性。</p>
+<p>redis 持久化有两种方式，RDB与AOF。</p>
 
-<p>迪米特法则中的“朋友”是指：当前对象本身、当前对象的成员对象、当前对象所创建的对象、当前对象的方法参数等，这些对象同当前对象存在关联、聚合或组合关系，可以直接访问这些对象的方法。</p>
+<h3 id="rdb">RDB</h3>
 
-<h2 id="优点">优点</h2>
+<p>优点:</p>
 
-<ol>
-<li>降低了类之间的耦合度，提高了模块的相对独立性。</li>
-<li>由于亲和度降低，从而提高了类的可复用率和系统的扩展性。</li>
-</ol>
+<ul>
+<li>利于备份</li>
+<li>适用于故障恢复</li>
+<li>比AOF重启更快
+<br /></li>
+</ul>
 
-<p>但是，过度使用迪米特法则会使系统产生大量的<strong>中介类(Agent)</strong>，从而增加系统的复杂性，使模块之间的通信效率降低。所以，在采用迪米特法则时需要反复权衡，确保高内聚和低耦合的同时，保证系统的结构清晰。</p>
+<p>缺点:</p>
 
-<h2 id="实现方法">实现方法</h2>
+<ul>
+<li>备份会造成更大的数据损失</li>
+<li>需要使用fork子进程来持久化数据到盘上，如果数据量较大，会造成同步期间短暂的停止服务。</li>
+</ul>
 
-<p>从迪米特法则的定义和特点可知，它强调以下两点：</p>
+<h3 id="aof">AOF</h3>
 
-<ol>
-<li>从依赖者的角度来说，只依赖应该依赖的对象。</li>
-<li>从被依赖者的角度说，只暴露应该暴露的方法。</li>
-</ol>
+<p>优点:</p>
 
-<p>所以，在运用迪米特法则时要注意以下 6 点。</p>
+<ul>
+<li>持久化做的更好，可以选择三种同步策略，不同步、一秒同步一次，每次更新同步一次。默认策略是每秒同步一次，而且性能也很优秀，但是仍会造成一秒的数据损失。</li>
+<li>AOF 的日志是append only log, 没有seek操作，在电力故障的时候不会发生文件损坏。就算最后一条命令只写入一般，redis检查工具也可以对其进行修复。</li>
+</ul>
 
-<ol>
-<li>在类的划分上，应该创建弱耦合的类。类与类之间的耦合越弱，就越有利于实现可复用的目标。</li>
-<li>在类的结构设计上，尽量降低类成员的访问权限。</li>
-<li>在类的设计上，优先考虑将一个类设置成不变类。</li>
-<li>在对其他类的引用上，将引用其他对象的次数降到最低。</li>
-<li>不暴露类的属性成员，而应该提供相应的访问器（set 和 get 方法）。</li>
-<li>谨慎使用序列化（Serializable）功能。</li>
-</ol>
+<p>缺点:</p>
+
+<ul>
+<li>AOF文件通常比RDB文件大的多</li>
+<li>就算AOF每秒同步一次写，其性能损耗仍然不小。</li>
+</ul>
+
+<p>日志重写:</p>
+
+<p>​   在日志量较大的情况下，AOF数据载入的性能较低，使用日志重写，可以将历史上对一条key的所有操作替换成一条操作。</p>
+
+<p>redis数据库在进行AOF日志重写期间仍可以继续处理命令请求，而新的命令可能对现有的数据进行修改，这可能造成当前数据库的数据和重写后的数据不一致。为解决这个问题，redis增加了一个AOF重写缓存，redis服务器在执行完写命令之后，会同时将这个写命令追加到AOF缓冲区和AOF重写缓冲区。</p>
+
+<h2 id="同步">同步</h2>
+
+<h3 id="旧版复制">旧版复制</h3>
+
+<ul>
+<li>同步sync :将从数据库中的数据库状态更新至主服务器当前所处的数据库状态。</li>
+<li>命令传播：主库出现写命令导致主从不一致时，发送写命令给从库</li>
+<li>如果网络断开一段时间，需要重新同步，库较大时会导致耗时较长
+<br /></li>
+</ul>
+
+<h3 id="新版复制">新版复制</h3>
+
+<ul>
+<li>psync:分为完整重同步和部分重同步</li>
+<li>完整重同步跟同步sync一样</li>
+<li>部分重同步，主服务器和从服务器各维护一个offset，根据偏移量，从服务器与主服务器重连之后不必</li>
+</ul>
+
+<h2 id="cluster">cluster</h2>
 
     </div>
 
@@ -378,7 +412,7 @@
   </p>
   <p class="copyright-item">
     <span class="item-title">LastMod</span>
-    <span class="item-content">2018-06-28</span>
+    <span class="item-content">2019-05-28</span>
   </p>
   
   <p class="copyright-item">
@@ -392,17 +426,12 @@
     
 
     <footer class="post-footer">
-      <div class="post-tags">
-          <a href="https://kphn.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
-          <a href="https://kphn.github.io/tags/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/">迪米特法则</a>
-          <a href="https://kphn.github.io/tags/lsp/">LSP</a>
-          
-        </div>
+      
 
       
       <nav class="post-nav">
         
-          <a class="prev" href="/post/2019/%E5%90%88%E6%88%90%E5%A4%8D%E7%94%A8%E5%8E%9F%E5%88%99/">
+          <a class="prev" href="/post/2019/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
             
             <i class="iconfont">
               <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -412,12 +441,12 @@
 </svg>
 
             </i>
-            <span class="prev-text nav-default">合成复用原则</span>
+            <span class="prev-text nav-default">分布式锁</span>
             <span class="prev-text nav-mobile">Prev</span>
           </a>
         
-          <a class="next" href="/post/2019/%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99/">
-            <span class="next-text nav-default">接口隔离原则</span>
+          <a class="next" href="/post/2019/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
+            <span class="next-text nav-default">网络编程</span>
             <span class="prev-text nav-mobile">Next</span>
             
             <i class="iconfont">
@@ -455,7 +484,7 @@
   <div id="disqus_thread"></div>
   <script type="text/javascript">
     var disqus_config = function () {
-      this.page.url = "https://kphn.github.io/post/2019/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/";
+      this.page.url = "https://kphn.github.io/post/2019/redis%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%8E%E5%90%8C%E6%AD%A5/";
     };
     function load_disqus() {
       

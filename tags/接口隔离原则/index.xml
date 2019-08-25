@@ -6,7 +6,7 @@
     <description>Recent content in 接口隔离原则 on 有鸟止南方之阜</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 28 Jun 2019 08:16:33 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 28 Jun 2018 08:16:33 +0800</lastBuildDate>
     
 	<atom:link href="https://kphn.github.io/tags/%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>接口隔离原则</title>
       <link>https://kphn.github.io/post/2019/%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99/</link>
-      <pubDate>Fri, 28 Jun 2019 08:16:33 +0800</pubDate>
+      <pubDate>Thu, 28 Jun 2018 08:16:33 +0800</pubDate>
       
       <guid>https://kphn.github.io/post/2019/%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99/</guid>
       <description>定义 接口隔离原则（Interface Segregation Principle，ISP）要求程序员尽量将臃肿庞大的接口拆分成更小和更具体的接口，让接口中只包含客户</description>
