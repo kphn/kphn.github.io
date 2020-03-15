@@ -10,8 +10,21 @@
   
   <url>
     <loc>https://kphn.github.io/post/</loc>
-    <lastmod>2019-12-25T07:51:02+08:00</lastmod>
+    <lastmod>2020-03-15T22:57:08+08:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://kphn.github.io/</loc>
+    <lastmod>2020-03-15T22:57:08+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://kphn.github.io/post/2020/%E6%9D%A8%E6%B5%A6%E5%9B%BE%E4%B9%A6%E9%A6%86%E6%97%A5%E6%B5%81%E9%87%8F%E7%88%AC%E8%99%AB/</loc>
+    <lastmod>2020-03-15T22:57:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
@@ -19,12 +32,6 @@
     <lastmod>2019-12-25T07:51:02+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://kphn.github.io/</loc>
-    <lastmod>2019-12-25T07:51:02+08:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
