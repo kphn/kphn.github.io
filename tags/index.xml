@@ -5,7 +5,7 @@
     <link>https://kunpengdai.github.io/tags/</link>
     <description>Recent content in Tags on 有鸟止南方之阜</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
+    <language>zh-CN</language>
     <lastBuildDate>Sat, 24 Aug 2019 22:12:12 +0800</lastBuildDate><atom:link href="https://kunpengdai.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>bitmap</title>
@@ -54,10 +54,10 @@
     
     <item>
       <title>IO</title>
-      <link>https://kunpengdai.github.io/tags/io/</link>
+      <link>https://kunpengdai.github.io/tags/IO/</link>
       <pubDate>Fri, 03 May 2019 15:51:09 +0800</pubDate>
       
-      <guid>https://kunpengdai.github.io/tags/io/</guid>
+      <guid>https://kunpengdai.github.io/tags/IO/</guid>
       <description></description>
     </item>
     
@@ -99,10 +99,10 @@
     
     <item>
       <title>LSP</title>
-      <link>https://kunpengdai.github.io/tags/lsp/</link>
+      <link>https://kunpengdai.github.io/tags/LSP/</link>
       <pubDate>Thu, 28 Jun 2018 08:41:18 +0800</pubDate>
       
-      <guid>https://kunpengdai.github.io/tags/lsp/</guid>
+      <guid>https://kunpengdai.github.io/tags/LSP/</guid>
       <description></description>
     </item>
     
@@ -153,10 +153,10 @@
     
     <item>
       <title>DIP</title>
-      <link>https://kunpengdai.github.io/tags/dip/</link>
+      <link>https://kunpengdai.github.io/tags/DIP/</link>
       <pubDate>Wed, 27 Jun 2018 08:42:55 +0800</pubDate>
       
-      <guid>https://kunpengdai.github.io/tags/dip/</guid>
+      <guid>https://kunpengdai.github.io/tags/DIP/</guid>
       <description></description>
     </item>
     
@@ -171,10 +171,10 @@
     
     <item>
       <title>OPP</title>
-      <link>https://kunpengdai.github.io/tags/opp/</link>
+      <link>https://kunpengdai.github.io/tags/OPP/</link>
       <pubDate>Tue, 26 Jun 2018 23:17:56 +0800</pubDate>
       
-      <guid>https://kunpengdai.github.io/tags/opp/</guid>
+      <guid>https://kunpengdai.github.io/tags/OPP/</guid>
       <description></description>
     </item>
     
@@ -184,6 +184,24 @@
       <pubDate>Tue, 26 Jun 2018 23:17:56 +0800</pubDate>
       
       <guid>https://kunpengdai.github.io/tags/%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>index</title>
+      <link>https://kunpengdai.github.io/tags/index/</link>
+      <pubDate>Tue, 26 Jun 2018 08:25:28 +0800</pubDate>
+      
+      <guid>https://kunpengdai.github.io/tags/index/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>develop</title>
+      <link>https://kunpengdai.github.io/tags/develop/</link>
+      <pubDate>Fri, 30 Jun 2017 15:37:14 +0800</pubDate>
+      
+      <guid>https://kunpengdai.github.io/tags/develop/</guid>
       <description></description>
     </item>
     
