@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: https://kphn.github.io/sitemap.xml
+Sitemap: https://kunpengdai.github.io/sitemap.xml

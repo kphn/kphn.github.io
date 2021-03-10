@@ -1,193 +1,189 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on 有鸟止南方之阜</title>
-    <link>https://kphn.github.io/tags/</link>
+    <link>https://kunpengdai.github.io/tags/</link>
     <description>Recent content in Tags on 有鸟止南方之阜</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 24 Aug 2019 22:12:12 +0800</lastBuildDate>
-    
-	<atom:link href="https://kphn.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sat, 24 Aug 2019 22:12:12 +0800</lastBuildDate><atom:link href="https://kunpengdai.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>bitmap</title>
-      <link>https://kphn.github.io/tags/bitmap/</link>
+      <link>https://kunpengdai.github.io/tags/bitmap/</link>
       <pubDate>Sat, 24 Aug 2019 22:12:12 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/bitmap/</guid>
+      <guid>https://kunpengdai.github.io/tags/bitmap/</guid>
       <description></description>
     </item>
     
     <item>
       <title>go</title>
-      <link>https://kphn.github.io/tags/go/</link>
+      <link>https://kunpengdai.github.io/tags/go/</link>
       <pubDate>Sat, 24 Aug 2019 22:12:12 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/go/</guid>
+      <guid>https://kunpengdai.github.io/tags/go/</guid>
       <description></description>
     </item>
     
     <item>
       <title>redis</title>
-      <link>https://kphn.github.io/tags/redis/</link>
+      <link>https://kunpengdai.github.io/tags/redis/</link>
       <pubDate>Sat, 24 Aug 2019 22:12:12 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/redis/</guid>
+      <guid>https://kunpengdai.github.io/tags/redis/</guid>
       <description></description>
     </item>
     
     <item>
       <title>chubby</title>
-      <link>https://kphn.github.io/tags/chubby/</link>
+      <link>https://kunpengdai.github.io/tags/chubby/</link>
       <pubDate>Fri, 05 Jul 2019 08:05:08 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/chubby/</guid>
+      <guid>https://kunpengdai.github.io/tags/chubby/</guid>
       <description></description>
     </item>
     
     <item>
       <title>分布式锁</title>
-      <link>https://kphn.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
+      <link>https://kunpengdai.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</link>
       <pubDate>Fri, 05 Jul 2019 08:05:08 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</guid>
+      <guid>https://kunpengdai.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</guid>
       <description></description>
     </item>
     
     <item>
       <title>IO</title>
-      <link>https://kphn.github.io/tags/io/</link>
+      <link>https://kunpengdai.github.io/tags/io/</link>
       <pubDate>Fri, 03 May 2019 15:51:09 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/io/</guid>
+      <guid>https://kunpengdai.github.io/tags/io/</guid>
       <description></description>
     </item>
     
     <item>
       <title>tcp</title>
-      <link>https://kphn.github.io/tags/tcp/</link>
+      <link>https://kunpengdai.github.io/tags/tcp/</link>
       <pubDate>Fri, 03 May 2019 15:51:09 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/tcp/</guid>
+      <guid>https://kunpengdai.github.io/tags/tcp/</guid>
       <description></description>
     </item>
     
     <item>
       <title>套接字</title>
-      <link>https://kphn.github.io/tags/%E5%A5%97%E6%8E%A5%E5%AD%97/</link>
+      <link>https://kunpengdai.github.io/tags/%E5%A5%97%E6%8E%A5%E5%AD%97/</link>
       <pubDate>Fri, 03 May 2019 15:51:09 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/%E5%A5%97%E6%8E%A5%E5%AD%97/</guid>
+      <guid>https://kunpengdai.github.io/tags/%E5%A5%97%E6%8E%A5%E5%AD%97/</guid>
       <description></description>
     </item>
     
     <item>
       <title>网络编程</title>
-      <link>https://kphn.github.io/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</link>
+      <link>https://kunpengdai.github.io/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</link>
       <pubDate>Fri, 03 May 2019 15:51:09 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</guid>
+      <guid>https://kunpengdai.github.io/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</guid>
       <description></description>
     </item>
     
     <item>
       <title>interface</title>
-      <link>https://kphn.github.io/tags/interface/</link>
+      <link>https://kunpengdai.github.io/tags/interface/</link>
       <pubDate>Wed, 13 Mar 2019 21:46:30 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/interface/</guid>
+      <guid>https://kunpengdai.github.io/tags/interface/</guid>
       <description></description>
     </item>
     
     <item>
       <title>LSP</title>
-      <link>https://kphn.github.io/tags/lsp/</link>
+      <link>https://kunpengdai.github.io/tags/lsp/</link>
       <pubDate>Thu, 28 Jun 2018 08:41:18 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/lsp/</guid>
+      <guid>https://kunpengdai.github.io/tags/lsp/</guid>
       <description></description>
     </item>
     
     <item>
       <title>合成复用原则</title>
-      <link>https://kphn.github.io/tags/%E5%90%88%E6%88%90%E5%A4%8D%E7%94%A8%E5%8E%9F%E5%88%99/</link>
+      <link>https://kunpengdai.github.io/tags/%E5%90%88%E6%88%90%E5%A4%8D%E7%94%A8%E5%8E%9F%E5%88%99/</link>
       <pubDate>Thu, 28 Jun 2018 08:41:18 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/%E5%90%88%E6%88%90%E5%A4%8D%E7%94%A8%E5%8E%9F%E5%88%99/</guid>
+      <guid>https://kunpengdai.github.io/tags/%E5%90%88%E6%88%90%E5%A4%8D%E7%94%A8%E5%8E%9F%E5%88%99/</guid>
       <description></description>
     </item>
     
     <item>
       <title>设计模式</title>
-      <link>https://kphn.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+      <link>https://kunpengdai.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
       <pubDate>Thu, 28 Jun 2018 08:41:18 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid>
+      <guid>https://kunpengdai.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid>
       <description></description>
     </item>
     
     <item>
       <title>迪米特法则</title>
-      <link>https://kphn.github.io/tags/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/</link>
+      <link>https://kunpengdai.github.io/tags/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/</link>
       <pubDate>Thu, 28 Jun 2018 08:27:57 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/</guid>
+      <guid>https://kunpengdai.github.io/tags/%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99/</guid>
       <description></description>
     </item>
     
     <item>
       <title>接口隔离原则</title>
-      <link>https://kphn.github.io/tags/%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99/</link>
+      <link>https://kunpengdai.github.io/tags/%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99/</link>
       <pubDate>Thu, 28 Jun 2018 08:16:33 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99/</guid>
+      <guid>https://kunpengdai.github.io/tags/%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99/</guid>
       <description></description>
     </item>
     
     <item>
       <title>单一职责原则</title>
-      <link>https://kphn.github.io/tags/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99/</link>
+      <link>https://kunpengdai.github.io/tags/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99/</link>
       <pubDate>Thu, 28 Jun 2018 08:05:42 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99/</guid>
+      <guid>https://kunpengdai.github.io/tags/%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99/</guid>
       <description></description>
     </item>
     
     <item>
       <title>DIP</title>
-      <link>https://kphn.github.io/tags/dip/</link>
+      <link>https://kunpengdai.github.io/tags/dip/</link>
       <pubDate>Wed, 27 Jun 2018 08:42:55 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/dip/</guid>
+      <guid>https://kunpengdai.github.io/tags/dip/</guid>
       <description></description>
     </item>
     
     <item>
       <title>依赖倒置原则</title>
-      <link>https://kphn.github.io/tags/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99/</link>
+      <link>https://kunpengdai.github.io/tags/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99/</link>
       <pubDate>Wed, 27 Jun 2018 08:42:55 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99/</guid>
+      <guid>https://kunpengdai.github.io/tags/%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99/</guid>
       <description></description>
     </item>
     
     <item>
       <title>OPP</title>
-      <link>https://kphn.github.io/tags/opp/</link>
+      <link>https://kunpengdai.github.io/tags/opp/</link>
       <pubDate>Tue, 26 Jun 2018 23:17:56 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/opp/</guid>
+      <guid>https://kunpengdai.github.io/tags/opp/</guid>
       <description></description>
     </item>
     
     <item>
       <title>开闭原则</title>
-      <link>https://kphn.github.io/tags/%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99/</link>
+      <link>https://kunpengdai.github.io/tags/%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99/</link>
       <pubDate>Tue, 26 Jun 2018 23:17:56 +0800</pubDate>
       
-      <guid>https://kphn.github.io/tags/%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99/</guid>
+      <guid>https://kunpengdai.github.io/tags/%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99/</guid>
       <description></description>
     </item>
     

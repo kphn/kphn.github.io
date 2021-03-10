@@ -23,7 +23,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="kunpeng" />
-  <meta name="description" content="临时对象池是啥 查看sync.Pool中的注释来了解pool的基本用法。主要有以下几点： pool是一个可以存储和取出临时对象的临时对象池。 池中" />
+  <meta name="description" content="临时对象池是啥？ 查看sync.Pool中的注释来了解pool的基本用法。主要有以下几点： pool是一个可以存储和取出临时对象的临时对象池。 池" />
 
   <meta name="keywords" content="Hugo, theme, jane" />
 
@@ -32,10 +32,10 @@
 
 
 
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.81.0-DEV" />
 
 
-<link rel="canonical" href="https://kphn.github.io/post/2019/go%E4%B8%B4%E6%97%B6%E5%AF%B9%E8%B1%A1%E6%B1%A0pool%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/" />
+<link rel="canonical" href="https://kunpengdai.github.io/post/2019/go%E4%B8%B4%E6%97%B6%E5%AF%B9%E8%B1%A1%E6%B1%A0pool%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/" />
 
 
 
@@ -58,26 +58,23 @@
 
 
 <meta property="og:title" content="Go临时对象池pool原理解析" />
-<meta property="og:description" content="临时对象池是啥 查看sync.Pool中的注释来了解pool的基本用法。主要有以下几点： pool是一个可以存储和取出临时对象的临时对象池。 池中" />
+<meta property="og:description" content="临时对象池是啥？ 查看sync.Pool中的注释来了解pool的基本用法。主要有以下几点： pool是一个可以存储和取出临时对象的临时对象池。 池" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://kphn.github.io/post/2019/go%E4%B8%B4%E6%97%B6%E5%AF%B9%E8%B1%A1%E6%B1%A0pool%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/" />
+<meta property="og:url" content="https://kunpengdai.github.io/post/2019/go%E4%B8%B4%E6%97%B6%E5%AF%B9%E8%B1%A1%E6%B1%A0pool%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/" />
 <meta property="article:published_time" content="2019-04-12T20:07:58+08:00" />
 <meta property="article:modified_time" content="2019-04-12T20:07:58+08:00" />
-
 <meta itemprop="name" content="Go临时对象池pool原理解析">
-<meta itemprop="description" content="临时对象池是啥 查看sync.Pool中的注释来了解pool的基本用法。主要有以下几点： pool是一个可以存储和取出临时对象的临时对象池。 池中">
-
-
-<meta itemprop="datePublished" content="2019-04-12T20:07:58&#43;08:00" />
-<meta itemprop="dateModified" content="2019-04-12T20:07:58&#43;08:00" />
-<meta itemprop="wordCount" content="1854">
+<meta itemprop="description" content="临时对象池是啥？ 查看sync.Pool中的注释来了解pool的基本用法。主要有以下几点： pool是一个可以存储和取出临时对象的临时对象池。 池">
+<meta itemprop="datePublished" content="2019-04-12T20:07:58+08:00" />
+<meta itemprop="dateModified" content="2019-04-12T20:07:58+08:00" />
+<meta itemprop="wordCount" content="1853">
 
 
 
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Go临时对象池pool原理解析"/>
-<meta name="twitter:description" content="临时对象池是啥 查看sync.Pool中的注释来了解pool的基本用法。主要有以下几点： pool是一个可以存储和取出临时对象的临时对象池。 池中"/>
+<meta name="twitter:description" content="临时对象池是啥？ 查看sync.Pool中的注释来了解pool的基本用法。主要有以下几点： pool是一个可以存储和取出临时对象的临时对象池。 池"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -109,35 +106,35 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/">首页</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/">首页</a>
           
         
       </li><li class="mobile-menu-item">
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/post/">博客</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/post/">博客</a>
           
         
       </li><li class="mobile-menu-item">
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/tags/">标签</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/tags/">标签</a>
           
         
       </li><li class="mobile-menu-item">
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/categories/">分类</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/categories/">分类</a>
           
         
       </li><li class="mobile-menu-item">
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/about/">关于</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/about/">关于</a>
           
         
       </li>
@@ -225,7 +222,7 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/">首页</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/">首页</a>
           
 
         
@@ -236,7 +233,7 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/post/">博客</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/post/">博客</a>
           
 
         
@@ -247,7 +244,7 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/tags/">标签</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/tags/">标签</a>
           
 
         
@@ -258,7 +255,7 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/categories/">分类</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/categories/">分类</a>
           
 
         
@@ -269,7 +266,7 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/about/">关于</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/about/">关于</a>
           
 
         
@@ -312,35 +309,29 @@
   <h2 class="post-toc-title">Table of Contents</h2>
   <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#临时对象池是啥">临时对象池是啥</a></li>
-<li><a href="#使用的基本原理">使用的基本原理</a>
-<ul>
-<li><a href="#get">Get</a></li>
-<li><a href="#getslow">getSlow</a></li>
-<li><a href="#put">Put</a></li>
-<li><a href="#poolcleanup">poolCleanup</a></li>
-</ul></li>
-<li><a href="#使用示例">使用示例</a></li>
-<li><a href="#源码解析">源码解析</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#临时对象池是啥">临时对象池是啥？</a></li>
+    <li><a href="#使用的基本原理">使用的基本原理</a>
+      <ul>
+        <li><a href="#get">Get</a></li>
+        <li><a href="#getslow">getSlow</a></li>
+        <li><a href="#put">Put</a></li>
+        <li><a href="#poolcleanup">poolCleanup</a></li>
+      </ul>
+    </li>
+    <li><a href="#使用示例">使用示例</a></li>
+    <li><a href="#源码解析">源码解析</a></li>
+  </ul>
 </nav>
   </div>
 </div>
 
     
     <div class="post-content">
-      
-
-<h2 id="临时对象池是啥">临时对象池是啥</h2>
-
+      <h2 id="临时对象池是啥">临时对象池是啥？</h2>
 <p>查看<code>sync.Pool</code>中的注释来了解<code>pool</code>的基本用法。主要有以下几点：</p>
-
 <ol>
-<li>pool是一个可以存储和取出临时对象的<strong><em>临时对象</em></strong>池。</li>
+<li>pool是一个可以存储和取出临时对象的<em><strong>临时对象</strong></em>池。</li>
 <li>池中的对象会在没有通知的情况下自动删除，如果一个对象池持有某个对象的唯一引用，那么该对象很有可能被回收。</li>
 <li>pool是多goroutine并发安全的。</li>
 <li>pool的目的是缓存已经分配但之后才回用到的对象，来减轻GC的压力。使用pool可以高效的构建线程安全的<code>free list</code>,但是其并不适用于所有场景的<code>free list</code>。</li>
@@ -349,238 +340,207 @@
 <li>Pool不适合存储在短生命周期的对象，这种场景下的缓存效果不大。</li>
 <li>一旦一个pool使用之后，便不能再被复制。</li>
 </ol>
-
 <p><code>pool</code>的结构体定义如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Pool</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">noCopy</span> <span style="color:#a6e22e">noCopy</span>
 
-<pre><code class="language-go">type Pool struct {
-	noCopy noCopy
-
-	local     unsafe.Pointer // local fixed-size per-P pool, actual type is [P]poolLocal
-	localSize uintptr        // size of the local array
-
-	// New optionally specifies a function to generate
-	// a value when Get would otherwise return nil.
-	// It may not be changed concurrently with calls to Get.
-	New func() interface{}
+	<span style="color:#a6e22e">local</span>     <span style="color:#a6e22e">unsafe</span>.<span style="color:#a6e22e">Pointer</span> <span style="color:#75715e">// local fixed-size per-P pool, actual type is [P]poolLocal
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">localSize</span> <span style="color:#66d9ef">uintptr</span>        <span style="color:#75715e">// size of the local array
+</span><span style="color:#75715e"></span>
+	<span style="color:#75715e">// New optionally specifies a function to generate
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// a value when Get would otherwise return nil.
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// It may not be changed concurrently with calls to Get.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">New</span> <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">interface</span>{}
 }
-</code></pre>
-
-<p>使用pool对象的时候，需要传入New方法，来创建自己需要的对象（Get方法拿不到对象的时候，会调用New方法）。</p>
-
+</code></pre></div><p>使用pool对象的时候，需要传入New方法，来创建自己需要的对象（Get方法拿不到对象的时候，会调用New方法）。</p>
 <p>Pool 中有两个定义的公共方法，分别是 Put - 向池中添加元素；Get - 从池中获取元素，如果没有，则调用 New 生成元素，如果 New 未设置，则返回 nil。</p>
-
 <h2 id="使用的基本原理">使用的基本原理</h2>
-
 <h3 id="get">Get</h3>
+<p>Pool会为每个P维护一个本地池，P的本地池分为私有对象private 和 共享池 shared。私有对象的元数据只能本地P使用，共享池中的shared中的元素可能会被其他P<em>偷走</em>。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// Local per-P Pool appendix.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">poolLocalInternal</span> <span style="color:#66d9ef">struct</span> {
+  <span style="color:#75715e">//P私有元素,获取private不需要加锁
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">private</span> <span style="color:#66d9ef">interface</span>{}   <span style="color:#75715e">// Can be used only by the respective P.
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">//各个P共享元素池，获取shared需要加锁
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">shared</span>  []<span style="color:#66d9ef">interface</span>{} <span style="color:#75715e">// Can be used by any P.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">Mutex</span>                 <span style="color:#75715e">// Protects shared.
+</span><span style="color:#75715e"></span>}
+</code></pre></div><p>Get会优先查找本地private，再查找本地shared，最后再去其他P的shared去查找。如果都查不到则会调用New函数来获取新元素。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">
 
-<p>Pool会为每个P维护一个本地池，P的本地池分为私有对象private 和 共享池 shared。私有对象的元数据只能本地P使用，共享池中的shared中的元素可能会被其他P*偷走*。</p>
-
-<pre><code class="language-go">// Local per-P Pool appendix.
-type poolLocalInternal struct {
-  //P私有元素,获取private不需要加锁
-	private interface{}   // Can be used only by the respective P.
-  //各个P共享元素池，获取shared需要加锁
-	shared  []interface{} // Can be used by any P.
-	Mutex                 // Protects shared.
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">p</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Pool</span>) <span style="color:#a6e22e">Get</span>() <span style="color:#66d9ef">interface</span>{} {
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">race</span>.<span style="color:#a6e22e">Enabled</span> {
+		<span style="color:#a6e22e">race</span>.<span style="color:#a6e22e">Disable</span>()
+	}
+	<span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">pin</span>()
+  <span style="color:#75715e">//先取private
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">x</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">private</span>
+	<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">private</span> = <span style="color:#66d9ef">nil</span>
+	<span style="color:#a6e22e">runtime_procUnpin</span>()
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Lock</span>()
+		<span style="color:#a6e22e">last</span> <span style="color:#f92672">:=</span> len(<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">shared</span>) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">last</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span> {
+      <span style="color:#75715e">//加锁取shared
+</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">x</span> = <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">shared</span>[<span style="color:#a6e22e">last</span>]
+			<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">shared</span> = <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">shared</span>[:<span style="color:#a6e22e">last</span>]
+		}
+		<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Unlock</span>()
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+      <span style="color:#75715e">//去取其他P的对象池数据
+</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">x</span> = <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">getSlow</span>()
+		}
+	}
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">race</span>.<span style="color:#a6e22e">Enabled</span> {
+		<span style="color:#a6e22e">race</span>.<span style="color:#a6e22e">Enable</span>()
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+			<span style="color:#a6e22e">race</span>.<span style="color:#a6e22e">Acquire</span>(<span style="color:#a6e22e">poolRaceAddr</span>(<span style="color:#a6e22e">x</span>))
+		}
+	}
+  <span style="color:#75715e">//都不存在则创建新对象，此时pool持有的对象未必为空，其他p可能是有私有数据的
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">New</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#a6e22e">x</span> = <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">New</span>()
+	}
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">x</span>
 }
-</code></pre>
-
-<p>Get会优先查找本地private，再查找本地shared，最后再去其他P的shared去查找。如果都查不到则会调用New函数来获取新元素。</p>
-
-<pre><code class="language-go">
-
-func (p *Pool) Get() interface{} {
-	if race.Enabled {
-		race.Disable()
-	}
-	l := p.pin()
-  //先取private
-	x := l.private
-	l.private = nil
-	runtime_procUnpin()
-	if x == nil {
-		l.Lock()
-		last := len(l.shared) - 1
-		if last &gt;= 0 {
-      //加锁取shared
-			x = l.shared[last]
-			l.shared = l.shared[:last]
-		}
-		l.Unlock()
-		if x == nil {
-      //去取其他P的对象池数据
-			x = p.getSlow()
-		}
-	}
-	if race.Enabled {
-		race.Enable()
-		if x != nil {
-			race.Acquire(poolRaceAddr(x))
-		}
-	}
-  //都不存在则创建新对象，此时pool持有的对象未必为空，其他p可能是有私有数据的
-	if x == nil &amp;&amp; p.New != nil {
-		x = p.New()
-	}
-	return x
-}
-</code></pre>
-
-<h3 id="getslow">getSlow</h3>
-
+</code></pre></div><h3 id="getslow">getSlow</h3>
 <p>getSlow 会从其他的P中的shared获取可用元素：</p>
-
-<pre><code class="language-go">func (p *Pool) getSlow() (x interface{}) {
-	// See the comment in pin regarding ordering of the loads.
-	size := atomic.LoadUintptr(&amp;p.localSize) // load-acquire
-	local := p.local                         // load-consume
-	// Try to steal one element from other procs.
-	pid := runtime_procPin()
-	runtime_procUnpin()
-	for i := 0; i &lt; int(size); i++ {
-		l := indexLocal(local, (pid+i+1)%int(size))
-    //对应的pool需要加上锁
-		l.Lock()
-		last := len(l.shared) - 1
-		if last &gt;= 0 {
-			x = l.shared[last]
-			l.shared = l.shared[:last]
-			l.Unlock()
-			break
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">p</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Pool</span>) <span style="color:#a6e22e">getSlow</span>() (<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">interface</span>{}) {
+	<span style="color:#75715e">// See the comment in pin regarding ordering of the loads.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">size</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">atomic</span>.<span style="color:#a6e22e">LoadUintptr</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">localSize</span>) <span style="color:#75715e">// load-acquire
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">local</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">local</span>                         <span style="color:#75715e">// load-consume
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// Try to steal one element from other procs.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">pid</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">runtime_procPin</span>()
+	<span style="color:#a6e22e">runtime_procUnpin</span>()
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; int(<span style="color:#a6e22e">size</span>); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+		<span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">indexLocal</span>(<span style="color:#a6e22e">local</span>, (<span style="color:#a6e22e">pid</span><span style="color:#f92672">+</span><span style="color:#a6e22e">i</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">%</span>int(<span style="color:#a6e22e">size</span>))
+    <span style="color:#75715e">//对应的pool需要加上锁
+</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Lock</span>()
+		<span style="color:#a6e22e">last</span> <span style="color:#f92672">:=</span> len(<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">shared</span>) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>
+		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">last</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">0</span> {
+			<span style="color:#a6e22e">x</span> = <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">shared</span>[<span style="color:#a6e22e">last</span>]
+			<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">shared</span> = <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">shared</span>[:<span style="color:#a6e22e">last</span>]
+			<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Unlock</span>()
+			<span style="color:#66d9ef">break</span>
 		}
-		l.Unlock()
+		<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Unlock</span>()
 	}
-	return x
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">x</span>
 }
-</code></pre>
-
-<h3 id="put">Put</h3>
-
+</code></pre></div><h3 id="put">Put</h3>
 <p>Put优先把数据放到private对象中，如果private对象不为空，则放入shared池中。但是在放入池中时，会有1/4的几率把池数据丢掉。</p>
-
-<pre><code class="language-go">// Put adds x to the pool.
-func (p *Pool) Put(x interface{}) {
-	if x == nil {
-		return
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// Put adds x to the pool.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">p</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Pool</span>) <span style="color:#a6e22e">Put</span>(<span style="color:#a6e22e">x</span> <span style="color:#66d9ef">interface</span>{}) {
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span>
 	}
-	if race.Enabled {
-    //随机丢掉数据
-		if fastrand()%4 == 0 {
-			// Randomly drop x on floor.
-			return
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">race</span>.<span style="color:#a6e22e">Enabled</span> {
+    <span style="color:#75715e">//随机丢掉数据
+</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">fastrand</span>()<span style="color:#f92672">%</span><span style="color:#ae81ff">4</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+			<span style="color:#75715e">// Randomly drop x on floor.
+</span><span style="color:#75715e"></span>			<span style="color:#66d9ef">return</span>
 		}
-		race.ReleaseMerge(poolRaceAddr(x))
-		race.Disable()
+		<span style="color:#a6e22e">race</span>.<span style="color:#a6e22e">ReleaseMerge</span>(<span style="color:#a6e22e">poolRaceAddr</span>(<span style="color:#a6e22e">x</span>))
+		<span style="color:#a6e22e">race</span>.<span style="color:#a6e22e">Disable</span>()
 	}
-	l := p.pin()
-  //优先放入private对象中
-	if l.private == nil {
-		l.private = x
-		x = nil
+	<span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">pin</span>()
+  <span style="color:#75715e">//优先放入private对象中
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">private</span> <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">private</span> = <span style="color:#a6e22e">x</span>
+		<span style="color:#a6e22e">x</span> = <span style="color:#66d9ef">nil</span>
 	}
-	runtime_procUnpin()
-	if x != nil {
-		l.Lock()
-    //其次放入shared池中
-		l.shared = append(l.shared, x)
-		l.Unlock()
+	<span style="color:#a6e22e">runtime_procUnpin</span>()
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Lock</span>()
+    <span style="color:#75715e">//其次放入shared池中
+</span><span style="color:#75715e"></span>		<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">shared</span> = append(<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">shared</span>, <span style="color:#a6e22e">x</span>)
+		<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">Unlock</span>()
 	}
-	if race.Enabled {
-		race.Enable()
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">race</span>.<span style="color:#a6e22e">Enabled</span> {
+		<span style="color:#a6e22e">race</span>.<span style="color:#a6e22e">Enable</span>()
 	}
 }
-</code></pre>
-
-<h3 id="poolcleanup">poolCleanup</h3>
-
+</code></pre></div><h3 id="poolcleanup">poolCleanup</h3>
 <p>在STW阶段，垃圾回收时，poolCleanup就会被调用。如果此时pool.shared被一个goroutine占用，那么整个Pool都会被保留下来，下次清理时内存占用差不多会翻一倍。</p>
-
-<pre><code class="language-go">func poolCleanup() {
-	// This function is called with the world stopped, at the beginning of a garbage collection.
-	// It must not allocate and probably should not call any runtime functions.
-	// Defensively zero out everything, 2 reasons:
-	// 1. To prevent false retention of whole Pools.
-	// 2. If GC happens while a goroutine works with l.shared in Put/Get,
-	//    it will retain whole Pool. So next cycle memory consumption would be doubled.
-	for i, p := range allPools {
-		allPools[i] = nil
-		for i := 0; i &lt; int(p.localSize); i++ {
-			l := indexLocal(p.local, i)
-			l.private = nil
-			for j := range l.shared {
-				l.shared[j] = nil
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">poolCleanup</span>() {
+	<span style="color:#75715e">// This function is called with the world stopped, at the beginning of a garbage collection.
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// It must not allocate and probably should not call any runtime functions.
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// Defensively zero out everything, 2 reasons:
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 1. To prevent false retention of whole Pools.
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// 2. If GC happens while a goroutine works with l.shared in Put/Get,
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">//    it will retain whole Pool. So next cycle memory consumption would be doubled.
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">p</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">allPools</span> {
+		<span style="color:#a6e22e">allPools</span>[<span style="color:#a6e22e">i</span>] = <span style="color:#66d9ef">nil</span>
+		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; int(<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">localSize</span>); <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+			<span style="color:#a6e22e">l</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">indexLocal</span>(<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">local</span>, <span style="color:#a6e22e">i</span>)
+			<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">private</span> = <span style="color:#66d9ef">nil</span>
+			<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">shared</span> {
+				<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">shared</span>[<span style="color:#a6e22e">j</span>] = <span style="color:#66d9ef">nil</span>
 			}
-			l.shared = nil
+			<span style="color:#a6e22e">l</span>.<span style="color:#a6e22e">shared</span> = <span style="color:#66d9ef">nil</span>
 		}
-		p.local = nil
-		p.localSize = 0
+		<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">local</span> = <span style="color:#66d9ef">nil</span>
+		<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">localSize</span> = <span style="color:#ae81ff">0</span>
 	}
-	allPools = []*Pool{}
+	<span style="color:#a6e22e">allPools</span> = []<span style="color:#f92672">*</span><span style="color:#a6e22e">Pool</span>{}
 }
-</code></pre>
-
-<h2 id="使用示例">使用示例</h2>
-
+</code></pre></div><h2 id="使用示例">使用示例</h2>
 <p>fmt中的printer pool</p>
-
 <p>printer与其的临时对象池,newPrinter从对象池中获取printer，free将对象放入对象池中，这样就避免了每次都重新生成打印对象，节省了对象生成时间。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// pp is used to store a printer&#39;s state and is reused with sync.Pool to avoid allocations.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">pp</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">buf</span> <span style="color:#a6e22e">buffer</span>
 
-<pre><code class="language-go">// pp is used to store a printer's state and is reused with sync.Pool to avoid allocations.
-type pp struct {
-	buf buffer
+	<span style="color:#75715e">// arg holds the current item, as an interface{}.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">arg</span> <span style="color:#66d9ef">interface</span>{}
 
-	// arg holds the current item, as an interface{}.
-	arg interface{}
+	<span style="color:#75715e">// value is used instead of arg for reflect values.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">value</span> <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">Value</span>
 
-	// value is used instead of arg for reflect values.
-	value reflect.Value
+	<span style="color:#75715e">// fmt is used to format basic items such as integers or strings.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">fmt</span> <span style="color:#a6e22e">fmt</span>
 
-	// fmt is used to format basic items such as integers or strings.
-	fmt fmt
-
-	// reordered records whether the format string used argument reordering.
-	reordered bool
-	// goodArgNum records whether the most recent reordering directive was valid.
-	goodArgNum bool
-	// panicking is set by catchPanic to avoid infinite panic, recover, panic, ... recursion.
-	panicking bool
-	// erroring is set when printing an error string to guard against calling handleMethods.
-	erroring bool
+	<span style="color:#75715e">// reordered records whether the format string used argument reordering.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">reordered</span> <span style="color:#66d9ef">bool</span>
+	<span style="color:#75715e">// goodArgNum records whether the most recent reordering directive was valid.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">goodArgNum</span> <span style="color:#66d9ef">bool</span>
+	<span style="color:#75715e">// panicking is set by catchPanic to avoid infinite panic, recover, panic, ... recursion.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">panicking</span> <span style="color:#66d9ef">bool</span>
+	<span style="color:#75715e">// erroring is set when printing an error string to guard against calling handleMethods.
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">erroring</span> <span style="color:#66d9ef">bool</span>
 }
 
-var ppFree = sync.Pool{
-	New: func() interface{} { return new(pp) },
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ppFree</span> = <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Pool</span>{
+	<span style="color:#a6e22e">New</span>: <span style="color:#66d9ef">func</span>() <span style="color:#66d9ef">interface</span>{} { <span style="color:#66d9ef">return</span> new(<span style="color:#a6e22e">pp</span>) },
 }
 
-// newPrinter allocates a new pp struct or grabs a cached one.
-func newPrinter() *pp {
-	p := ppFree.Get().(*pp)
-	p.panicking = false
-	p.erroring = false
-	p.fmt.init(&amp;p.buf)
-	return p
+<span style="color:#75715e">// newPrinter allocates a new pp struct or grabs a cached one.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">newPrinter</span>() <span style="color:#f92672">*</span><span style="color:#a6e22e">pp</span> {
+	<span style="color:#a6e22e">p</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">ppFree</span>.<span style="color:#a6e22e">Get</span>().(<span style="color:#f92672">*</span><span style="color:#a6e22e">pp</span>)
+	<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">panicking</span> = <span style="color:#66d9ef">false</span>
+	<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">erroring</span> = <span style="color:#66d9ef">false</span>
+	<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">init</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">buf</span>)
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">p</span>
 }
 
-// free saves used pp structs in ppFree; avoids an allocation per invocation.
-func (p *pp) free() {
-	// Proper usage of a sync.Pool requires each entry to have approximately
-	// the same memory cost. To obtain this property when the stored type
-	// contains a variably-sized buffer, we add a hard limit on the maximum buffer
-	// to place back in the pool.
-	//
-	// See https://golang.org/issue/23199
-	if cap(p.buf) &gt; 64&lt;&lt;10 {
-		return
+<span style="color:#75715e">// free saves used pp structs in ppFree; avoids an allocation per invocation.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">p</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">pp</span>) <span style="color:#a6e22e">free</span>() {
+	<span style="color:#75715e">// Proper usage of a sync.Pool requires each entry to have approximately
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// the same memory cost. To obtain this property when the stored type
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// contains a variably-sized buffer, we add a hard limit on the maximum buffer
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// to place back in the pool.
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">//
+</span><span style="color:#75715e"></span>	<span style="color:#75715e">// See https://golang.org/issue/23199
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> cap(<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">buf</span>) &gt; <span style="color:#ae81ff">64</span><span style="color:#f92672">&lt;&lt;</span><span style="color:#ae81ff">10</span> {
+		<span style="color:#66d9ef">return</span>
 	}
 
-	p.buf = p.buf[:0]
-	p.arg = nil
-	p.value = reflect.Value{}
-	ppFree.Put(p)
+	<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">buf</span> = <span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">buf</span>[:<span style="color:#ae81ff">0</span>]
+	<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">arg</span> = <span style="color:#66d9ef">nil</span>
+	<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">value</span> = <span style="color:#a6e22e">reflect</span>.<span style="color:#a6e22e">Value</span>{}
+	<span style="color:#a6e22e">ppFree</span>.<span style="color:#a6e22e">Put</span>(<span style="color:#a6e22e">p</span>)
 }
-</code></pre>
-
-<h2 id="源码解析">源码解析</h2>
+</code></pre></div><h2 id="源码解析">源码解析</h2>
 
     </div>
 
@@ -665,7 +625,7 @@ func (p *pp) free() {
   <div id="disqus_thread"></div>
   <script type="text/javascript">
     var disqus_config = function () {
-      this.page.url = "https://kphn.github.io/post/2019/go%E4%B8%B4%E6%97%B6%E5%AF%B9%E8%B1%A1%E6%B1%A0pool%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/";
+      this.page.url = "https://kunpengdai.github.io/post/2019/go%E4%B8%B4%E6%97%B6%E5%AF%B9%E8%B1%A1%E6%B1%A0pool%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90/";
     };
     function load_disqus() {
       
@@ -717,7 +677,7 @@ func (p *pp) free() {
 
     </a>
   
-    <a href="https://github.com/kphn" rel="me noopener" class="iconfont"
+    <a href="https://github.com/kunpengdai" rel="me noopener" class="iconfont"
       title="github"  target="_blank"
       >
       <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
@@ -729,7 +689,7 @@ func (p *pp) free() {
     </a>
 
 
-<a href="https://kphn.github.io/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+<a href="https://kunpengdai.github.io/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
     class="iconfont" title="rss" target="_blank">
     <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
   xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -754,7 +714,7 @@ func (p *pp) free() {
     &copy;
     
       2017 -
-    2020
+    2021
     <span class="heart">
       
       <i class="iconfont">

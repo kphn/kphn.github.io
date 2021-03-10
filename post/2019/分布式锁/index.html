@@ -32,10 +32,10 @@
 
 
 
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.81.0-DEV" />
 
 
-<link rel="canonical" href="https://kphn.github.io/post/2019/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" />
+<link rel="canonical" href="https://kunpengdai.github.io/post/2019/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" />
 
 
 
@@ -60,17 +60,14 @@
 <meta property="og:title" content="分布式锁" />
 <meta property="og:description" content="背景 在分布式环境下，需要控制多个节点对同一个资源的并发访问，此时本地的加锁已经不能满足需要。为了实现在分布式环境下的锁。 使用场景 效率:使用分" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://kphn.github.io/post/2019/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" />
+<meta property="og:url" content="https://kunpengdai.github.io/post/2019/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" />
 <meta property="article:published_time" content="2019-07-05T08:05:08+08:00" />
 <meta property="article:modified_time" content="2019-07-05T08:05:08+08:00" />
-
 <meta itemprop="name" content="分布式锁">
 <meta itemprop="description" content="背景 在分布式环境下，需要控制多个节点对同一个资源的并发访问，此时本地的加锁已经不能满足需要。为了实现在分布式环境下的锁。 使用场景 效率:使用分">
-
-
-<meta itemprop="datePublished" content="2019-07-05T08:05:08&#43;08:00" />
-<meta itemprop="dateModified" content="2019-07-05T08:05:08&#43;08:00" />
-<meta itemprop="wordCount" content="3213">
+<meta itemprop="datePublished" content="2019-07-05T08:05:08+08:00" />
+<meta itemprop="dateModified" content="2019-07-05T08:05:08+08:00" />
+<meta itemprop="wordCount" content="3255">
 
 
 
@@ -109,35 +106,35 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/">首页</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/">首页</a>
           
         
       </li><li class="mobile-menu-item">
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/post/">博客</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/post/">博客</a>
           
         
       </li><li class="mobile-menu-item">
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/tags/">标签</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/tags/">标签</a>
           
         
       </li><li class="mobile-menu-item">
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/categories/">分类</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/categories/">分类</a>
           
         
       </li><li class="mobile-menu-item">
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/about/">关于</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/about/">关于</a>
           
         
       </li>
@@ -225,7 +222,7 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/">首页</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/">首页</a>
           
 
         
@@ -236,7 +233,7 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/post/">博客</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/post/">博客</a>
           
 
         
@@ -247,7 +244,7 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/tags/">标签</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/tags/">标签</a>
           
 
         
@@ -258,7 +255,7 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/categories/">分类</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/categories/">分类</a>
           
 
         
@@ -269,7 +266,7 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/about/">关于</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/about/">关于</a>
           
 
         
@@ -296,8 +293,8 @@
           2019-07-05
         </time>
         <div class="post-category">
-            <a href="https://kphn.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"> 分布式 </a>
-            <a href="https://kphn.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/"> 分布式锁 </a>
+            <a href="https://kunpengdai.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"> 分布式 </a>
+            <a href="https://kunpengdai.github.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/"> 分布式锁 </a>
             
           </div>
         
@@ -316,51 +313,45 @@
   <h2 class="post-toc-title">Table of Contents</h2>
   <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#背景">背景</a>
-<ul>
-<li><a href="#使用场景">使用场景</a></li>
-<li><a href="#特点">特点</a></li>
-<li><a href="#常见实现方式">常见实现方式</a></li>
-</ul></li>
-<li><a href="#mysql">mysql</a>
-<ul>
-<li><a href="#事务">事务</a></li>
-</ul></li>
-<li><a href="#etcd">etcd</a>
-<ul>
-<li><a href="#事务-1">事务</a></li>
-</ul></li>
-<li><a href="#redis">redis</a>
-<ul>
-<li><a href="#单节点redis锁">单节点redis锁</a></li>
-<li><a href="#redlock">redlock</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#背景">背景</a>
+      <ul>
+        <li><a href="#使用场景">使用场景</a></li>
+        <li><a href="#特点">特点</a></li>
+        <li><a href="#常见实现方式">常见实现方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#mysql">mysql</a>
+      <ul>
+        <li><a href="#事务">事务</a></li>
+      </ul>
+    </li>
+    <li><a href="#etcd">etcd</a>
+      <ul>
+        <li><a href="#事务-1">事务</a></li>
+      </ul>
+    </li>
+    <li><a href="#redis">redis</a>
+      <ul>
+        <li><a href="#单节点redis锁">单节点redis锁</a></li>
+        <li><a href="#redlock">redlock</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
   </div>
 </div>
 
     
     <div class="post-content">
-      
-
-<h2 id="背景">背景</h2>
-
+      <h2 id="背景">背景</h2>
 <p>在分布式环境下，需要控制多个节点对同一个资源的并发访问，此时本地的加锁已经不能满足需要。为了实现在分布式环境下的锁。</p>
-
 <h3 id="使用场景">使用场景</h3>
-
 <ul>
 <li>效率:使用分布式锁可以避免不同节点重复相同的工作，这些工作会浪费资源。比如用户付了钱之后有可能不同节点会发出多封短信。</li>
 <li>正确性:加分布式锁同样可以避免破坏正确性的发生，如果两个节点在同一条数据上面操作，比如多个节点机器对同一个订单操作不同的流程有可能会导致该笔订单最后状态出现错误，造成损失。</li>
 </ul>
-
 <h3 id="特点">特点</h3>
-
 <ul>
 <li>互斥性:和我们本地锁一样互斥性是最基本，但是分布式锁需要保证在不同节点的不同线程的互斥。</li>
 <li>可重入性:同一个节点上的同一个线程如果获取了锁之后那么也可以再次获取这个锁。</li>
@@ -369,310 +360,259 @@
 <li>支持阻塞和非阻塞:和ReentrantLock一样支持lock和trylock以及tryLock(long timeOut)。</li>
 <li>支持公平锁和非公平锁(可选):公平锁的意思是按照请求加锁的顺序获得锁，非公平锁就相反是无序的。这个一般来说实现的比较少。</li>
 </ul>
-
 <h3 id="常见实现方式">常见实现方式</h3>
-
 <ul>
 <li>MySql</li>
 <li>ZK/etcd</li>
 <li>Redis</li>
 <li>Chubby</li>
 </ul>
-
 <h2 id="mysql">mysql</h2>
-
 <h3 id="事务">事务</h3>
-
 <p>利用mysql的事务可以实现分布式资源的互斥访问，一般可以建立一个锁表。</p>
-
-<pre><code class="language-sql">CREATE TABLE `lock_table` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `resourcce_name` varchar(128) DEFAULT '''''' COMMENT '资源名称',
-  `node_info` varchar(128) DEFAULT NULL COMMENT '机器信息',
-  `count` int(11) NOT NULL DEFAULT '0' COMMENT '锁的次数，统计可重入锁',
-  `desc` varchar(128) DEFAULT NULL COMMENT '额外的描述信息',
-  `utime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间戳',
-  `ctime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间戳',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq_resource` (`resourcce_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-</code></pre>
-
-<p><strong>Lock</strong>:</p>
-
-<pre><code class="language-java">@Transcation
-public void lock(resourceName){
-  if (select * from lock_table where resource_name = resourceName;有数据){
-    if(node_info == currentNode){
-      update lock_table set count=count+1 where resource_name = resourceName；
-      return true；
-    }else{
-      return false;
-    }
-  }else{
-    insert into lock_table;
-  }
-}
-</code></pre>
-
-<p>利用了sql的事务，获取锁时，先去查询锁是否存在，如果存在则比较node_info【ip+线程id】是否一致。如果一致就加可重入锁count的值，如果不一致那么就返回false。如果没有值，则可以创建这个锁。</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#f92672">`</span>lock_table<span style="color:#f92672">`</span> (
+  <span style="color:#f92672">`</span>id<span style="color:#f92672">`</span> int(<span style="color:#ae81ff">11</span>) unsigned <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> AUTO_INCREMENT,
+  <span style="color:#f92672">`</span>resourcce_name<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">128</span>) <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">&#39;&#39;&#39;&#39;&#39;&#39;</span> <span style="color:#66d9ef">COMMENT</span> <span style="color:#e6db74">&#39;资源名称&#39;</span>,
+  <span style="color:#f92672">`</span>node_info<span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">128</span>) <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">COMMENT</span> <span style="color:#e6db74">&#39;机器信息&#39;</span>,
+  <span style="color:#f92672">`</span><span style="color:#66d9ef">count</span><span style="color:#f92672">`</span> int(<span style="color:#ae81ff">11</span>) <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">&#39;0&#39;</span> <span style="color:#66d9ef">COMMENT</span> <span style="color:#e6db74">&#39;锁的次数，统计可重入锁&#39;</span>,
+  <span style="color:#f92672">`</span><span style="color:#66d9ef">desc</span><span style="color:#f92672">`</span> varchar(<span style="color:#ae81ff">128</span>) <span style="color:#66d9ef">DEFAULT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">COMMENT</span> <span style="color:#e6db74">&#39;额外的描述信息&#39;</span>,
+  <span style="color:#f92672">`</span>utime<span style="color:#f92672">`</span> int(<span style="color:#ae81ff">11</span>) unsigned <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">&#39;0&#39;</span> <span style="color:#66d9ef">COMMENT</span> <span style="color:#e6db74">&#39;更新时间戳&#39;</span>,
+  <span style="color:#f92672">`</span>ctime<span style="color:#f92672">`</span> int(<span style="color:#ae81ff">11</span>) unsigned <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> <span style="color:#e6db74">&#39;0&#39;</span> <span style="color:#66d9ef">COMMENT</span> <span style="color:#e6db74">&#39;创建时间戳&#39;</span>,
+  <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span> (<span style="color:#f92672">`</span>id<span style="color:#f92672">`</span>),
+  <span style="color:#66d9ef">UNIQUE</span> <span style="color:#66d9ef">KEY</span> <span style="color:#f92672">`</span>uniq_resource<span style="color:#f92672">`</span> (<span style="color:#f92672">`</span>resourcce_name<span style="color:#f92672">`</span>)
+) ENGINE<span style="color:#f92672">=</span>InnoDB <span style="color:#66d9ef">DEFAULT</span> CHARSET<span style="color:#f92672">=</span>utf8mb4;
+</code></pre></div><p><strong>Lock</strong>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Transcation</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">lock</span><span style="color:#f92672">(</span>resourceName<span style="color:#f92672">){</span>
+  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>select <span style="color:#f92672">*</span> from lock_table where resource_name <span style="color:#f92672">=</span> resourceName<span style="color:#f92672">;</span>有数据<span style="color:#f92672">){</span>
+    <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>node_info <span style="color:#f92672">==</span> currentNode<span style="color:#f92672">){</span>
+      update lock_table set count<span style="color:#f92672">=</span>count<span style="color:#f92672">+</span>1 where resource_name <span style="color:#f92672">=</span> resourceName<span style="color:#960050;background-color:#1e0010">；</span>
+      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#960050;background-color:#1e0010">；</span>
+    <span style="color:#f92672">}</span><span style="color:#66d9ef">else</span><span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">}</span><span style="color:#66d9ef">else</span><span style="color:#f92672">{</span>
+    insert into lock_table<span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p>利用了sql的事务，获取锁时，先去查询锁是否存在，如果存在则比较node_info【ip+线程id】是否一致。如果一致就加可重入锁count的值，如果不一致那么就返回false。如果没有值，则可以创建这个锁。</p>
 <p><strong>tryLock:</strong></p>
-
-<pre><code class="language-java">public boolean tryLock(){
-  return mysqlLock.lock();
-}
-</code></pre>
-
-<p><strong>tryLock(timeout)</strong>:</p>
-
-<pre><code class="language-java">public boolean tryLock(long timeout){
-  long endtime = timenow + timeout;
-  while(true){
-    if mysqlLock.lock(){
-      return true;
-    }
-    if(timenow &gt; endtime){
-      return false;
-    }
-  }
-}
-</code></pre>
-
-<p><strong>unlock()</strong>:</p>
-
-<pre><code class="language-java">@Transcation
-public boolean unlock(){
-  if(select * from lock_table 有数据){
-    if(currentNode == node_info){
-      if (count&gt;1){
-        update count = count-1;
-      }else{
-        delete;
-      }
-    }else{
-      return false;
-    }
-  }else{
-    return false;
-  }
-}
-</code></pre>
-
-<p><strong>锁超时</strong>：如果持有锁的节点挂了，那么该锁就不会被释放，我们可以启动一个定时任务来认定节点挂了之后释放锁。</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">tryLock</span><span style="color:#f92672">(){</span>
+  <span style="color:#66d9ef">return</span> mysqlLock<span style="color:#f92672">.</span><span style="color:#a6e22e">lock</span><span style="color:#f92672">();</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p><strong>tryLock(timeout)</strong>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">tryLock</span><span style="color:#f92672">(</span><span style="color:#66d9ef">long</span> timeout<span style="color:#f92672">){</span>
+  <span style="color:#66d9ef">long</span> endtime <span style="color:#f92672">=</span> timenow <span style="color:#f92672">+</span> timeout<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">while</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">){</span>
+    <span style="color:#66d9ef">if</span> mysqlLock<span style="color:#f92672">.</span><span style="color:#a6e22e">lock</span><span style="color:#f92672">(){</span>
+      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>timenow <span style="color:#f92672">&gt;</span> endtime<span style="color:#f92672">){</span>
+      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p><strong>unlock()</strong>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Transcation</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">unlock</span><span style="color:#f92672">(){</span>
+  <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>select <span style="color:#f92672">*</span> from lock_table 有数据<span style="color:#f92672">){</span>
+    <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>currentNode <span style="color:#f92672">==</span> node_info<span style="color:#f92672">){</span>
+      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>count<span style="color:#f92672">&gt;</span>1<span style="color:#f92672">){</span>
+        update count <span style="color:#f92672">=</span> count<span style="color:#f92672">-</span>1<span style="color:#f92672">;</span>
+      <span style="color:#f92672">}</span><span style="color:#66d9ef">else</span><span style="color:#f92672">{</span>
+        delete<span style="color:#f92672">;</span>
+      <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span><span style="color:#66d9ef">else</span><span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">}</span><span style="color:#66d9ef">else</span><span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+</code></pre></div><p><strong>锁超时</strong>：如果持有锁的节点挂了，那么该锁就不会被释放，我们可以启动一个定时任务来认定节点挂了之后释放锁。</p>
 <h2 id="etcd">etcd</h2>
-
 <h3 id="事务-1">事务</h3>
-
 <p>etcd3中可以序列化多个操作为一个条件性的迷你事务。每个事务包含一组条件守护的组合，当所有提交满足时一组操作被执行，并且任何条件不满足时另外一组操作被执行。事务可以保证分布式锁的安全。</p>
-
-<pre><code class="language-go">Txn().If(cond1, cond2, ...).Then(op1, op2, ...,).Else(op1’, op2’, …)
-</code></pre>
-
-<p>etcd3中的事务有三个部分，条件块，<code>If(cond1,cond2,...)</code> ,成功块 <code>Then(op1,op2,...)</code>,失败块<code>Else(op1,op2,...)</code> 条件块中的所有条件都满足的情况下就执行Then，否则就执行Else。</p>
-
-<pre><code class="language-go">func doTxnXfer(etcd *v3.Client, from, to string, amount uint) (bool, error) {
-    getresp, err := etcd.Txn(ctx.TODO()).Then(OpGet(from), OpGet(to)).Commit()	//事务查出from和get
-    if err != nil {
-         return false, err
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#a6e22e">Txn</span>().<span style="color:#a6e22e">If</span>(<span style="color:#a6e22e">cond1</span>, <span style="color:#a6e22e">cond2</span>, <span style="color:#f92672">...</span>).<span style="color:#a6e22e">Then</span>(<span style="color:#a6e22e">op1</span>, <span style="color:#a6e22e">op2</span>, <span style="color:#f92672">...</span>,).<span style="color:#a6e22e">Else</span>(<span style="color:#a6e22e">op1</span><span style="color:#960050;background-color:#1e0010">’</span>, <span style="color:#a6e22e">op2</span><span style="color:#960050;background-color:#1e0010">’</span>, <span style="color:#960050;background-color:#1e0010">…</span>)
+</code></pre></div><p>etcd3中的事务有三个部分，条件块，<code>If(cond1,cond2,...)</code> ,成功块 <code>Then(op1,op2,...)</code>,失败块<code>Else(op1,op2,...)</code> 条件块中的所有条件都满足的情况下就执行Then，否则就执行Else。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doTxnXfer</span>(<span style="color:#a6e22e">etcd</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">v3</span>.<span style="color:#a6e22e">Client</span>, <span style="color:#a6e22e">from</span>, <span style="color:#a6e22e">to</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">amount</span> <span style="color:#66d9ef">uint</span>) (<span style="color:#66d9ef">bool</span>, <span style="color:#66d9ef">error</span>) {
+    <span style="color:#a6e22e">getresp</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">etcd</span>.<span style="color:#a6e22e">Txn</span>(<span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">TODO</span>()).<span style="color:#a6e22e">Then</span>(<span style="color:#a6e22e">OpGet</span>(<span style="color:#a6e22e">from</span>), <span style="color:#a6e22e">OpGet</span>(<span style="color:#a6e22e">to</span>)).<span style="color:#a6e22e">Commit</span>()	<span style="color:#75715e">//事务查出from和get
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+         <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>, <span style="color:#a6e22e">err</span>
     }
-    fromKV := getresp.Responses[0].GetRangeResponse().Kvs[0]
-    toKV := getresp.Responses[1].GetRangeResponse().Kvs[1]
-    fromV, toV := toUInt64(fromKV.Value), toUint64(toKV.Value)
-    if fromV &lt; amount {
-        return false, fmt.Errorf(“insufficient value”)
+    <span style="color:#a6e22e">fromKV</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">getresp</span>.<span style="color:#a6e22e">Responses</span>[<span style="color:#ae81ff">0</span>].<span style="color:#a6e22e">GetRangeResponse</span>().<span style="color:#a6e22e">Kvs</span>[<span style="color:#ae81ff">0</span>]
+    <span style="color:#a6e22e">toKV</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">getresp</span>.<span style="color:#a6e22e">Responses</span>[<span style="color:#ae81ff">1</span>].<span style="color:#a6e22e">GetRangeResponse</span>().<span style="color:#a6e22e">Kvs</span>[<span style="color:#ae81ff">1</span>]
+    <span style="color:#a6e22e">fromV</span>, <span style="color:#a6e22e">toV</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">toUInt64</span>(<span style="color:#a6e22e">fromKV</span>.<span style="color:#a6e22e">Value</span>), <span style="color:#a6e22e">toUint64</span>(<span style="color:#a6e22e">toKV</span>.<span style="color:#a6e22e">Value</span>)
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">fromV</span> &lt; <span style="color:#a6e22e">amount</span> {
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>, <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#960050;background-color:#1e0010">“</span><span style="color:#a6e22e">insufficient</span> <span style="color:#a6e22e">value</span><span style="color:#960050;background-color:#1e0010">”</span>)
     }
-    txn := etcd.Txn(ctx.TODO()).If(
-        v3.Compare(v3.ModRevision(from), “=”, fromKV.ModRevision),
-        v3.Compare(v3.ModRevision(to), “=”, toKV.ModRevision))			//如果from 和 get还没被修改
-    txn = txn.Then(
-        OpPut(from, fromUint64(fromV - amount)),					//那么久同时更新这两个key
-        OpPut(to, fromUint64(toV + amount))
-    putresp, err := txn.Commit()												//提交事务
-    if err != nil {
-        return false, err
+    <span style="color:#a6e22e">txn</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">etcd</span>.<span style="color:#a6e22e">Txn</span>(<span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">TODO</span>()).<span style="color:#a6e22e">If</span>(
+        <span style="color:#a6e22e">v3</span>.<span style="color:#a6e22e">Compare</span>(<span style="color:#a6e22e">v3</span>.<span style="color:#a6e22e">ModRevision</span>(<span style="color:#a6e22e">from</span>), <span style="color:#960050;background-color:#1e0010">“</span>=<span style="color:#960050;background-color:#1e0010">”</span>, <span style="color:#a6e22e">fromKV</span>.<span style="color:#a6e22e">ModRevision</span>),
+        <span style="color:#a6e22e">v3</span>.<span style="color:#a6e22e">Compare</span>(<span style="color:#a6e22e">v3</span>.<span style="color:#a6e22e">ModRevision</span>(<span style="color:#a6e22e">to</span>), <span style="color:#960050;background-color:#1e0010">“</span>=<span style="color:#960050;background-color:#1e0010">”</span>, <span style="color:#a6e22e">toKV</span>.<span style="color:#a6e22e">ModRevision</span>))			<span style="color:#75715e">//如果from 和 get还没被修改
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">txn</span> = <span style="color:#a6e22e">txn</span>.<span style="color:#a6e22e">Then</span>(
+        <span style="color:#a6e22e">OpPut</span>(<span style="color:#a6e22e">from</span>, <span style="color:#a6e22e">fromUint64</span>(<span style="color:#a6e22e">fromV</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">amount</span>)),					<span style="color:#75715e">//那么久同时更新这两个key
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">OpPut</span>(<span style="color:#a6e22e">to</span>, <span style="color:#a6e22e">fromUint64</span>(<span style="color:#a6e22e">toV</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">amount</span>))
+    <span style="color:#a6e22e">putresp</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">txn</span>.<span style="color:#a6e22e">Commit</span>()												<span style="color:#75715e">//提交事务
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span>, <span style="color:#a6e22e">err</span>
     }
-    return putresp.Succeeded, nil
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">putresp</span>.<span style="color:#a6e22e">Succeeded</span>, <span style="color:#66d9ef">nil</span>
 }
-</code></pre>
-
-<p><img src="https://coreos.com/sites/default/files/inline-images/diagram3.png" alt="diagram" /></p>
-
+</code></pre></div><p><img src="https://coreos.com/sites/default/files/inline-images/diagram3.png" alt="diagram"></p>
 <p>而利用etcd的事务实现分布式锁的代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#f92672">package</span> <span style="color:#a6e22e">concurrency</span>
 
-<pre><code class="language-go">package concurrency
+<span style="color:#f92672">import</span> (
+	<span style="color:#e6db74">&#34;context&#34;</span>
+	<span style="color:#e6db74">&#34;fmt&#34;</span>
+	<span style="color:#e6db74">&#34;sync&#34;</span>
 
-import (
-	&quot;context&quot;
-	&quot;fmt&quot;
-	&quot;sync&quot;
-
-	v3 &quot;go.etcd.io/etcd/clientv3&quot;
-	pb &quot;go.etcd.io/etcd/etcdserver/etcdserverpb&quot;
+	<span style="color:#a6e22e">v3</span> <span style="color:#e6db74">&#34;go.etcd.io/etcd/clientv3&#34;</span>
+	<span style="color:#a6e22e">pb</span> <span style="color:#e6db74">&#34;go.etcd.io/etcd/etcdserver/etcdserverpb&#34;</span>
 )
 
-// Mutex implements the sync Locker interface with etcd
-type Mutex struct {
-	s *Session
+<span style="color:#75715e">// Mutex implements the sync Locker interface with etcd
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Mutex</span> <span style="color:#66d9ef">struct</span> {
+	<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Session</span>
 
-	pfx   string
-	myKey string
-	myRev int64
-	hdr   *pb.ResponseHeader
+	<span style="color:#a6e22e">pfx</span>   <span style="color:#66d9ef">string</span>
+	<span style="color:#a6e22e">myKey</span> <span style="color:#66d9ef">string</span>
+	<span style="color:#a6e22e">myRev</span> <span style="color:#66d9ef">int64</span>
+	<span style="color:#a6e22e">hdr</span>   <span style="color:#f92672">*</span><span style="color:#a6e22e">pb</span>.<span style="color:#a6e22e">ResponseHeader</span>
 }
 
-func NewMutex(s *Session, pfx string) *Mutex {
-	return &amp;Mutex{s, pfx + &quot;/&quot;, &quot;&quot;, -1, nil}
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewMutex</span>(<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Session</span>, <span style="color:#a6e22e">pfx</span> <span style="color:#66d9ef">string</span>) <span style="color:#f92672">*</span><span style="color:#a6e22e">Mutex</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Mutex</span>{<span style="color:#a6e22e">s</span>, <span style="color:#a6e22e">pfx</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;/&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#66d9ef">nil</span>}
 }
 
-// Lock locks the mutex with a cancelable context. If the context is canceled
-// while trying to acquire the lock, the mutex tries to clean its stale lock entry.
-func (m *Mutex) Lock(ctx context.Context) error {
-	s := m.s
-	client := m.s.Client()
+<span style="color:#75715e">// Lock locks the mutex with a cancelable context. If the context is canceled
+</span><span style="color:#75715e">// while trying to acquire the lock, the mutex tries to clean its stale lock entry.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">m</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Mutex</span>) <span style="color:#a6e22e">Lock</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>) <span style="color:#66d9ef">error</span> {
+	<span style="color:#a6e22e">s</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">s</span>
+	<span style="color:#a6e22e">client</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">Client</span>()
 
-	m.myKey = fmt.Sprintf(&quot;%s%x&quot;, m.pfx, s.Lease())
-	cmp := v3.Compare(v3.CreateRevision(m.myKey), &quot;=&quot;, 0)
-	// put self in lock waiters via myKey; oldest waiter holds lock
-	put := v3.OpPut(m.myKey, &quot;&quot;, v3.WithLease(s.Lease()))
-	// reuse key in case this session already holds the lock
-	get := v3.OpGet(m.myKey)
-	// fetch current holder to complete uncontended path with only one RPC
-	getOwner := v3.OpGet(m.pfx, v3.WithFirstCreate()...)
-	resp, err := client.Txn(ctx).If(cmp).Then(put, getOwner).Else(get, getOwner).Commit()
-  //类似于原子操作cas，compare and swap
-	if err != nil {
-		return err
+	<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">myKey</span> = <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprintf</span>(<span style="color:#e6db74">&#34;%s%x&#34;</span>, <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">pfx</span>, <span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">Lease</span>())
+	<span style="color:#a6e22e">cmp</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">v3</span>.<span style="color:#a6e22e">Compare</span>(<span style="color:#a6e22e">v3</span>.<span style="color:#a6e22e">CreateRevision</span>(<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">myKey</span>), <span style="color:#e6db74">&#34;=&#34;</span>, <span style="color:#ae81ff">0</span>)
+	<span style="color:#75715e">// put self in lock waiters via myKey; oldest waiter holds lock
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">put</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">v3</span>.<span style="color:#a6e22e">OpPut</span>(<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">myKey</span>, <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#a6e22e">v3</span>.<span style="color:#a6e22e">WithLease</span>(<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">Lease</span>()))
+	<span style="color:#75715e">// reuse key in case this session already holds the lock
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">get</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">v3</span>.<span style="color:#a6e22e">OpGet</span>(<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">myKey</span>)
+	<span style="color:#75715e">// fetch current holder to complete uncontended path with only one RPC
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">getOwner</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">v3</span>.<span style="color:#a6e22e">OpGet</span>(<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">pfx</span>, <span style="color:#a6e22e">v3</span>.<span style="color:#a6e22e">WithFirstCreate</span>()<span style="color:#f92672">...</span>)
+	<span style="color:#a6e22e">resp</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">Txn</span>(<span style="color:#a6e22e">ctx</span>).<span style="color:#a6e22e">If</span>(<span style="color:#a6e22e">cmp</span>).<span style="color:#a6e22e">Then</span>(<span style="color:#a6e22e">put</span>, <span style="color:#a6e22e">getOwner</span>).<span style="color:#a6e22e">Else</span>(<span style="color:#a6e22e">get</span>, <span style="color:#a6e22e">getOwner</span>).<span style="color:#a6e22e">Commit</span>()
+  <span style="color:#75715e">//类似于原子操作cas，compare and swap
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
 	}
-	m.myRev = resp.Header.Revision
-	if !resp.Succeeded {
-		m.myRev = resp.Responses[0].GetResponseRange().Kvs[0].CreateRevision
+	<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">myRev</span> = <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Header</span>.<span style="color:#a6e22e">Revision</span>
+	<span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Succeeded</span> {
+		<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">myRev</span> = <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Responses</span>[<span style="color:#ae81ff">0</span>].<span style="color:#a6e22e">GetResponseRange</span>().<span style="color:#a6e22e">Kvs</span>[<span style="color:#ae81ff">0</span>].<span style="color:#a6e22e">CreateRevision</span>
 	}
-	// if no key on prefix / the minimum rev is key, already hold the lock
-	ownerKey := resp.Responses[1].GetResponseRange().Kvs
-	if len(ownerKey) == 0 || ownerKey[0].CreateRevision == m.myRev {
-		m.hdr = resp.Header
-		return nil
+	<span style="color:#75715e">// if no key on prefix / the minimum rev is key, already hold the lock
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">ownerKey</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Responses</span>[<span style="color:#ae81ff">1</span>].<span style="color:#a6e22e">GetResponseRange</span>().<span style="color:#a6e22e">Kvs</span>
+	<span style="color:#66d9ef">if</span> len(<span style="color:#a6e22e">ownerKey</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">ownerKey</span>[<span style="color:#ae81ff">0</span>].<span style="color:#a6e22e">CreateRevision</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">myRev</span> {
+		<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">hdr</span> = <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Header</span>
+		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
 	}
 
-	// wait for deletion revisions prior to myKey
-	hdr, werr := waitDeletes(ctx, client, m.pfx, m.myRev-1)
-	// release lock key if wait failed
-	if werr != nil {
-		m.Unlock(client.Ctx())
-	} else {
-		m.hdr = hdr
+	<span style="color:#75715e">// wait for deletion revisions prior to myKey
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">hdr</span>, <span style="color:#a6e22e">werr</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">waitDeletes</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">client</span>, <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">pfx</span>, <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">myRev</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+	<span style="color:#75715e">// release lock key if wait failed
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">werr</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Unlock</span>(<span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">Ctx</span>())
+	} <span style="color:#66d9ef">else</span> {
+		<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">hdr</span> = <span style="color:#a6e22e">hdr</span>
 	}
-	return werr
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">werr</span>
 }
 
-func (m *Mutex) Unlock(ctx context.Context) error {
-	client := m.s.Client()
-	if _, err := client.Delete(ctx, m.myKey); err != nil {
-		return err
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">m</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Mutex</span>) <span style="color:#a6e22e">Unlock</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>) <span style="color:#66d9ef">error</span> {
+	<span style="color:#a6e22e">client</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">Client</span>()
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">Delete</span>(<span style="color:#a6e22e">ctx</span>, <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">myKey</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
 	}
-	m.myKey = &quot;\x00&quot;
-	m.myRev = -1
-	return nil
+	<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">myKey</span> = <span style="color:#e6db74">&#34;\x00&#34;</span>
+	<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">myRev</span> = <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
 }
 
-func (m *Mutex) IsOwner() v3.Cmp {
-	return v3.Compare(v3.CreateRevision(m.myKey), &quot;=&quot;, m.myRev)
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">m</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Mutex</span>) <span style="color:#a6e22e">IsOwner</span>() <span style="color:#a6e22e">v3</span>.<span style="color:#a6e22e">Cmp</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">v3</span>.<span style="color:#a6e22e">Compare</span>(<span style="color:#a6e22e">v3</span>.<span style="color:#a6e22e">CreateRevision</span>(<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">myKey</span>), <span style="color:#e6db74">&#34;=&#34;</span>, <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">myRev</span>)
 }
 
-func (m *Mutex) Key() string { return m.myKey }
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">m</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Mutex</span>) <span style="color:#a6e22e">Key</span>() <span style="color:#66d9ef">string</span> { <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">myKey</span> }
 
-// Header is the response header received from etcd on acquiring the lock.
-func (m *Mutex) Header() *pb.ResponseHeader { return m.hdr }
+<span style="color:#75715e">// Header is the response header received from etcd on acquiring the lock.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">m</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Mutex</span>) <span style="color:#a6e22e">Header</span>() <span style="color:#f92672">*</span><span style="color:#a6e22e">pb</span>.<span style="color:#a6e22e">ResponseHeader</span> { <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">hdr</span> }
 
-type lockerMutex struct{ *Mutex }
+<span style="color:#66d9ef">type</span> <span style="color:#a6e22e">lockerMutex</span> <span style="color:#66d9ef">struct</span>{ <span style="color:#f92672">*</span><span style="color:#a6e22e">Mutex</span> }
 
-func (lm *lockerMutex) Lock() {
-	client := lm.s.Client()
-	if err := lm.Mutex.Lock(client.Ctx()); err != nil {
-		panic(err)
-	}
-}
-func (lm *lockerMutex) Unlock() {
-	client := lm.s.Client()
-	if err := lm.Mutex.Unlock(client.Ctx()); err != nil {
-		panic(err)
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">lm</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">lockerMutex</span>) <span style="color:#a6e22e">Lock</span>() {
+	<span style="color:#a6e22e">client</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">lm</span>.<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">Client</span>()
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">lm</span>.<span style="color:#a6e22e">Mutex</span>.<span style="color:#a6e22e">Lock</span>(<span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">Ctx</span>()); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		panic(<span style="color:#a6e22e">err</span>)
 	}
 }
-
-// NewLocker creates a sync.Locker backed by an etcd mutex.
-func NewLocker(s *Session, pfx string) sync.Locker {
-	return &amp;lockerMutex{NewMutex(s, pfx)}
+<span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">lm</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">lockerMutex</span>) <span style="color:#a6e22e">Unlock</span>() {
+	<span style="color:#a6e22e">client</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">lm</span>.<span style="color:#a6e22e">s</span>.<span style="color:#a6e22e">Client</span>()
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">lm</span>.<span style="color:#a6e22e">Mutex</span>.<span style="color:#a6e22e">Unlock</span>(<span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">Ctx</span>()); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		panic(<span style="color:#a6e22e">err</span>)
+	}
 }
 
-</code></pre>
+<span style="color:#75715e">// NewLocker creates a sync.Locker backed by an etcd mutex.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewLocker</span>(<span style="color:#a6e22e">s</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Session</span>, <span style="color:#a6e22e">pfx</span> <span style="color:#66d9ef">string</span>) <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Locker</span> {
+	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">lockerMutex</span>{<span style="color:#a6e22e">NewMutex</span>(<span style="color:#a6e22e">s</span>, <span style="color:#a6e22e">pfx</span>)}
+}
 
-<h2 id="redis">redis</h2>
-
+</code></pre></div><h2 id="redis">redis</h2>
 <h3 id="单节点redis锁">单节点redis锁</h3>
-
 <pre><code>SET resource_name my_random_value NX PX 30000
-</code></pre>
-
-<p>在上面的<code>SET</code>命令中：</p>
-
+</code></pre><p>在上面的<code>SET</code>命令中：</p>
 <ul>
 <li><code>my_random_value</code>是由客户端生成的一个随机字符串，它要保证在足够长的一段时间内在所有客户端的所有获取锁的请求中都是唯一的。</li>
 <li><code>NX</code>表示只有当<code>resource_name</code>对应的key值不存在的时候才能<code>SET</code>成功。这保证了只有第一个请求的客户端才能获得锁，而其它客户端在锁被释放之前都无法获得锁。</li>
 <li><code>PX 30000</code>表示这个锁有一个30秒的自动过期时间。当然，这里30秒只是一个例子，客户端可以选择合适的过期时间。</li>
 </ul>
-
 <p>最后，当客户端完成了对共享资源的操作之后，执行下面的Redis Lua脚本来<strong>释放锁</strong>：</p>
-
 <pre><code>if redis.call(&quot;get&quot;,KEYS[1]) == ARGV[1] then
     return redis.call(&quot;del&quot;,KEYS[1])
 else
     return 0
 end复制代码
-</code></pre>
-
-<p>这段Lua脚本在执行的时候要把前面的<code>my_random_value</code>作为<code>ARGV[1]</code>的值传进去，把<code>resource_name</code>作为<code>KEYS[1]</code>的值传进去.</p>
-
+</code></pre><p>这段Lua脚本在执行的时候要把前面的<code>my_random_value</code>作为<code>ARGV[1]</code>的值传进去，把<code>resource_name</code>作为<code>KEYS[1]</code>的值传进去.</p>
 <p>有几个点要注意下：</p>
-
 <ol>
-<li><p>锁的过期时间，如果一个客户端获取到锁只有崩溃了，那么其他客户端再也不能获取到这个锁。所以要设置这个有效时间。</p></li>
-
-<li><p>设置一个随机字符串 my_random_value很有必要，这保证一个客户端释放的锁是自己持有的那个锁。假如获取锁时<code>SET</code>的不是一个随机字符串，而是一个固定值，那么可能会发生下面的执行序列：</p>
-
+<li>
+<p>锁的过期时间，如果一个客户端获取到锁只有崩溃了，那么其他客户端再也不能获取到这个锁。所以要设置这个有效时间。</p>
+</li>
+<li>
+<p>设置一个随机字符串 my_random_value很有必要，这保证一个客户端释放的锁是自己持有的那个锁。假如获取锁时<code>SET</code>的不是一个随机字符串，而是一个固定值，那么可能会发生下面的执行序列：</p>
 <ol>
 <li>客户端1获取锁成功。</li>
 <li>客户端1在某个操作上阻塞了很长时间。</li>
 <li>过期时间到了，锁自动释放了。</li>
 <li>客户端2获取到了对应同一个资源的锁。</li>
 <li>客户端1从阻塞中恢复过来，释放掉了客户端2持有的锁。</li>
-</ol></li>
 </ol>
-
 <p>之后，客户端2在访问共享资源的时候，就没有锁为它提供保护了。</p>
-
-<ol>
-<li>释放锁的过程：释放锁的过程必须使用lua脚本或（multi）来实现。释放锁其实包含三步操作：&rsquo;GET&rsquo;、判断和&rsquo;DEL&rsquo;，用Lua脚本来实现能保证这三步的原子性。</li>
+</li>
+<li>
+<p>释放锁的过程：释放锁的过程必须使用lua脚本或（multi）来实现。释放锁其实包含三步操作：&lsquo;GET&rsquo;、判断和&rsquo;DEL'，用Lua脚本来实现能保证这三步的原子性。</p>
+</li>
 </ol>
-
 <h3 id="redlock">redlock</h3>
-
 <p>我们想象一个这样的场景当机器A申请到一把锁之后，如果Redis主宕机了，这个时候从机并没有同步到这一把锁，那么机器B再次申请的时候就会再次申请到这把锁，为了解决这个问题Redis作者提出了RedLock红锁的算法,在Redission中也对RedLock进行了实现。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//三个redis的集群
+</span><span style="color:#75715e"></span>Rlock lock1 <span style="color:#f92672">=</span> redissonInstance1<span style="color:#f92672">.</span><span style="color:#a6e22e">getLock</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;lock1&#34;</span><span style="color:#f92672">);</span>
+Rlock lock2 <span style="color:#f92672">=</span> redissonInstance2<span style="color:#f92672">.</span><span style="color:#a6e22e">getLock</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;lock2&#34;</span><span style="color:#f92672">);</span>
+Rlock lock3 <span style="color:#f92672">=</span> redissonInstance3<span style="color:#f92672">.</span><span style="color:#a6e22e">getLock</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;lock3&#34;</span><span style="color:#f92672">);</span>
 
-<pre><code class="language-java">//三个redis的集群
-Rlock lock1 = redissonInstance1.getLock(&quot;lock1&quot;);
-Rlock lock2 = redissonInstance2.getLock(&quot;lock2&quot;);
-Rlock lock3 = redissonInstance3.getLock(&quot;lock3&quot;);
-
-RedissonRedLock lock = new REdissonRedLock(lock1,lock2,lock3);
-lock.lock();
-  ...
-lock.unlock();
-</code></pre>
-
-<p>通过上面的代码，我们需要实现多个Redis集群，然后进行红锁的加锁，解锁。具体的步骤如下:</p>
-
+RedissonRedLock lock <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> REdissonRedLock<span style="color:#f92672">(</span>lock1<span style="color:#f92672">,</span>lock2<span style="color:#f92672">,</span>lock3<span style="color:#f92672">);</span>
+lock<span style="color:#f92672">.</span><span style="color:#a6e22e">lock</span><span style="color:#f92672">();</span>
+  <span style="color:#f92672">...</span>
+lock<span style="color:#f92672">.</span><span style="color:#a6e22e">unlock</span><span style="color:#f92672">();</span>
+</code></pre></div><p>通过上面的代码，我们需要实现多个Redis集群，然后进行红锁的加锁，解锁。具体的步骤如下:</p>
 <ol>
 <li>首先生成多个Redis集群的Rlock，并将其构造成RedLock。</li>
 <li>依次循环对三个集群进行加锁，加锁的过程和5.2里面一致。</li>
@@ -680,11 +620,8 @@ lock.unlock();
 <li>加锁的过程中需要判断是否加锁超时，有可能我们设置加锁只能用3ms，第一个集群加锁已经消耗了3ms了。那么也算加锁失败。</li>
 <li>3，4步里面加锁失败的话，那么就会进行解锁操作，解锁会对所有的集群在请求一次解锁。</li>
 </ol>
-
 <p>可以看见RedLock基本原理是利用多个Redis集群，用<strong>多数</strong>的集群加锁成功，减少Redis某个集群出故障，造成分布式锁出现问题的概率。</p>
-
 <p><strong>redis锁小结</strong>：</p>
-
 <ul>
 <li>优点:对于Redis实现简单，性能对比ZK和Mysql较好。如果不需要特别复杂的要求，那么自己就可以利用setNx进行实现，如果自己需要复杂的需求的话那么可以利用或者借鉴Redission。对于一些要求比较严格的场景来说的话可以使用RedLock。</li>
 <li>缺点:需要维护Redis集群，如果要实现RedLock那么需要维护更多的集群。</li>
@@ -716,9 +653,9 @@ lock.unlock();
 
     <footer class="post-footer">
       <div class="post-tags">
-          <a href="https://kphn.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">分布式锁</a>
-          <a href="https://kphn.github.io/tags/redis/">redis</a>
-          <a href="https://kphn.github.io/tags/chubby/">chubby</a>
+          <a href="https://kunpengdai.github.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">分布式锁</a>
+          <a href="https://kunpengdai.github.io/tags/redis/">redis</a>
+          <a href="https://kunpengdai.github.io/tags/chubby/">chubby</a>
           
         </div>
 
@@ -778,7 +715,7 @@ lock.unlock();
   <div id="disqus_thread"></div>
   <script type="text/javascript">
     var disqus_config = function () {
-      this.page.url = "https://kphn.github.io/post/2019/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/";
+      this.page.url = "https://kunpengdai.github.io/post/2019/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/";
     };
     function load_disqus() {
       
@@ -830,7 +767,7 @@ lock.unlock();
 
     </a>
   
-    <a href="https://github.com/kphn" rel="me noopener" class="iconfont"
+    <a href="https://github.com/kunpengdai" rel="me noopener" class="iconfont"
       title="github"  target="_blank"
       >
       <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
@@ -842,7 +779,7 @@ lock.unlock();
     </a>
 
 
-<a href="https://kphn.github.io/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+<a href="https://kunpengdai.github.io/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
     class="iconfont" title="rss" target="_blank">
     <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
   xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -867,7 +804,7 @@ lock.unlock();
     &copy;
     
       2017 -
-    2020
+    2021
     <span class="heart">
       
       <i class="iconfont">

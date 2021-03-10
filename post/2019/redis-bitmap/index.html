@@ -32,10 +32,10 @@
 
 
 
-<meta name="generator" content="Hugo 0.56.0-DEV" />
+<meta name="generator" content="Hugo 0.81.0-DEV" />
 
 
-<link rel="canonical" href="https://kphn.github.io/post/2019/redis-bitmap/" />
+<link rel="canonical" href="https://kunpengdai.github.io/post/2019/redis-bitmap/" />
 
 
 
@@ -60,16 +60,13 @@
 <meta property="og:title" content="Redis Bitmap" />
 <meta property="og:description" content="redis bitmap简介 redis中的bitmap是一串连续的2进制数字，每一位所在的位置为偏移，在bitmap上可以执行AND，OR，XOR，N" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://kphn.github.io/post/2019/redis-bitmap/" />
+<meta property="og:url" content="https://kunpengdai.github.io/post/2019/redis-bitmap/" />
 <meta property="article:published_time" content="2019-08-24T22:12:12+08:00" />
 <meta property="article:modified_time" content="2019-08-24T22:12:12+08:00" />
-
 <meta itemprop="name" content="Redis Bitmap">
 <meta itemprop="description" content="redis bitmap简介 redis中的bitmap是一串连续的2进制数字，每一位所在的位置为偏移，在bitmap上可以执行AND，OR，XOR，N">
-
-
-<meta itemprop="datePublished" content="2019-08-24T22:12:12&#43;08:00" />
-<meta itemprop="dateModified" content="2019-08-24T22:12:12&#43;08:00" />
+<meta itemprop="datePublished" content="2019-08-24T22:12:12+08:00" />
+<meta itemprop="dateModified" content="2019-08-24T22:12:12+08:00" />
 <meta itemprop="wordCount" content="1057">
 
 
@@ -109,35 +106,35 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/">首页</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/">首页</a>
           
         
       </li><li class="mobile-menu-item">
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/post/">博客</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/post/">博客</a>
           
         
       </li><li class="mobile-menu-item">
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/tags/">标签</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/tags/">标签</a>
           
         
       </li><li class="mobile-menu-item">
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/categories/">分类</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/categories/">分类</a>
           
         
       </li><li class="mobile-menu-item">
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/about/">关于</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/about/">关于</a>
           
         
       </li>
@@ -225,7 +222,7 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/">首页</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/">首页</a>
           
 
         
@@ -236,7 +233,7 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/post/">博客</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/post/">博客</a>
           
 
         
@@ -247,7 +244,7 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/tags/">标签</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/tags/">标签</a>
           
 
         
@@ -258,7 +255,7 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/categories/">分类</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/categories/">分类</a>
           
 
         
@@ -269,7 +266,7 @@
         
           
           
-            <a class="menu-item-link" href="https://kphn.github.io/about/">关于</a>
+            <a class="menu-item-link" href="https://kunpengdai.github.io/about/">关于</a>
           
 
         
@@ -296,9 +293,9 @@
           2019-08-24
         </time>
         <div class="post-category">
-            <a href="https://kphn.github.io/categories/go/"> go </a>
-            <a href="https://kphn.github.io/categories/redis/"> redis </a>
-            <a href="https://kphn.github.io/categories/gonum/"> gonum </a>
+            <a href="https://kunpengdai.github.io/categories/go/"> go </a>
+            <a href="https://kunpengdai.github.io/categories/redis/"> redis </a>
+            <a href="https://kunpengdai.github.io/categories/gonum/"> gonum </a>
             
           </div>
         
@@ -317,129 +314,107 @@
   <h2 class="post-toc-title">Table of Contents</h2>
   <div class="post-toc-content">
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#redis-bitmap简介">redis bitmap简介</a></li>
-<li><a href="#bitmap-vs-hash">bitmap vs hash</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#redis-bitmap简介">redis bitmap简介</a></li>
+    <li><a href="#bitmap-vs-hash">bitmap vs hash</a></li>
+  </ul>
 </nav>
   </div>
 </div>
 
     
     <div class="post-content">
-      
-
-<h2 id="redis-bitmap简介">redis bitmap简介</h2>
-
+      <h2 id="redis-bitmap简介">redis bitmap简介</h2>
 <p>redis中的bitmap是一串连续的2进制数字，每一位所在的位置为偏移，在bitmap上可以执行AND，OR，XOR，NOT等位操作。</p>
-
 <p>bitmap中保存每个位置的数据仅使用了一个bit，而对应的数据的存储根据大小在bitmap中相对应offset。</p>
-
 <p>一个简单的例子：日活跃用户</p>
-
 <p>​    为了统计今日登录的用户数，我们建立了一个bitmap,每一位标识一个用户ID。当某个用户访问我们的网页或执行了某个操作，就在bitmap中把标识此用户的位置为1。在Redis中获取此bitmap的key值是通过用户执行操作的类型和时间戳获得的。之后可以通过各天的bitmap进行位操作来统计相应的数据。</p>
-
 <p>在这里，bitmap在大数据量的情况下，占用大小较为稳定，增长不会随着存储数据量线性增长。也不会只存储一个 2^32-1数字就占满 512G（存在着内存压缩）。</p>
-
 <h2 id="bitmap-vs-hash">bitmap vs hash</h2>
-
 <p>在数据量没有那么大的情况下，使用bitmap可能比使用hashmap还要占用空间。因此，做了如下的实验来验证各个数据存储量的情况下，bitmap与hash占用的空间大小。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">testBit</span>(<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">redis</span>.<span style="color:#a6e22e">Conn</span>, <span style="color:#a6e22e">times</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span> {	<span style="color:#75715e">//times为测试存储量
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">times</span>; <span style="color:#a6e22e">i</span> = <span style="color:#a6e22e">i</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1000</span> {
+		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">j</span> &lt; <span style="color:#ae81ff">1000</span>; <span style="color:#a6e22e">j</span><span style="color:#f92672">++</span> {		<span style="color:#75715e">//redis pipeline
+</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Send</span>(<span style="color:#e6db74">&#34;setbit&#34;</span>, <span style="color:#e6db74">&#34;bitset&#34;</span>, <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Intn</span>(<span style="color:#a6e22e">maxUsers</span>), <span style="color:#ae81ff">1</span>)	<span style="color:#75715e">//使数据尽量分散，减小压缩带来的占用降低
+</span><span style="color:#75715e"></span>		}
+		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Flush</span>()
+	}
 
-<pre><code class="language-go">func testBit(c redis.Conn, times int) int {	//times为测试存储量
-	for i := 0; i &lt; times; i = i + 1000 {
-		for j := 0; j &lt; 1000; j++ {		//redis pipeline
-			c.Send(&quot;setbit&quot;, &quot;bitset&quot;, rand.Intn(maxUsers), 1)	//使数据尽量分散，减小压缩带来的占用降低
+	<span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">redis</span>.<span style="color:#a6e22e">String</span>(<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#e6db74">&#34;debug&#34;</span>, <span style="color:#e6db74">&#34;object&#34;</span>, <span style="color:#e6db74">&#34;bitset&#34;</span>))
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">getLength</span>(<span style="color:#a6e22e">res</span>)
+}
+
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">testHash</span>(<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">redis</span>.<span style="color:#a6e22e">Conn</span>, <span style="color:#a6e22e">times</span> <span style="color:#66d9ef">int</span>) <span style="color:#66d9ef">int</span> {
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">times</span>; <span style="color:#a6e22e">i</span> <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1000</span> {
+		<span style="color:#a6e22e">args</span> <span style="color:#f92672">:=</span> make([]<span style="color:#66d9ef">interface</span>{}, <span style="color:#ae81ff">0</span>)
+		<span style="color:#a6e22e">args</span> = append(<span style="color:#a6e22e">args</span>, <span style="color:#e6db74">&#34;hash&#34;</span>)
+		<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">j</span> &lt; <span style="color:#ae81ff">1000</span>; <span style="color:#a6e22e">j</span><span style="color:#f92672">++</span> {	<span style="color:#75715e">//redis mset
+</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">args</span> = append(<span style="color:#a6e22e">args</span>, <span style="color:#a6e22e">i</span><span style="color:#f92672">+</span><span style="color:#a6e22e">j</span><span style="color:#f92672">+</span><span style="color:#a6e22e">times</span>)
+			<span style="color:#a6e22e">args</span> = append(<span style="color:#a6e22e">args</span>, <span style="color:#ae81ff">1</span>)
 		}
-		c.Flush()
+		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#e6db74">&#34;HSET&#34;</span>, <span style="color:#a6e22e">args</span><span style="color:#f92672">...</span>)
 	}
-
-	res, _ := redis.String(c.Do(&quot;debug&quot;, &quot;object&quot;, &quot;bitset&quot;))
-	return getLength(res)
+	<span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">redis</span>.<span style="color:#a6e22e">String</span>(<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#e6db74">&#34;debug&#34;</span>, <span style="color:#e6db74">&#34;object&#34;</span>, <span style="color:#e6db74">&#34;hash&#34;</span>))
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">getLength</span>(<span style="color:#a6e22e">res</span>)
 }
 
-func testHash(c redis.Conn, times int) int {
-	for i := 0; i &lt; times; i += 1000 {
-		args := make([]interface{}, 0)
-		args = append(args, &quot;hash&quot;)
-		for j := 0; j &lt; 1000; j++ {	//redis mset
-			args = append(args, i+j+times)
-			args = append(args, 1)
-		}
-		c.Do(&quot;HSET&quot;, args...)
-	}
-	res, _ := redis.String(c.Do(&quot;debug&quot;, &quot;object&quot;, &quot;hash&quot;))
-	return getLength(res)
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">getLength</span>(<span style="color:#a6e22e">s</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">int</span> {			<span style="color:#75715e">//获取debug命令中占用空间量
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">strs</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Fields</span>(<span style="color:#a6e22e">s</span>)
+	<span style="color:#a6e22e">length</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Split</span>(<span style="color:#a6e22e">strs</span>[<span style="color:#ae81ff">4</span>], <span style="color:#e6db74">&#34;:&#34;</span>)[<span style="color:#ae81ff">1</span>]
+	<span style="color:#a6e22e">l</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">Atoi</span>(<span style="color:#a6e22e">length</span>)
+	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">l</span>
 }
 
-func getLength(s string) int {			//获取debug命令中占用空间量
-	strs := strings.Fields(s)
-	length := strings.Split(strs[4], &quot;:&quot;)[1]
-	l, _ := strconv.Atoi(length)
-	return l
+</code></pre></div><p>实际测试代码，测试少量数据情况下【100~100000】及大量数据情况下的【100000，10000000】情况下的实际空间大小，并使用gonum/plot绘制出效果图：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">maxUsers</span> = <span style="color:#ae81ff">200000000</span>		<span style="color:#75715e">//假设公司有两亿用户
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+	<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">redis</span>.<span style="color:#a6e22e">Dial</span>(<span style="color:#e6db74">&#34;tcp&#34;</span>, <span style="color:#e6db74">&#34;:6379&#34;</span>)
+	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+		<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;err:&#34;</span>, <span style="color:#a6e22e">err</span>)
+		<span style="color:#66d9ef">return</span>
+	}
+	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Close</span>()
+	<span style="color:#a6e22e">p</span>, <span style="color:#a6e22e">_</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">plot</span>.<span style="color:#a6e22e">New</span>()
+	<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">Title</span>.<span style="color:#a6e22e">Text</span> = <span style="color:#e6db74">&#34;bitmap vs hash&#34;</span>
+	<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">X</span>.<span style="color:#a6e22e">Label</span>.<span style="color:#a6e22e">Text</span> = <span style="color:#e6db74">&#34;key nums&#34;</span>
+	<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">Y</span>.<span style="color:#a6e22e">Label</span>.<span style="color:#a6e22e">Text</span> = <span style="color:#e6db74">&#34;memory used&#34;</span>
+
+	<span style="color:#a6e22e">points</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">plotter</span>.<span style="color:#a6e22e">XYs</span>{}
+	<span style="color:#a6e22e">points1</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">plotter</span>.<span style="color:#a6e22e">XYs</span>{}
+
+	<span style="color:#a6e22e">timess</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">1000</span>, <span style="color:#ae81ff">2000</span>, <span style="color:#ae81ff">5000</span>, <span style="color:#ae81ff">10000</span>, <span style="color:#ae81ff">30000</span>, <span style="color:#ae81ff">45000</span>, <span style="color:#ae81ff">60000</span>, <span style="color:#ae81ff">100000</span>}
+	<span style="color:#a6e22e">afterTest</span>(<span style="color:#a6e22e">c</span>)
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">times</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">timess</span> {
+		<span style="color:#a6e22e">points</span> = append(<span style="color:#a6e22e">points</span>, <span style="color:#a6e22e">plotter</span>.<span style="color:#a6e22e">XY</span>{float64(<span style="color:#a6e22e">times</span>), float64(<span style="color:#a6e22e">testBit</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">times</span>))})
+		<span style="color:#a6e22e">points1</span> = append(<span style="color:#a6e22e">points1</span>, <span style="color:#a6e22e">plotter</span>.<span style="color:#a6e22e">XY</span>{float64(<span style="color:#a6e22e">times</span>), float64(<span style="color:#a6e22e">testHash</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">times</span>))})
+		<span style="color:#a6e22e">afterTest</span>(<span style="color:#a6e22e">c</span>)
+	}
+	<span style="color:#a6e22e">plotutil</span>.<span style="color:#a6e22e">AddLinePoints</span>(<span style="color:#a6e22e">p</span>, []<span style="color:#66d9ef">interface</span>{}{<span style="color:#a6e22e">points</span>, <span style="color:#a6e22e">points1</span>}<span style="color:#f92672">...</span>)
+	<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">Save</span>(<span style="color:#ae81ff">4</span><span style="color:#f92672">*</span><span style="color:#a6e22e">vg</span>.<span style="color:#a6e22e">Inch</span>, <span style="color:#ae81ff">4</span><span style="color:#f92672">*</span><span style="color:#a6e22e">vg</span>.<span style="color:#a6e22e">Inch</span>, <span style="color:#e6db74">&#34;small.png&#34;</span>)
+
+	<span style="color:#a6e22e">points3</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">plotter</span>.<span style="color:#a6e22e">XYs</span>{}
+	<span style="color:#a6e22e">points4</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">plotter</span>.<span style="color:#a6e22e">XYs</span>{}
+
+	<span style="color:#a6e22e">timess</span> = []<span style="color:#66d9ef">int</span>{<span style="color:#ae81ff">100000</span>, <span style="color:#ae81ff">300000</span>, <span style="color:#ae81ff">1000000</span>, <span style="color:#ae81ff">2000000</span>, <span style="color:#ae81ff">3000000</span>, <span style="color:#ae81ff">10000000</span>}
+	<span style="color:#a6e22e">afterTest</span>(<span style="color:#a6e22e">c</span>)
+	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">times</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">timess</span> {
+		<span style="color:#a6e22e">points3</span> = append(<span style="color:#a6e22e">points3</span>, <span style="color:#a6e22e">plotter</span>.<span style="color:#a6e22e">XY</span>{float64(<span style="color:#a6e22e">times</span>), float64(<span style="color:#a6e22e">testBit</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">times</span>))})
+		<span style="color:#a6e22e">points4</span> = append(<span style="color:#a6e22e">points4</span>, <span style="color:#a6e22e">plotter</span>.<span style="color:#a6e22e">XY</span>{float64(<span style="color:#a6e22e">times</span>), float64(<span style="color:#a6e22e">testHash</span>(<span style="color:#a6e22e">c</span>, <span style="color:#a6e22e">times</span>))})
+		<span style="color:#a6e22e">afterTest</span>(<span style="color:#a6e22e">c</span>)
+	}
+	<span style="color:#a6e22e">plotutil</span>.<span style="color:#a6e22e">AddLinePoints</span>(<span style="color:#a6e22e">p</span>, []<span style="color:#66d9ef">interface</span>{}{<span style="color:#a6e22e">points3</span>, <span style="color:#a6e22e">points4</span>}<span style="color:#f92672">...</span>)
+	<span style="color:#a6e22e">p</span>.<span style="color:#a6e22e">Save</span>(<span style="color:#ae81ff">4</span><span style="color:#f92672">*</span><span style="color:#a6e22e">vg</span>.<span style="color:#a6e22e">Inch</span>, <span style="color:#ae81ff">4</span><span style="color:#f92672">*</span><span style="color:#a6e22e">vg</span>.<span style="color:#a6e22e">Inch</span>, <span style="color:#e6db74">&#34;large.png&#34;</span>)
 }
 
-</code></pre>
-
-<p>实际测试代码，测试少量数据情况下【100~100000】及大量数据情况下的【100000，10000000】情况下的实际空间大小，并使用gonum/plot绘制出效果图：</p>
-
-<pre><code class="language-go">const maxUsers = 200000000		//假设公司有两亿用户
-
-func main() {
-	c, err := redis.Dial(&quot;tcp&quot;, &quot;:6379&quot;)
-	if err != nil {
-		fmt.Println(&quot;err:&quot;, err)
-		return
-	}
-	defer c.Close()
-	p, _ := plot.New()
-	p.Title.Text = &quot;bitmap vs hash&quot;
-	p.X.Label.Text = &quot;key nums&quot;
-	p.Y.Label.Text = &quot;memory used&quot;
-
-	points := plotter.XYs{}
-	points1 := plotter.XYs{}
-
-	timess := []int{100, 1000, 2000, 5000, 10000, 30000, 45000, 60000, 100000}
-	afterTest(c)
-	for _, times := range timess {
-		points = append(points, plotter.XY{float64(times), float64(testBit(c, times))})
-		points1 = append(points1, plotter.XY{float64(times), float64(testHash(c, times))})
-		afterTest(c)
-	}
-	plotutil.AddLinePoints(p, []interface{}{points, points1}...)
-	p.Save(4*vg.Inch, 4*vg.Inch, &quot;small.png&quot;)
-
-	points3 := plotter.XYs{}
-	points4 := plotter.XYs{}
-
-	timess = []int{100000, 300000, 1000000, 2000000, 3000000, 10000000}
-	afterTest(c)
-	for _, times := range timess {
-		points3 = append(points3, plotter.XY{float64(times), float64(testBit(c, times))})
-		points4 = append(points4, plotter.XY{float64(times), float64(testHash(c, times))})
-		afterTest(c)
-	}
-	plotutil.AddLinePoints(p, []interface{}{points3, points4}...)
-	p.Save(4*vg.Inch, 4*vg.Inch, &quot;large.png&quot;)
+<span style="color:#66d9ef">func</span> <span style="color:#a6e22e">afterTest</span>(<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">redis</span>.<span style="color:#a6e22e">Conn</span>) {
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#e6db74">&#34;del&#34;</span>, <span style="color:#e6db74">&#34;bitset&#34;</span>)
+	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#e6db74">&#34;del&#34;</span>, <span style="color:#e6db74">&#34;hash&#34;</span>)
 }
-
-func afterTest(c redis.Conn) {
-	c.Do(&quot;del&quot;, &quot;bitset&quot;)
-	c.Do(&quot;del&quot;, &quot;hash&quot;)
-}
-</code></pre>
-
-<p>实验结果如下：</p>
-
-<p><img src="/image/small.png" alt="小规模数据" /></p>
-
+</code></pre></div><p>实验结果如下：</p>
+<p><img src="/image/small.png" alt="小规模数据"></p>
 <p>在假定两亿用户的情况下，小规模数据测试情况下，可以发现6W左右数据存储的情况下，hash 和 bitmap使用的空间都为400~500KB，而用户小于6W的情况下使用hash稍有优势。而数据规模更大的时候，bitmap的存储优势就发挥了出来。</p>
-
-<p><img src="/image/large.png" alt="大规模数据" /></p>
-
+<p><img src="/image/large.png" alt="大规模数据"></p>
 <p>大规模场景下可以看出hash的空间占用为线性增长，而bitmap在大规模数据存储的情况下空间占用量的增长则稳定的多。</p>
 
     </div>
@@ -468,9 +443,9 @@ func afterTest(c redis.Conn) {
 
     <footer class="post-footer">
       <div class="post-tags">
-          <a href="https://kphn.github.io/tags/redis/">redis</a>
-          <a href="https://kphn.github.io/tags/go/">go</a>
-          <a href="https://kphn.github.io/tags/bitmap/">bitmap</a>
+          <a href="https://kunpengdai.github.io/tags/redis/">redis</a>
+          <a href="https://kunpengdai.github.io/tags/go/">go</a>
+          <a href="https://kunpengdai.github.io/tags/bitmap/">bitmap</a>
           
         </div>
 
@@ -530,7 +505,7 @@ func afterTest(c redis.Conn) {
   <div id="disqus_thread"></div>
   <script type="text/javascript">
     var disqus_config = function () {
-      this.page.url = "https://kphn.github.io/post/2019/redis-bitmap/";
+      this.page.url = "https://kunpengdai.github.io/post/2019/redis-bitmap/";
     };
     function load_disqus() {
       
@@ -582,7 +557,7 @@ func afterTest(c redis.Conn) {
 
     </a>
   
-    <a href="https://github.com/kphn" rel="me noopener" class="iconfont"
+    <a href="https://github.com/kunpengdai" rel="me noopener" class="iconfont"
       title="github"  target="_blank"
       >
       <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
@@ -594,7 +569,7 @@ func afterTest(c redis.Conn) {
     </a>
 
 
-<a href="https://kphn.github.io/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+<a href="https://kunpengdai.github.io/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
     class="iconfont" title="rss" target="_blank">
     <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
   xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -619,7 +594,7 @@ func afterTest(c redis.Conn) {
     &copy;
     
       2017 -
-    2020
+    2021
     <span class="heart">
       
       <i class="iconfont">
