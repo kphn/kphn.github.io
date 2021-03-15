@@ -300,8 +300,8 @@
 <span style="color:#000;font-weight:bold">public</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">lock</span><span style="color:#000;font-weight:bold">(</span>resourceName<span style="color:#000;font-weight:bold">){</span>
   <span style="color:#000;font-weight:bold">if</span> <span style="color:#000;font-weight:bold">(</span>select <span style="color:#000;font-weight:bold">*</span> from lock_table where resource_name <span style="color:#000;font-weight:bold">=</span> resourceName<span style="color:#000;font-weight:bold">;</span>有数据<span style="color:#000;font-weight:bold">){</span>
     <span style="color:#000;font-weight:bold">if</span><span style="color:#000;font-weight:bold">(</span>node_info <span style="color:#000;font-weight:bold">==</span> currentNode<span style="color:#000;font-weight:bold">){</span>
-      update lock_table set count<span style="color:#000;font-weight:bold">=</span>count<span style="color:#000;font-weight:bold">+</span>1 where resource_name <span style="color:#000;font-weight:bold">=</span> resourceName<span style="color:#a61717;background-color:#e3d2d2">；</span>
-      <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">true</span><span style="color:#a61717;background-color:#e3d2d2">；</span>
+      update lock_table set count<span style="color:#000;font-weight:bold">=</span>count<span style="color:#000;font-weight:bold">+</span>1 where resource_name <span style="color:#000;font-weight:bold">=</span> resourceName<span style="color:#000;font-weight:bold">;</span>
+      <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">true</span><span style="color:#000;font-weight:bold">;</span>
     <span style="color:#000;font-weight:bold">}</span><span style="color:#000;font-weight:bold">else</span><span style="color:#000;font-weight:bold">{</span>
       <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">false</span><span style="color:#000;font-weight:bold">;</span>
     <span style="color:#000;font-weight:bold">}</span>
@@ -402,7 +402,7 @@
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#900;font-weight:bold">Txn</span>().<span style="color:#900;font-weight:bold">If</span>(cond1, cond2, <span style="color:#000;font-weight:bold">...</span>).<span style="color:#900;font-weight:bold">Then</span>(op1, op2, <span style="color:#000;font-weight:bold">...</span>,).<span style="color:#900;font-weight:bold">Else</span>(op1<span style="color:#a61717;background-color:#e3d2d2">’</span>, op2<span style="color:#a61717;background-color:#e3d2d2">’</span>, <span style="color:#a61717;background-color:#e3d2d2">…</span>)
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#900;font-weight:bold">Txn</span>().<span style="color:#900;font-weight:bold">If</span>(cond1, cond2, <span style="color:#000;font-weight:bold">...</span>).<span style="color:#900;font-weight:bold">Then</span>(op1, op2, <span style="color:#000;font-weight:bold">...</span>,).<span style="color:#900;font-weight:bold">Else</span>(op1, op2, <span style="color:#a61717;background-color:#e3d2d2">…</span>)
 </code></pre></td></tr></table>
 </div>
 </div><p>etcd3中的事务有三个部分，条件块，<code>If(cond1,cond2,...)</code> ,成功块 <code>Then(op1,op2,...)</code>,失败块<code>Else(op1,op2,...)</code> 条件块中的所有条件都满足的情况下就执行Then，否则就执行Else。</p>
@@ -442,11 +442,11 @@
     toKV <span style="color:#000;font-weight:bold">:=</span> getresp.Responses[<span style="color:#099">1</span>].<span style="color:#900;font-weight:bold">GetRangeResponse</span>().Kvs[<span style="color:#099">1</span>]
     fromV, toV <span style="color:#000;font-weight:bold">:=</span> <span style="color:#900;font-weight:bold">toUInt64</span>(fromKV.Value), <span style="color:#900;font-weight:bold">toUint64</span>(toKV.Value)
     <span style="color:#000;font-weight:bold">if</span> fromV &lt; amount {
-        <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">false</span>, fmt.<span style="color:#900;font-weight:bold">Errorf</span>(<span style="color:#a61717;background-color:#e3d2d2">“</span>insufficient value<span style="color:#a61717;background-color:#e3d2d2">”</span>)
+        <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">false</span>, fmt.<span style="color:#900;font-weight:bold">Errorf</span>(<span style="color:#d14">&#34;insufficient value&#34;</span>)
     }
     txn <span style="color:#000;font-weight:bold">:=</span> etcd.<span style="color:#900;font-weight:bold">Txn</span>(ctx.<span style="color:#900;font-weight:bold">TODO</span>()).<span style="color:#900;font-weight:bold">If</span>(
-        v3.<span style="color:#900;font-weight:bold">Compare</span>(v3.<span style="color:#900;font-weight:bold">ModRevision</span>(from), <span style="color:#a61717;background-color:#e3d2d2">“</span>=<span style="color:#a61717;background-color:#e3d2d2">”</span>, fromKV.ModRevision),
-        v3.<span style="color:#900;font-weight:bold">Compare</span>(v3.<span style="color:#900;font-weight:bold">ModRevision</span>(to), <span style="color:#a61717;background-color:#e3d2d2">“</span>=<span style="color:#a61717;background-color:#e3d2d2">”</span>, toKV.ModRevision))			<span style="color:#998;font-style:italic">//如果from 和 get还没被修改
+        v3.<span style="color:#900;font-weight:bold">Compare</span>(v3.<span style="color:#900;font-weight:bold">ModRevision</span>(from), <span style="color:#d14">&#34;=&#34;</span>, fromKV.ModRevision),
+        v3.<span style="color:#900;font-weight:bold">Compare</span>(v3.<span style="color:#900;font-weight:bold">ModRevision</span>(to), <span style="color:#d14">&#34;=&#34;</span>, toKV.ModRevision))			<span style="color:#998;font-style:italic">//如果from 和 get还没被修改
 </span><span style="color:#998;font-style:italic"></span>    txn = txn.<span style="color:#900;font-weight:bold">Then</span>(
         <span style="color:#900;font-weight:bold">OpPut</span>(from, <span style="color:#900;font-weight:bold">fromUint64</span>(fromV <span style="color:#000;font-weight:bold">-</span> amount)),					<span style="color:#998;font-style:italic">//那么久同时更新这两个key
 </span><span style="color:#998;font-style:italic"></span>        <span style="color:#900;font-weight:bold">OpPut</span>(to, <span style="color:#900;font-weight:bold">fromUint64</span>(toV <span style="color:#000;font-weight:bold">+</span> amount))
@@ -458,10 +458,7 @@
 }
 </code></pre></td></tr></table>
 </div>
-</div><p>
-        <img class="mx-auto" alt="diagram" src="https://coreos.com/sites/default/files/inline-images/diagram3.png" />   
-    </p>
-<p>而利用etcd的事务实现分布式锁的代码如下：</p>
+</div><p>而利用etcd的事务实现分布式锁的代码如下：</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  1
@@ -688,12 +685,23 @@
 <li><code>PX 30000</code>表示这个锁有一个30秒的自动过期时间。当然，这里30秒只是一个例子，客户端可以选择合适的过期时间。</li>
 </ul>
 <p>最后，当客户端完成了对共享资源的操作之后，执行下面的Redis Lua脚本来<strong>释放锁</strong>：</p>
-<pre><code>if redis.call(&quot;get&quot;,KEYS[1]) == ARGV[1] then
-    return redis.call(&quot;del&quot;,KEYS[1])
-else
-    return 0
-end复制代码
-</code></pre><p>这段Lua脚本在执行的时候要把前面的<code>my_random_value</code>作为<code>ARGV[1]</code>的值传进去，把<code>resource_name</code>作为<code>KEYS[1]</code>的值传进去.</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-lua" data-lang="lua"><span style="color:#000;font-weight:bold">if</span> redis.call(<span style="color:#d14">&#34;get&#34;</span>,KEYS[<span style="color:#099">1</span>]) <span style="color:#000;font-weight:bold">==</span> ARGV[<span style="color:#099">1</span>] <span style="color:#000;font-weight:bold">then</span>
+    <span style="color:#000;font-weight:bold">return</span> redis.call(<span style="color:#d14">&#34;del&#34;</span>,KEYS[<span style="color:#099">1</span>])
+<span style="color:#000;font-weight:bold">else</span>
+    <span style="color:#000;font-weight:bold">return</span> <span style="color:#099">0</span>
+<span style="color:#000;font-weight:bold">end</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这段Lua脚本在执行的时候要把前面的<code>my_random_value</code>作为<code>ARGV[1]</code>的值传进去，把<code>resource_name</code>作为<code>KEYS[1]</code>的值传进去.</p>
 <p>有几个点要注意下：</p>
 <ol>
 <li>
